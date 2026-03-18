@@ -1,0 +1,57 @@
+import React, { useEffect, useState } from "react";
+import { API } from "../../api/Axios";
+import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+
+const AllUsers = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await API.get("/api/users");
+        setUsers(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUsers();
+  });
+  return (
+    <div>
+      <Navbar />
+      <div className="px-2 pr-4 max-w-5xl mx-auto min-h-screen">
+        <h1 className="my-5 font-bold text2xl">All Users of this app</h1>
+
+        {users.length === 0 && (
+          <p className="text-center mt-10">No users found.</p>
+        )}
+        {users?.map((user) => (
+          <div
+            key={user._id}
+            className="flex justify-between items-center p-2 border rounded border-gray-300 mb-2"
+          >
+            <div>
+              <h2 className="font-semibold text-lg">{user.name}</h2>
+              <p className="text-gray-500 text-sm">{user.email}</p>
+            </div>
+
+            <div>
+              <Link
+                to={`/user/${user._id}/posts`}
+                className="hover:text-blue-800 hover:underline"
+              >
+                View Posts
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex-end"></div>
+      <Footer />
+    </div>
+  );
+};
+
+export default AllUsers;
