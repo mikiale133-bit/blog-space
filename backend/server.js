@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "https://blog-back-end-jnwf.onrender.com",
+    origin: "https://blog-frontend-xlqk.onrender.com",
     credentials: true,
   }),
 );
