@@ -15,10 +15,9 @@ const AllUsers = () => {
       try {
         const response = await API.get("/api/users");
         setUsers(response.data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchUsers();

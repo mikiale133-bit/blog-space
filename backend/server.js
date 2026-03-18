@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "https://blog-frontend-xlqk.onrender.com",
+    origin: "https://mkblog-space.vercel.app",
     credentials: true,
   }),
 );
