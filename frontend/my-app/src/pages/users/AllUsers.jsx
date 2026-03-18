@@ -15,27 +15,32 @@ const AllUsers = () => {
       try {
         const response = await API.get("/api/users");
         setUsers(response.data);
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUsers();
-  });
+  }, []);
+
   return (
     <div>
       <Navbar />
       <div className="px-2 pr-4 max-w-5xl mx-auto min-h-screen">
         <h1 className="my-5 font-bold text2xl">All Users of this app</h1>
 
-        {loading && (
+        {loading ? (
           <div className="flex justify-center items-center h-64 text-gray-900">
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
+        ) : (
+          users.length === 0 && (
+            <p className="text-center mt-10">No users found.</p>
+          )
         )}
-        {users.length === 0 && (
-          <p className="text-center mt-10">No users found.</p>
-        )}
+
         {users?.map((user) => (
           <div
             key={user._id}
