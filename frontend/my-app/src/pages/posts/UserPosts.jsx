@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { API } from "../../api/Axios";
 import { Link, useParams } from "react-router-dom";
 import { Loader2, FileText, RefreshCcw } from "lucide-react";
 import Navbar from "../../components/Navbar";
@@ -15,7 +15,7 @@ const UserPosts = () => {
     try {
       setLoading(true);
       // Your parent route is /api/posts and sub-route is /user/:userId
-      const response = await axios.get(`/api/posts/user/${userId}`);
+      const response = await API.get(`/api/posts/user/${userId}`);
       setPosts(response.data.posts);
       setError(null);
     } catch (err) {
