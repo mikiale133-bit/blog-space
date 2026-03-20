@@ -37,7 +37,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
       <main className="max-w-3xl mx-auto px-1 py-8">
         {/* Header Section */}
         <div className="mb-6">
@@ -99,6 +98,14 @@ const Home = () => {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* right tab bar */}
+        <div className="sticky top-20 right-0 bg-white border-2 border-gray-300 rounded-lg p-3">
+          {/* header */}
+          <div>
+            <h2></h2>
+          </div>
         </div>
       </main>
       {/* <Footer /> */}
