@@ -11,6 +11,8 @@ import PostDetail from "./pages/posts/PostDetail";
 import Navbar from "./components/Navbar";
 import Profile from "./Profile";
 
+import UserProfile from "./pages/users/UserProfile";
+
 const App = () => {
   return (
     <div>
@@ -19,22 +21,17 @@ const App = () => {
           <div className="fixed w-full top-0 left-0 z-3">
             <Navbar />
           </div>
-          <div className="pt-15">
+          <div className="pt-20">
             <Routes>
               <Route path="/" element={<Home />} />
-
               {/* Auth */}
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
+              <Route path="/posts/:postId" element={<PostDetail />} />
 
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/users" element={<AllUsers />} />
-              <Route path="/user/:userId/posts" element={<UserPosts />} />
-
-              {/* Post detail */}
-              <Route path="/posts/:postId" element={<PostDetail />} />
-
-              <Route path="/pro" element={<Profile />} />
+              <Route path="/users/:id" element={<UserProfile />} />
             </Routes>
           </div>
         </BrowserRouter>
@@ -44,3 +41,6 @@ const App = () => {
 };
 
 export default App;
+{
+  /* <Route path="/user/:userId/posts" element={<UserPosts />} /> */
+}

@@ -11,7 +11,7 @@ import {
 
 // parent route: /api/posts
 postsRouter.get("/", getPosts);
-postsRouter.get("/user/:userId", getUserPosts);
+postsRouter.get("/:userId", getUserPosts);
 postsRouter.post("/", protect, createPost);
 postsRouter.put("/:id", protect, updatePost);
 postsRouter.delete("/:id", protect, deletePost);

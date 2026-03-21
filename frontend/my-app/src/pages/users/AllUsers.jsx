@@ -27,7 +27,6 @@ const AllUsers = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="px-2 pr-4 max-w-5xl mx-auto min-h-screen">
         <h1 className="my-5 font-bold text2xl">All Users of this app</h1>
 
@@ -53,10 +52,10 @@ const AllUsers = () => {
 
             <div>
               <Link
-                to={`/user/${user._id}/posts`}
+                to={`/users/${user._id}`}
                 className="hover:text-blue-800 hover:underline"
               >
-                View Posts
+                View profile
               </Link>
             </div>
           </div>

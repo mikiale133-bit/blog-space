@@ -37,9 +37,7 @@ const PostDetail = () => {
 
   return (
     <div className="min-h-screen text-[#001e00]">
-      <Navbar />
-
-      <main className="max-w-5xl mx-auto px-1 py-2 md:py-8">
+      <main className="max-w-3xl mx-auto px-1 py-2 md:py-8">
         {/* Back Button */}
         <Link
           to="/"
@@ -49,7 +47,7 @@ const PostDetail = () => {
           <span>Back to search</span>
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4">
+        <div className="grid grid-cols-1">
           <div className="grid grid-cols-1 gap-0 rounded-lg bg-white overflow-hidden md:px-8">
             {/* Main Content Column */}
             <div className="lg:col-span-3 lg:border-r border-slate-200">
@@ -142,7 +140,7 @@ const PostDetail = () => {
           </div>
 
           {/* Right tab bar, Related posts - Desktop View */}
-          <div className="max-w-lg:hidden sticky top-20 right-0 bg-white border-2 border-gray-300 rounded-lg p-3">
+          <div className="max-lg:hidden fixed top-20 right-0 bg-white border-2 border-gray-300 rounded-lg lg:p-3 h-screen">
             {/* header */}
             <div className="container">
               <div className="flex justify-between items-center border-b border-gray-200">
@@ -164,16 +162,16 @@ const PostDetail = () => {
           </div>
 
           {/* Mobile View */}
-          <div className="max-w-lg:hidden bg-white">
-            <div className="container">
+          <div className="lg:hidden bg-white">
+            <div className="containe">
               <h2 className="heading font-bold text-2xl mb-5">Related Posts</h2>
               <div className="header"></div>
             </div>
 
             {/* Posts List */}
-            <div className="grid grid-cols-2 w-full h-full overflow-y-scroll">
+            <div className="grid grid-cols-2 w-full">
               <Link
-                to={`/post-details/${post._id}`}
+                to={`/posts/${post._id}`}
                 className="p-2 border border-gray-200 rounded-md hover:border-gray-300"
               >
                 <h2 className="mb-1 line-clamp-2 text-gray-700">

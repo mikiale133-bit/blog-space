@@ -46,7 +46,7 @@ const Home = () => {
           <p className="text-slate-500">Stay informed with the latest feeds.</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-0">
           {error && (
             <p className="text-red-500 bg-red-50 p-4 rounded">{error}</p>
           )}
@@ -56,7 +56,7 @@ const Home = () => {
           {posts.map((post) => (
             <article
               key={post._id}
-              className="group bg-white rounded-lg border border-slate-200 p-6 transition-all hover:border-gray-200 hover:bg-gray-200 duration-500 "
+              className="group bg-white border-b-3 p-6 transition-all border-gray-200  duration-500 "
             >
               {/* Card Header: Metadata */}
               <div className="flex justify-between items-start mb-3">
@@ -87,7 +87,7 @@ const Home = () => {
               </p>
 
               {/* Card Footer: Action */}
-              <div className="mt-4 pt-4 border-t border-slate-100 flex justify-end group-hover:border-t-2  group-hover:border-gray-300">
+              <div className="mt-4 pt-2 border-t border-slate-100 flex justify-end  ">
                 <Link
                   to={`/posts/${post._id}`}
                   state={{ post }}
@@ -98,14 +98,6 @@ const Home = () => {
               </div>
             </article>
           ))}
-        </div>
-
-        {/* right tab bar */}
-        <div className="sticky top-20 right-0 bg-white border-2 border-gray-300 rounded-lg p-3">
-          {/* header */}
-          <div>
-            <h2></h2>
-          </div>
         </div>
       </main>
       {/* <Footer /> */}

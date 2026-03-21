@@ -8,7 +8,8 @@ import User from "../models/userModel.js";
   @access  Public */
 
 export const getUsers = async (req, res) => {
-  const users = await User.find().select("-password"); // Exclude password field
+  const users = await User.find().select("-password");
+  // Exclude password field
 
   if (!users) {
     return res.status(404).json({ msg: "No users found" });
@@ -17,7 +18,8 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  const user = await User.findOne({ name: req.params.name });
+  const user = await User.findById(req.params.id).select("-password");
+
   // Exclude password field
 
   if (!user) {
