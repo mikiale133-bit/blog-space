@@ -18,7 +18,7 @@ const Profile = ({ isOwnProfile = false }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className="max-w-screen-xl mx-auto md:flex gap-8 px-4 py-8">
+    <div className="mx-auto md:flex gap-8 px-4 py-8">
       {/* 1. SIDEBAR: Identity & Stats (Stays consistent) */}
       <aside className="md:w-1/3 lg:w-1/4 mb-8">
         <div className="sticky top-20">

@@ -15,6 +15,14 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "password is required"],
     },
+    // profileImg: {
+    //   public_id: { type: String, required: true },
+    //   url: { type: String, required: true },
+    // },
+    // plan: {
+    //   type: Array,
+    //   enum: ["daily", "weekely", "monthly", "yearly"],
+    // },
   },
   { timestamps: true },
 );

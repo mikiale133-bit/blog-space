@@ -1,6 +1,9 @@
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
+import { upload } from "../middleware/imgUpload.js";
+import { cloudinary } from "../config/cloudinary.js";
+
 /* ✓ */
 export const getPosts = async (req, res) => {
   try {
@@ -33,28 +36,43 @@ export const getUserPosts = async (req, res) => {
 };
 
 /* ✓ */
-export const createPost = async (req, res) => {
-  try {
-    const { title, content } = req.body;
+export const createPost = [
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ msg: "Unauthorized" });
+      }
+      const { title, content } = req.body;
 
-    if (!title || !content) {
-      return res.status(400).json({ msg: "Please add all fields" });
+      if (!title || !content) {
+        return res.status(400).json({ msg: "Please add all fields" });
+      }
+      if (!req.file) {
+        return res.status(400).json({ message: "Please upload an image" });
+      }
+
+      const newPost = await Post.create({
+        title,
+        content,
+        image: {
+          public_id: req.file.filename,
+          url: req.file.path,
+        },
+        user: req.user._id,
+        username: req.user.name,
+        email: req.user.email,
+      });
+
+      const populatedPost = await newPost.populate("user", "name email");
+
+      res.status(201).json(populatedPost);
+    } catch (error) {
+      console.error("CREATE POST ERROR:", error);
+      res.status(500).json({ msg: error.message });
     }
-    const post = await Post.create({
-      title,
-      content,
-      user: req.user._id,
-      username: req.user.name,
-      email: req.user.email,
-    });
-
-    const populatedPost = await post.populate("user", "name email");
-
-    res.status(201).json(populatedPost);
-  } catch (error) {
-    res.status(500).json({ msg: error.message });
-  }
-};
+  },
+];
 
 /* x */
 export const updatePost = async (req, res) => {

@@ -3,13 +3,12 @@ import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/auth/Login";
-import CreatePost from "./pages/posts/CreatePost";
+import CreatePost from "./components/CreatePost";
 import { AuthProvider } from "./context/AuthContext";
-import UserPosts from "./pages/posts/UserPosts";
+// import UserPosts from "./pages/posts/UserPosts";
 import AllUsers from "./pages/users/AllUsers";
 import PostDetail from "./pages/posts/PostDetail";
 import Navbar from "./components/Navbar";
-import Profile from "./Profile";
 
 import UserProfile from "./pages/users/UserProfile";
 
