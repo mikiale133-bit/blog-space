@@ -2,8 +2,11 @@ import { useState } from "react";
 import { API } from "../../api/Axios";
 import { Lock, Mail, Loader2 } from "lucide-react";
 import Navbar from "../../components/Navbar";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const Login = () => {
+  const login = useAuthStore((state) => state.login);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -16,6 +19,7 @@ const Login = () => {
       const resp = await API.post("/api/users/login", formData);
       localStorage.setItem("token", resp.data.token);
       window.location.href = "/"; // Simple redirect
+      login(resp.data);
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {
@@ -25,8 +29,6 @@ const Login = () => {
 
   return (
     <div>
-      <Navbar />
-
       <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
           <div className="mb-8 text-center">

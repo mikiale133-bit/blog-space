@@ -2,8 +2,11 @@ import { useState } from "react";
 import { API } from "../../api/Axios";
 import { User, Mail, Lock, Loader2, CheckCircle } from "lucide-react";
 import Navbar from "../../components/Navbar";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const Register = () => {
+  const register = useAuthStore((state) => state.register);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -28,9 +31,12 @@ const Register = () => {
     try {
       // 2. Destructure to send only what the server expects
       const { confirmPassword, ...userData } = formData;
+
       const resp = await API.post("/api/users/register", userData);
       localStorage.setItem("token", resp.data.token);
       alert("Registration successful!");
+
+      register(resp.data);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {

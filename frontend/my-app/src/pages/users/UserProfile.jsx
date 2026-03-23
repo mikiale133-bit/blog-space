@@ -4,14 +4,17 @@ import { useState } from "react";
 import { API } from "../../api/Axios";
 import { Link, useParams } from "react-router-dom";
 import { Bookmark, Save, SaveAllIcon, SaveIcon } from "lucide-react";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const UserProfile = () => {
   const { id } = useParams();
-  console.log(id);
+
+  const loggedinUser = useAuthStore((state) => state.user);
+  const isOwner = loggedinUser._id === id;
+
   const [userPosts, setUserPosts] = useState();
   const [user, setUser] = useState();
 
-  const [isOwner, setIsOwner] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // this is not setters place  - this line is wrong
@@ -26,7 +29,6 @@ const UserProfile = () => {
         const res = await API.get(`/api/users/${id}`);
 
         setUser(res.data);
-        setIsOwner(true);
       } catch (error) {
         setError(`Failed to get user: ${error}`);
       } finally {
@@ -45,7 +47,6 @@ const UserProfile = () => {
         const res = await API.get(`/api/posts/${id}`);
 
         setUserPosts(res.data);
-        setIsOwner(true);
       } catch (error) {
         setError(`Failed to get user: ${error}`);
       } finally {
@@ -85,10 +86,11 @@ const UserProfile = () => {
           <h2 className="text-gray-700 text-lg">{user.name}</h2>
           <p className="text-gray-500 text-sm">{user.email}</p>
         </div>
+
         {isOwner ? (
           <div className="flex gap-2 items-center">
             <button className="text-blue-500 hover:underline ">Edit</button>
-            <button className="text-red-500 hover:underline">delete</button>
+            <button className="hover:underline">delete</button>
           </div>
         ) : (
           <button className="px-5 py-0.5 rounded-full bg-blue-500 text-white cursor-pointer">
@@ -101,11 +103,13 @@ const UserProfile = () => {
         <button className="font-semibold pb-0.8 mb-5 border-b-5 border-blue-00 inline rounded text-xl">
           Posts
         </button>
+
         {error && (
           <p className="text-red-500 bg-red-50 border border-red-600 px-2 py-1 rounded text-sm mb-2">
             {error}
           </p>
         )}
+
         {userPosts?.posts.length === 0 ? (
           <p>No posts found for this user.</p>
         ) : (
