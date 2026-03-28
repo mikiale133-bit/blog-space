@@ -107,8 +107,8 @@ const UserProfile = () => {
             </h2>
           </div>
 
-          <button className="text-lg hover:text-blue-600">Latest</button>
-          <button className="text-lg hover:text-blue-600">Popular</button>
+          <button className="text-lg hover:text-gray-600">Latest</button>
+          <button className="text-lg hover:text-gray-600">Popular</button>
         </div>
 
         <p className="mb-2">{userPosts?.count} posts</p>
@@ -118,7 +118,7 @@ const UserProfile = () => {
           </p>
         )}
 
-        {userPosts?.posts?.length === 0 ? (
+        {userPosts?.count === 0 ? (
           <p className="text-gray-500">No posts yet</p>
         ) : (
           <div className="grid gap-4">

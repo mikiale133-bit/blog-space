@@ -116,7 +116,7 @@ const Home = () => {
                     {/* Card Footer: Action */}
                     <div className="mt-0 py-2 border-t border-slate-100 flex justify-between items-center  px-2 relative">
                       <Link
-                        to={`/users/${post.user._id}`}
+                        to={`/users/${post?.user?._id}`}
                         state={{ user: post.user }}
                         className="flex items-center gap-0.5"
                       >
