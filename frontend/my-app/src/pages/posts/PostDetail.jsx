@@ -1,5 +1,6 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { API } from "../../api/Axios";
 import {
   MapPin,
   Calendar,
@@ -11,13 +12,41 @@ import {
   MessageSquare,
   Bookmark,
   X,
+  Loader2,
 } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 const PostDetail = () => {
-  const location = useLocation();
-  const post = location.state?.post;
+  const { id } = useParams();
+
+  const [post, setPost] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  console.log(id);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      setLoading(true);
+
+      try {
+        const resp = await API.get(`/api/posts/${id}`);
+        setPost(resp.data);
+
+        const resp2 = await API.get("/api/posts/recents");
+        setPosts(resp2.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      }
+    };
+    fetchPost();
+  }, [id]);
+
+  const relatedPosts = posts.filter((p) => p.category === post.category);
 
   if (!post) {
     return (
@@ -34,10 +63,19 @@ const PostDetail = () => {
       </div>
     );
   }
+  if (loading) {
+    return (
+      <div className="h-screen flex justify-center items-center animate-spin">
+        <button>
+          <Loader2 size={25} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-[#001e00]">
-      <main className="max-w-3xl mx-auto px-1 py-2 md:py-8">
+      <main className="lg:mx-10 mx-auto px-1 py-2 md:py-8">
         {/* Back Button */}
         <Link
           to="/"
@@ -47,10 +85,10 @@ const PostDetail = () => {
           <span>Back to search</span>
         </Link>
 
-        <div className="grid grid-cols-1">
-          <div className="grid grid-cols-1 gap-0 rounded-lg bg-white overflow-hidden md:px-8">
+        <div className="lg:flex justify-between ">
+          <div className="grid grid-cols-1 gap-0 rounded-lg bg-white overflow-hidden md:px-8 flex-1">
             {/* Main Content Column */}
-            <div className="lg:col-span-3 lg:border-r border-slate-200">
+            <div className="">
               <section className="p-1 mt-3 border-b border-slate-200">
                 <h1 className="text-[26px] font-medium leading-tight mb-6 max-sm:mb-2">
                   {post.title}
@@ -89,16 +127,7 @@ const PostDetail = () => {
             </div>
 
             {/* Right Sidebar */}
-            <div className="lg:col-span-1 bg-white p-5">
-              <div className="flex gap-3 items-center">
-                <button className="w-full bg-[#14a800] hover:bg-[#108a00] text-white font-medium py-2.5 rounded-full transition-colors text-sm">
-                  Follow
-                </button>
-                <button className="w-full border border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-medium py-2.5 rounded-full transition-colors text-sm flex items-center justify-center gap-2">
-                  <Bookmark size={16} /> Save Post
-                </button>
-              </div>
-
+            <div className="bg-white p-5">
               <div className="pt-6">
                 <h3 className="text-base font-medium mb-4">About the author</h3>
                 <div className="space-y-4">
@@ -140,24 +169,45 @@ const PostDetail = () => {
           </div>
 
           {/* Right tab bar, Related posts - Desktop View */}
-          <div className="max-lg:hidden fixed top-20 right-0 bg-white border-2 border-gray-300 rounded-lg lg:p-3 h-screen">
-            {/* header */}
-            <div className="container">
-              <div className="flex justify-between items-center border-b border-gray-200">
-                <h2>Related Posts</h2>
+          <div className="max-lg:hidden lg:sticky top-18  bg-white rounded-lg lg:p-3 h-170 overflow-y-scroll min-w-70 max-w-110">
+            <div className="h-screen">
+              {/* header */}
+
+              <div className="sticky -top-4 flex justify-between items-center border-b bg-white border-gray-200 mb-4">
+                <h2>Latest Posts</h2>
                 <div className="p-2 hover:bg-gray-100 cursor-pointer rounded-full">
-                  <X size={25} />
+                  20 posts
                 </div>
               </div>
 
-              {/* Header bottom */}
-              <div className=""></div>
-            </div>
-
-            {/* Posts List */}
-            <div className="flex flex-col w-full h-full overflow-y-scroll">
-              {/* posts list */}
-              <div className=""></div>
+              {/* Posts List */}
+              <div className="flex flex-col w-full h-full">
+                {/* posts list */}
+                <div className="space-y-1">
+                  {posts.map((p) => (
+                    <div
+                      key={post._id}
+                      className="group p-0.5 shadow-sm hover:shadow-md rounded hover:bg-gray-50"
+                    >
+                      <Link
+                        to={`/posts/${post._id}`}
+                        className="flex justify-between items-center"
+                      >
+                        {p.image && post.image?.url && (
+                          <div className="p-0.5 rounded-lg bg-green-100">
+                            <img src={p?.image?.url} alt="" className=" w-20" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <h2 className="group-hover:text-red-500 line-clamp-3 text-sm font-semibold">
+                            {p.title}
+                          </h2>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -170,15 +220,22 @@ const PostDetail = () => {
 
             {/* Posts List */}
             <div className="grid grid-cols-2 w-full">
-              <Link
-                to={`/posts/${post._id}`}
-                className="p-2 border border-gray-200 rounded-md hover:border-gray-300"
-              >
-                <h2 className="mb-1 line-clamp-2 text-gray-700">
-                  {post.title}
-                </h2>
-                <p className="mb-1 text-gray-500">{post.createdAt}</p>
-              </Link>
+              {relatedPosts.map((p) => (
+                <div
+                  key={post._id}
+                  className="border border-red-500 p-2 rounded hover:bg-blue-100"
+                >
+                  <Link to={`/posts/${post._id}`} className="">
+                    {p.image && post.image.url && (
+                      <div className="p-0.5 overflow-hidden rounded-lg w-40 h-40 bg-green-100">
+                        <img src={post.image.url} alt="max-h-20 w-1" />
+                      </div>
+                    )}
+                    <h2 className="line-clamp-2">{p.title}</h2>
+                    <h2 className="line-clamp-2">{p.content}</h2>
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>

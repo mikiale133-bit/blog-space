@@ -11,6 +11,7 @@ import PostDetail from "./pages/posts/PostDetail";
 import Navbar from "./components/Navbar";
 
 import UserProfile from "./pages/users/UserProfile";
+import Settings from "./pages/Settings";
 
 const App = () => {
   return (
@@ -20,17 +21,19 @@ const App = () => {
           <div className="fixed w-full top-0 left-0 z-3">
             <Navbar />
           </div>
-          <div className="pt-20">
+          <div className="pt-18">
             <Routes>
               <Route path="/" element={<Home />} />
               {/* Auth */}
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
-              <Route path="/posts/:postId" element={<PostDetail />} />
+              <Route path="/posts/:id" element={<PostDetail />} />
 
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/users" element={<AllUsers />} />
               <Route path="/users/:id" element={<UserProfile />} />
+
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </div>
         </BrowserRouter>

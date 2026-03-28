@@ -8,6 +8,8 @@ import {
   Menu,
   X,
   Settings,
+  Link2,
+  Mail,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -20,6 +22,14 @@ export const Navbar = () => {
   // const navigate = useNavigate();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // close logout modal when clicked on any screen
+  // const handleOutsideClick = (e) => {
+  //   if (logoutModalOpen && e.target !== e.currentTarget) {
+  //     setLogoutModalOpen(false);
+  //   }
+  // };
+  // window.addEventListener("click", handleOutsideClick);
 
   return (
     <div>
@@ -67,32 +77,6 @@ export const Navbar = () => {
                     </p>{" "}
                     {user.name}
                   </button>
-
-                  {logoutModalOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-500 border-b-black shadow-lg z-10 rounded-md">
-                      <button
-                        onClick={logout}
-                        className="px-4 py-2 flex gap-1 items-center rounded-t-md border-b border-b-gray-300 hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
-                      >
-                        <LogOut size={16} /> Logout
-                      </button>
-
-                      <button className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center  hover:bg-gray-100 w-full text-left cursor-pointer text-sm">
-                        <User size={16} /> Profile
-                      </button>
-
-                      <button className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center hover:bg-gray-100 w-full text-left cursor-pointer text-sm">
-                        <Settings size={16} /> Logout
-                      </button>
-
-                      <button
-                        onClick={() => setLogoutModalOpen(false)}
-                        className="block px-4 py-2 text-white text-center bg-black w-full cursor-pointer  text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
                 </div>
               ) : (
                 <div className="flex gap-2">
@@ -114,13 +98,15 @@ export const Navbar = () => {
 
             {/* Mobile Menu Button - Visible only on mobile */}
             <div className="flex gap-1 items-center">
-              {user && (
+              {user ? (
                 <button
                   onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
                   className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer"
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </button>
+              ) : (
+                ""
               )}
 
               <button
@@ -131,33 +117,6 @@ export const Navbar = () => {
               </button>
             </div>
           </div>
-
-          {/* Mobile Logout Modal */}
-          {logoutModalOpen && (
-            <div className="absolute right-0 top-15 mt-2 w-48 bg-white border border-gray-500 border-b-black shadow-lg z-10 rounded-md">
-              <button
-                onClick={logout}
-                className="px-4 py-2 flex gap-1 items-center rounded-t-md border-b border-b-gray-300 hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
-              >
-                <LogOut size={16} /> Logout
-              </button>
-
-              <button className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center  hover:bg-gray-100 w-full text-left cursor-pointer text-sm">
-                <User size={16} /> Profile
-              </button>
-
-              <button className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center hover:bg-gray-100 w-full text-left cursor-pointer text-sm">
-                <Settings size={16} /> Settings
-              </button>
-
-              <button
-                onClick={() => setLogoutModalOpen(false)}
-                className="block px-4 py-2 text-white text-center bg-black w-full cursor-pointer  text-sm"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
 
           {/* Mobile Navigation - Visible when menu is open */}
           {mobileMenuOpen && (
@@ -205,6 +164,61 @@ export const Navbar = () => {
             </div>
           )}
         </div>
+
+        {logoutModalOpen && (
+          <div className="absolute right-2 mt-2 w-48 bg-white border shadow-xl border-gray-100 border-b-black  z-10 rounded-md overflow-hidden">
+            <div className="p-2  bg-blue-200 rounded-b-xxl mb-2">
+              {user && user.profile_img && user.profile_img.url && (
+                <img
+                  src={user.profile_img.url}
+                  alt={user.name}
+                  className="w-10 h-10 rounded-full mx-auto"
+                />
+              )}
+
+              <div>
+                <h2 className="font-bold">{user.name}</h2>
+                <p className="flex text-xs items-center gap-1 pl-1 text-gray-500">
+                  {" "}
+                  <p className="font-bold bg-green-100 text-green-500 pb-0.5 px-3 rounded-full">
+                    email
+                  </p>{" "}
+                  {user.email}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={logout}
+              className="px-4 py-2 flex gap-1 items-center  border-b border-b-gray-300 hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+            >
+              <LogOut size={16} /> Logout
+            </button>
+
+            <Link
+              to={`users/${user._id}`}
+              onClick={() => setLogoutModalOpen(false)}
+              className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center  hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+            >
+              <User size={16} /> Profile
+            </Link>
+
+            <Link
+              to={"/settings"}
+              onClick={() => setLogoutModalOpen(false)}
+              className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+            >
+              <Settings size={16} /> Settings
+            </Link>
+
+            <button
+              onClick={() => setLogoutModalOpen(false)}
+              className="block px-4 py-2 text-white text-center bg-black w-full cursor-pointer  text-sm rounded-b"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </nav>
     </div>
   );

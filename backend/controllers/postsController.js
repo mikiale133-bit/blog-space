@@ -16,10 +16,22 @@ export const getPosts = async (req, res) => {
   }
 };
 
+export const getSinglePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    res.json(post);
+
+    if (!post) {
+      res.status(404);
+      throw new Error("Post not found");
+    }
+  } catch (error) {}
+};
+
 /* x */
 export const getUserPosts = async (req, res) => {
   // const posts = await Post.find({ user: req.user }); //.populate("user", "name email");
-  const posts = await Post.find({ user: req.params.userId })
+  const posts = await Post.find({ user: req.params.id })
     .sort({
       createdAt: -1,
     })
@@ -40,10 +52,15 @@ export const createPost = [
   upload.single("image"),
   async (req, res) => {
     try {
+      const post = await Post.find({ user: req.user._id });
+
+      if (!post) {
+        return res.status(404).json({ msg: "No posts found for this user" });
+      }
       if (!req.user) {
         return res.status(401).json({ msg: "Unauthorized" });
       }
-      const { title, content } = req.body;
+      const { title, content, category } = req.body;
 
       if (!title || !content) {
         return res.status(400).json({ msg: "Please add all fields" });
@@ -55,6 +72,7 @@ export const createPost = [
       const newPost = await Post.create({
         title,
         content,
+        category,
         image: {
           public_id: req.file.filename,
           url: req.file.path,
@@ -120,6 +138,22 @@ export const deletePost = async (req, res) => {
 
   await Post.findByIdAndDelete(req.params.id); // or post.deleteOne()
   res.status(200).json({ id: req.params.id, msg: "Post removed" });
+};
+
+// recent posts
+export const getRecentPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 }).limit(5);
+
+    if (!posts || posts.length === 0) {
+      res.status(404).json({ msg: "No posts found" });
+    }
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server Error" });
+  }
 };
 
 // Post.find().populate("user", "name email")

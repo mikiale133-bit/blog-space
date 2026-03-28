@@ -4,6 +4,7 @@ import userRouter from "./routes/usersRoute.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import { errHanler } from "./middleware/errorMiddleware.js";
 
 // frontend - backend connection
 // import path from "path";
@@ -29,8 +30,8 @@ app.use(
 app.use("/api/posts", postsRouter);
 app.use("/api/users", userRouter);
 
-// app.use(express.static(path.join))
-
+// error middleware
+app.use(errHanler);
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`),
 );

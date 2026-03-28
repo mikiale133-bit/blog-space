@@ -1,16 +1,17 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Check if token exists in localStorage on initial load
-  const [user, setUser] = useState(!!localStorage.getItem("token"));
+  // const [user, setUser] = useState(!!localStorage.getItem("token"));
 
-  const login = () => setUser(true);
-  const logout = () => setUser(false);
+  const [user, setUser] = useState(null);
+  const register = (userData) => setUser(userData);
+  const login = (userData) => setUser(userData);
+  const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

@@ -5,6 +5,7 @@ import ImageUpload from "./ImageUpload";
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,6 +37,7 @@ const CreatePost = ({ onPostCreated }) => {
     const formData = new FormData();
     formData.append("title", title.trim());
     formData.append("content", content.trim());
+    formData.append("category", category.trim());
     formData.append("image", image);
 
     try {
@@ -48,6 +50,7 @@ const CreatePost = ({ onPostCreated }) => {
       // Clear form
       setTitle("");
       setContent("");
+      setCategory("");
       setImage(null);
       setSuccess(true);
 
@@ -133,6 +136,33 @@ const CreatePost = ({ onPostCreated }) => {
               </p>
             </div>
 
+            <div>
+              <label className="font-bold text-xl mb-1">Category</label>
+              <select
+                name="category"
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full border p-2 border-gray-400 bg-gray-100"
+              >
+                <option value="">Select Category</option>
+                <option value="Technology">Technology</option>
+                <option value="Business">Business</option>
+                <option value="Travel">Travel</option>
+                <option value="Food">Food</option>
+                <option value="Health">Health</option>
+                <option value="Sports">Sports</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Photography">Photography</option>
+                <option value="Music">Music</option>
+                <option value="Art">Art</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Science">Science</option>
+                <option value="Environment">Environment</option>
+                <option value="Education">Education</option>
+                <option value="Politics">Politics</option>
+              </select>
+            </div>
             {/* Image Upload Component */}
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">

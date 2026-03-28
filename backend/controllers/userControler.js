@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
+import { upload } from "../middleware/imgUpload.js";
+import { cloudinary } from "../config/cloudinary.js";
+
 /*@desc    Register new user
   @route   POST /api/users
   @access  Public */
@@ -28,39 +31,64 @@ export const getUser = async (req, res) => {
   res.json(user);
 };
 
-export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+export const registerUser = [
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
 
-  // // check if user exists
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    res.status(400);
-    res.json({ msg: "user already exists" });
-  }
+      // 1. Basic Validation
+      if (!name || !email || !password) {
+        return res.status(400).json({ msg: "All fields are required" });
+      }
 
-  // hashed password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+      if (!req.file) {
+        return res.status(400).json({ msg: "Please upload an image" });
+      }
 
-  // create user
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-  });
+      // 2. Check if user exists (Added RETURN here)
+      const userExists = await User.findOne({ email });
+      if (userExists) {
+        return res.status(400).json({ msg: "User already exists" });
+      }
 
-  // data about the registered user
-  if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(400).json({ msg: "Invalid user data" });
-  }
-};
+      // 3. Hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      // 2. THE MISSING STEP: Upload the file to Cloudinary
+      // req.file.path comes from Multer, result comes from Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "user_profiles", // Optional: organizes images in Cloudinary
+      });
+
+      // 4. Create user
+      const user = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        profile_img: {
+          public_id: req.file.filename,
+          url: req.file.path,
+        },
+      });
+
+      if (user) {
+        res.status(201).json({
+          _id: user.id,
+          name: user.name,
+          email: user.email,
+          token: generateToken(user._id),
+        });
+      } else {
+        res.status(400).json({ msg: "Invalid user data" });
+      }
+    } catch (error) {
+      console.error("Register Error:", error);
+      res.status(500).json({ msg: "Server error" });
+    }
+  },
+];
 
 /*@desc    Authenticate a user
   @route   POST /api/users/login  
@@ -89,6 +117,7 @@ export const loginUser = async (req, res) => {
   @access  Private*/
 export const getMe = async (req, res) => {
   res.status(200).json(req.user);
+  console.log(req.user);
 };
 
 // Generate JWT

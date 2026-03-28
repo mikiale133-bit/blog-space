@@ -1,36 +1,28 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API } from "../../api/Axios";
 import { Link, useParams } from "react-router-dom";
-import { Bookmark, Save, SaveAllIcon, SaveIcon } from "lucide-react";
+import { Bookmark, Pencil, Trash2, UserPlus } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const UserProfile = () => {
   const { id } = useParams();
-
   const loggedinUser = useAuthStore((state) => state.user);
-  const isOwner = loggedinUser._id === id;
+  const isOwner = loggedinUser?._id === id;
 
   const [userPosts, setUserPosts] = useState();
   const [user, setUser] = useState();
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // this is not setters place  - this line is wrong
-  // setIsOwner(true);
 
-  // user
   useEffect(() => {
     const fetchUser = async () => {
-      setLoading(true);
-      setError(null);
       try {
+        setLoading(true);
         const res = await API.get(`/api/users/${id}`);
-
         setUser(res.data);
-      } catch (error) {
-        setError(`Failed to get user: ${error}`);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load user");
       } finally {
         setLoading(false);
       }
@@ -38,120 +30,131 @@ const UserProfile = () => {
     fetchUser();
   }, [id]);
 
-  // user posts
   useEffect(() => {
-    const fetchUserPosts = async () => {
-      setLoading(true);
-      setError(null);
+    const fetchPosts = async () => {
       try {
-        const res = await API.get(`/api/posts/${id}`);
-
+        setLoading(true);
+        const res = await API.get(`/api/posts/users/${id}`);
         setUserPosts(res.data);
-      } catch (error) {
-        setError(`Failed to get user: ${error}`);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load posts");
       } finally {
         setLoading(false);
       }
     };
-    fetchUserPosts();
+    fetchPosts();
   }, [id]);
 
-  const editPost = () => {
-    console.log("edit post");
-  };
-
-  const DeletePost = async (id) => {
+  const deletePost = async (postId) => {
     try {
-      await API.delete(`/api/posts/${id}`);
-    } catch (error) {
-      console.log(error);
-      setError(
-        `${error.response?.status === 400 ? "you are not authoriaed to delete this post" : error.message}`,
-      );
+      await API.delete(`/api/posts/${postId}`);
+      setUserPosts((prev) => ({
+        ...prev,
+        posts: prev.posts.filter((p) => p._id !== postId),
+      }));
+    } catch {
+      setError("Delete failed");
     }
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (!user) {
-    return <p>user not found, No profile.</p>;
-  }
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (!user) return <p className="text-center mt-10">User not found</p>;
 
   return (
-    <div className="px-2">
-      {/* {error && <p className="text-red-500">{error}</p>} */}
-      <div className="border border-gray-200 rounded p-2 flex justify-between items-center">
-        <div>
-          <h2 className="text-gray-700 text-lg">{user.name}</h2>
-          <p className="text-gray-500 text-sm">{user.email}</p>
+    <div className="max-w-4xl mx-auto ">
+      {/* Header */}
+      <div className="bg-blue-50 px-5 py-6 pb-8">
+        <div className="bg-gradient-to-r from-blue-400 to-indigo-600 h-28 rounded-2xl relative shadow ">
+          <img
+            src={user?.profile_img?.url}
+            alt="avatar"
+            className="absolute -bottom-10 left-6 w-24 h-24 rounded-full border-4 border-white object-cover shadow"
+          />
         </div>
 
-        {isOwner ? (
-          <div className="flex gap-2 items-center">
-            <button className="text-blue-500 hover:underline ">Edit</button>
-            <button className="hover:underline">delete</button>
+        {/* User Info */}
+        <div className="mt-14 flex justify-between items-center ">
+          <div>
+            <h1 className="text-xl font-bold">{user.name}</h1>
+            <p className="text-gray-500 text-sm">{user.email}</p>
           </div>
-        ) : (
-          <button className="px-5 py-0.5 rounded-full bg-blue-500 text-white cursor-pointer">
-            Follow
-          </button>
-        )}
+
+          {isOwner ? (
+            <div className="flex gap-3">
+              <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800">
+                <Pencil size={16} /> Edit
+              </button>
+              <button className="flex items-center gap-1 text-red-500 hover:text-red-700">
+                <Trash2 size={16} /> Delete
+              </button>
+            </div>
+          ) : (
+            <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-1.5 rounded-full hover:bg-blue-700 transition">
+              <UserPlus size={16} /> Follow
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="border-t border-t-gray-200 pt-5 max-w-3xl mx-auto">
-        <button className="font-semibold pb-0.8 mb-5 border-b-5 border-blue-00 inline rounded text-xl">
-          Posts
-        </button>
+      <div className="p-6">
+        {/* Posts */}
+        <div className="flex gap-4 items-center border-b border-gray-200 mb-4 pb-2">
+          <div className="">
+            <h2 className="relative text-lg font-semibold  text-blue-500">
+              Posts
+              <span className="absolute left-0 -bottom-2 w-12 h-1.5 bg-blue-600 rounded-t-lg"></span>
+            </h2>
+          </div>
 
+          <button className="text-lg hover:text-blue-600">Latest</button>
+          <button className="text-lg hover:text-blue-600">Popular</button>
+        </div>
+
+        <p className="mb-2">{userPosts?.count} posts</p>
         {error && (
-          <p className="text-red-500 bg-red-50 border border-red-600 px-2 py-1 rounded text-sm mb-2">
+          <p className="text-red-500 bg-red-50 border px-3 py-2 rounded mb-4">
             {error}
           </p>
         )}
 
-        {userPosts?.posts.length === 0 ? (
-          <p>No posts found for this user.</p>
+        {userPosts?.posts?.length === 0 ? (
+          <p className="text-gray-500">No posts yet</p>
         ) : (
-          <div className="flex gap-1 flex-col">
+          <div className="grid gap-4">
             {userPosts?.posts.map((post) => (
               <div
                 key={post._id}
-                className=" max-sm:p-3 md:p-4 border border-gray-300 rounded group bg-gray-50 relative"
+                className="p-4 bg-white rounded-xl border border-gray-300  transition relative"
               >
-                <div>
-                  <Link
-                    to={`/posts/${post._id}`}
-                    className="cursor-pointer line-clamp-2 group-hover:text-blue-900 font-semibold text-lg"
-                  >
-                    {post.title}
-                  </Link>
-                  <p className="text-gray-500 text-sm line-clamp-2 ">
-                    {post.content}
-                  </p>
-                </div>
-                {/* save btn */}
-                <button className="absolute top-3 right-3">
+                <Link
+                  to={`/posts/${post._id}`}
+                  className="font-semibold text-lg hover:text-blue-600 line-clamp-2"
+                >
+                  {post.title}
+                </Link>
+
+                <p className="text-gray-500 text-sm line-clamp-2">
+                  {post.content}
+                </p>
+
+                <button className="absolute top-3 right-3 text-gray-400 hover:text-blue-600">
                   <Bookmark size={18} />
                 </button>
-                {/* buttons */}
-                {isOwner ? (
-                  <div className="flex gap-2">
+
+                {isOwner && (
+                  <div className="flex gap-4 mt-3 text-sm">
                     <button
-                      className="hover:underline text-red-500"
-                      onClick={() => DeletePost(post._id)}
+                      onClick={() => deletePost(post._id)}
+                      className="text-red-500 hover:underline flex items-center gap-1"
                     >
-                      Delete
+                      <Trash2 size={14} /> Delete
                     </button>
-                    <button
-                      className="hover:underline text-blue-500"
-                      onClick={editPost}
-                    >
-                      Edit
+
+                    <button className="text-blue-600 hover:underline flex items-center gap-1">
+                      <Pencil size={14} /> Edit
                     </button>
                   </div>
-                ) : (
-                  <button>Follow</button>
                 )}
               </div>
             ))}
