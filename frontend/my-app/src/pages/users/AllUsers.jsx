@@ -28,7 +28,7 @@ const AllUsers = () => {
   return (
     <div>
       <div className="px-2 pr-4 max-w-5xl mx-auto min-h-screen">
-        <h1 className="my-5 font-bold text2xl">All Users of this app</h1>
+        <h1 className="my-5 font-bold text2xl">Find your favorite authors</h1>
 
         {loading ? (
           <div className="flex justify-center items-center h-64 text-gray-900">
