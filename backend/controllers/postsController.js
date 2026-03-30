@@ -18,7 +18,13 @@ export const getPosts = async (req, res) => {
 
 export const getSinglePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate(
+      "user",
+      " name email",
+    );
+    if (!post) {
+      return res.status(404).json({ msg: "post not found" });
+    }
     res.json(post);
 
     if (!post) {
@@ -105,7 +111,6 @@ export const updatePost = async (req, res) => {
   }
 
   // Match post user to logged-in user
-  // Use 'post' (the instance), not 'Post' (the model)
   if (post.user.toString() !== req.user.id) {
     res.status(400);
     throw new Error("User Not authorized");
@@ -143,9 +148,12 @@ export const deletePost = async (req, res) => {
 // recent posts
 export const getRecentPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 }).limit(5);
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .populate("user", "name email");
 
-    if (!posts || posts.length === 0) {
+    if (posts.length === 0) {
       res.status(404).json({ msg: "No posts found" });
     }
 

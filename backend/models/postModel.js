@@ -19,7 +19,7 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-
+    // tags: ["tech", "education", "MongoDB", "Backend"],
     image: {
       public_id: {
         type: String,

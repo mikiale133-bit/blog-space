@@ -101,7 +101,7 @@ export const Navbar = () => {
               {user ? (
                 <button
                   onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
-                  className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer"
+                  className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer md:hidden"
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </button>

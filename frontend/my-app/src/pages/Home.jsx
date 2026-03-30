@@ -6,14 +6,22 @@ import Footer from "../components/Footer";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // recent posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
         const resp = await API.get("/api/posts");
+
+        // recent posts
+        const recentPosts = await API.get("/api/posts/recents");
+        setRecentPosts(recentPosts.data);
+
         setPosts(resp.data);
         console.log(resp.data);
       } catch (error) {
@@ -25,10 +33,8 @@ const Home = () => {
     fetchPosts();
   }, []);
 
-  const latestPosts = posts.filter((post) => post.createdAt); //recent posts .slice(0, 5)
-  const history = posts.filter((post) => post); //past posts a user visited or interacted .slice(0, 5)
-  const historyPosts = history.slice(0, 5);
-  (latestPosts, historyPosts);
+  // explore posts
+  const explorePosts = posts.slice(4);
 
   if (loading) {
     return (
@@ -39,9 +45,9 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto px-1 pb-5">
-        {/* Header Section */}
+        {/* Header Section - search-bar */}
         <div className="mb-5">
           <div className="relative">
             <input
@@ -64,17 +70,69 @@ const Home = () => {
 
           {posts.length === 0 && <p>No posts found.</p>}
 
+          <div className="grid lg:grid-cols-2 grid-rows-3 gap-2 max-w-4xl mx-auto mb-5 lg:max-h-100">
+            {recentPosts?.map((p, index) => (
+              <div
+                key={p._id}
+                className={`lg:flex lg:justify-between lg:items-center lg:gap-2 max-lg:flex max-lg:flex-col max-lg:justify-between ${index === 0 ? "lg:row-span-3 border border-gray-300 p-2 rounded-lg flex-col bg-gray-800 text-white" : "lg:row-span-1 p-0 border-3 rounded-xl border-white hover:border-gray-900 transition-all duration-500 max-sm:border-gray-300 max-sm:p-2"}`}
+              >
+                <Link to={`/posts/${p._id}`}>
+                  {/* image */}
+                  <div className="">
+                    {p.image && p.image.url && (
+                      <div>
+                        <img
+                          src={p.image.url}
+                          alt={p.title}
+                          className={`rounded-lg w-full ${index !== 0 && "lg:h-25 lg:w-30"}`}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </Link>
+
+                {/* content */}
+                <div className="flex-1 justify-between flex flex-col">
+                  <Link to={`/posts/${p._id}`}>
+                    <h4 className="font-bold line-clamp-2 mb-2">{p.title}</h4>
+                  </Link>
+                  <p
+                    className={`text-sm  line-clamp-2 ${index === 0 ? "text-gray-400" : "text-gray-600"}`}
+                  >
+                    {p.content}
+                  </p>
+
+                  {/* card footer */}
+                  <div className="flex-1 flex justify-between items-center mt-2 lg:mt-0 lg:hidden border-t border-gray-200 pt-2">
+                    <div className="flex items-center gap-1 ">
+                      <p className="w-7 h-7 rounded-full bg-gray-300"></p>
+                      <p>{p.user.name}</p>
+                    </div>
+
+                    <Bookmark size={15} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <h2 className="font-bold mb-10 mt-10 text-4xl text-center">
+              Explore More Latest posts
+            </h2>
+          </div>
+          {/* Explore Posts */}
           <div className="lg:flex justify-between gap-2 space-y-2">
-            <div className="space-y-2">
-              {posts.map((post) => (
+            <div className="space-y-2 lg:grid lg:grid-cols-2 gap-2 justify-center items-center">
+              {explorePosts.map((post) => (
                 <article
                   key={post._id}
-                  className="group bg-white border-2 transition-all border-gray-200 duration-500 relative rounded-lg lg:flex gap-3 items-strech justify-between"
+                  className="group bg-white border-2 transition-all border-gray-200 duration-500 relative rounded-lg lg:flex gap-3 justify-between"
                 >
                   {/* Post Image */}
                   <div className="max-lg:mb-2">
                     {post.image && post.image.url && (
-                      <div className="w-full aspect-video p-0.5 overflow-hidden rounded-lg lg:max-w-100">
+                      <div className="w-full aspect-video p-0.5 overflow-hidden lg:-ml rounded-lg lg:max-w-100">
                         <img
                           src={post.image.url}
                           alt={post.title}
@@ -83,25 +141,23 @@ const Home = () => {
                       </div>
                     )}
                   </div>
-
                   {/* Date of post = will be hidden in large screen */}
                   <div className="lg:hidden pl-2">
                     <p className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
                       {new Date(post.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       {/* Card Body: Title & Content */}
                       <div>
-                        <Link to={`/posts/${post._id}`} state={{ post }}>
+                        <Link to={`/posts/${post._id}`}>
                           <h4 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-green-800 transition-colors line-clamp-2 px-2">
                             {post.title}
                           </h4>
                         </Link>
 
-                        <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 px-2 py-1">
+                        <p className="text-slate-600 text-sm leading-relaxed line-clamp-1 px-2 py-1">
                           {post.content}
                         </p>
                       </div>
@@ -147,79 +203,12 @@ const Home = () => {
                 </article>
               ))}
             </div>
-
-            {/* right sidebar
-            <div className="min-w-xl sticky overflow-y-scroll max-h-160 top-18 scroll-width-none">
-              <div className="">
-                <h2 className="font-medium font-mono text-2xl">Latest Posts</h2>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="border p-1 rounded flex justify-between flex-col">
-                    <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                    <h2 className="">Post 1</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing</p>
-                  </div>
-
-                  <div className="border p-1 rounded flex justify-between flex-col">
-                    <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                    <h2 className="">Post 1</h2>
-                    <p>Lorem ipsum dolor sit amet.lorem2 Lorem, ipsum.</p>
-                  </div>
-
-                  <div className="border p-1 rounded flex justify-between flex-col">
-                    <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                    <h2 className="">Post 1</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
-                  </div>
-
-                  <div className="border p-1 rounded flex justify-between flex-col">
-                    <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                    <h2 className="">Post 1</h2>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="my-5">
-                <div className="border p-1 rounded flex justify-between flex-col">
-                  <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                  <h2 className="">Post 1</h2>
-                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div className="border p-1 rounded flex justify-between flex-col">
-                  <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                  <h2 className="">Post 1</h2>
-                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing</p>
-                </div>
-
-                <div className="border p-1 rounded flex justify-between flex-col">
-                  <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                  <h2 className="">Post 1</h2>
-                  <p>Lorem ipsum dolor sit amet.lorem2 Lorem, ipsum.</p>
-                </div>
-
-                <div className="border p-1 rounded flex justify-between flex-col">
-                  <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                  <h2 className="">Post 1</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
-                </div>
-
-                <div className="border p-1 rounded flex justify-between flex-col">
-                  <div className="bg-blue-100 max-sm:min-w-20 max-sm:min-h-20 min-w-50 min-h-40"></div>
-                  <h2 className="">Post 1</h2>
-                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </main>
-      {/* <Footer /> */}
+
       <Footer />
-    </div>
+    </main>
   );
 };
 
