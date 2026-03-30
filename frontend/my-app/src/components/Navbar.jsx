@@ -10,6 +10,7 @@ import {
   Settings,
   Link2,
   Mail,
+  MailCheck,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -166,8 +167,8 @@ export const Navbar = () => {
         </div>
 
         {logoutModalOpen && (
-          <div className="absolute right-2 mt-2 w-48 bg-white border shadow-xl border-gray-100 border-b-black  z-10 rounded-md overflow-hidden">
-            <div className="p-2  bg-blue-200 rounded-b-xxl mb-2">
+          <div className="absolute right-7 mt-2 w-48 bg-white border shadow-xl border-gray-50 border-b-black  z-10 rounded-md overflow-hidden">
+            <div className="p-2  bg-green-100 rounded-b-xxl mb-2">
               {user && user.profile_img && user.profile_img.url && (
                 <img
                   src={user.profile_img.url}
@@ -177,13 +178,11 @@ export const Navbar = () => {
               )}
 
               <div>
-                <h2 className="font-bold">{user.name}</h2>
-                <p className="flex text-xs items-center gap-1 pl-1 text-gray-500">
-                  {" "}
-                  <p className="font-bold bg-green-100 text-green-500 pb-0.5 px-3 rounded-full">
-                    email
-                  </p>{" "}
-                  {user.email}
+                <h2 className="font-bold text-lg text-green-600">
+                  {user.name}
+                </h2>
+                <p className="flex text-xs items-center gap-1 pl-1 text-green-500">
+                  <MailCheck size={15} /> {user.email}
                 </p>
               </div>
             </div>

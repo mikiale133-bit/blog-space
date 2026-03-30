@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API } from "../../api/Axios";
 import { Link, useParams } from "react-router-dom";
-import { Bookmark, Pencil, Trash2, UserPlus } from "lucide-react";
+import { Bookmark, Pencil, Trash2, User, UserPlus } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const UserProfile = () => {
@@ -10,7 +10,7 @@ const UserProfile = () => {
   const isOwner = loggedinUser?._id === id;
 
   const [userPosts, setUserPosts] = useState();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -38,7 +38,7 @@ const UserProfile = () => {
         setUserPosts(res.data);
       } catch (err) {
         console.log(err);
-        setError("Failed to load posts");
+        setError("No posts found for this user.");
       } finally {
         setLoading(false);
       }
@@ -66,11 +66,17 @@ const UserProfile = () => {
       {/* Header */}
       <div className="bg-blue-50 px-5 py-6 pb-8">
         <div className="bg-gradient-to-r from-blue-400 to-indigo-600 h-28 rounded-2xl relative shadow ">
-          <img
-            src={user?.profile_img?.url}
-            alt="avatar"
-            className="absolute -bottom-10 left-6 w-24 h-24 rounded-full border-4 border-white object-cover shadow"
-          />
+          {user?.profile_img && user?.profile_img?.url ? (
+            <img
+              src={user?.profile_img?.url}
+              alt="avatar"
+              className="absolute -bottom-10 left-6 w-24 h-24 rounded-full border-4 border-white object-cover shadow"
+            />
+          ) : (
+            <div className="absolute -bottom-10 left-6 w-24 h-24 rounded-full border-4 border-white flex items-center justify-center bg-gray-300 text-gray-600 shadow">
+              <User />
+            </div>
+          )}
         </div>
 
         {/* User Info */}
@@ -113,9 +119,7 @@ const UserProfile = () => {
 
         <p className="mb-2">{userPosts?.count} posts</p>
         {error && (
-          <p className="text-red-500 bg-red-50 border px-3 py-2 rounded mb-4">
-            {error}
-          </p>
+          <p className="text-gray-700 italic py-2 rounded mb-4">{error}</p>
         )}
 
         {userPosts?.count === 0 ? (

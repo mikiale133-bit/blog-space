@@ -42,8 +42,7 @@ const PostDetail = () => {
       } catch (error) {
         console.error("Failed to fetch post:", error);
       } finally {
-        // Keeps the loader visible for a split second to prevent layout jump
-        setTimeout(() => setLoading(false), 500);
+        setLoading(false);
       }
     };
 
@@ -130,7 +129,7 @@ const PostDetail = () => {
           <section>
             <div className="max-lg:flex gap-2 items-center">
               <div>
-                {user?.profile_img?.url ? (
+                {user?.profile_img && user?.profile_img?.url ? (
                   <img
                     src={user.profile_img.url}
                     alt="profile"

@@ -70,11 +70,11 @@ const Home = () => {
 
           {posts.length === 0 && <p>No posts found.</p>}
 
-          <div className="grid lg:grid-cols-2 grid-rows-3 gap-2 max-w-4xl mx-auto mb-5 lg:max-h-100">
+          <div className="lg:grid lg:grid-cols-2 lg:grid-rows-3 gap-2 max-w-4xl mx-auto mb-5 lg:max-h-100 max-sm:space-y-1">
             {recentPosts?.map((p, index) => (
               <div
                 key={p._id}
-                className={`lg:flex lg:justify-between lg:items-center lg:gap-2 max-lg:flex max-lg:flex-col max-lg:justify-between ${index === 0 ? "lg:row-span-3 border border-gray-300 p-2 rounded-lg flex-col bg-gray-800 text-white" : "lg:row-span-1 p-0 border-3 rounded-xl border-white hover:border-gray-900 transition-all duration-500 max-sm:border-gray-300 max-sm:p-2"}`}
+                className={`lg:flex lg:justify-between lg:items-center lg:gap-2 max-lg:flex max-lg:flex-col max-lg:justify-between ${index === 0 ? "lg:row-span-3 border border-gray-900 p-2 rounded-lg flex-col bg-gray-700 text-white" : "lg:row-span-1 lg:p-1 border-4 rounded-xl border-white hover:border-gray-900 transition-all duration-500 max-sm:border-gray-300 max-sm:p-1"}`}
               >
                 <Link to={`/posts/${p._id}`}>
                   {/* image */}
@@ -83,8 +83,8 @@ const Home = () => {
                       <div>
                         <img
                           src={p.image.url}
-                          alt={p.title}
-                          className={`rounded-lg w-full ${index !== 0 && "lg:h-25 lg:w-30"}`}
+                          alt="Post image"
+                          className={`rounded-lg w-full video object-cover h-full ${index !== 0 && "lg:h-25 lg:w-30"}`}
                         />
                       </div>
                     )}
@@ -97,7 +97,7 @@ const Home = () => {
                     <h4 className="font-bold line-clamp-2 mb-2">{p.title}</h4>
                   </Link>
                   <p
-                    className={`text-sm  line-clamp-2 ${index === 0 ? "text-gray-400" : "text-gray-600"}`}
+                    className={`text-sm  line-clamp-2 ${index === 0 ? "text-gray-400 line-clamp-3" : "text-gray-600"}`}
                   >
                     {p.content}
                   </p>

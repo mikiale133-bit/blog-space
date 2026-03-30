@@ -14,19 +14,18 @@ const UserPosts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      // Your parent route is /api/posts and sub-route is /user/:userId
-      const response = await API.get(`/api/posts/user/${userId}`);
+      const response = await API.get(`/api/posts/users/${userId}`);
       setPosts(response.data.posts);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.msg || "Failed to fetch posts");
+      setError(err.response?.data?.msg || "No posts found for this user.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (userId) fetchPosts();
+    fetchPosts();
   }, [userId]);
 
   if (loading)
@@ -52,7 +51,7 @@ const UserPosts = () => {
         </div>
 
         {error ? (
-          <div className="bg-red-50 text-red-600 p-4 rounded-lg border border-red-200">
+          <div className="bg-red-50 text-gray-600 p-4 rounded-lg border border-red-200">
             {error}
           </div>
         ) : posts.length === 0 ? (
