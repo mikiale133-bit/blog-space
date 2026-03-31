@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 
 import UserProfile from "./pages/users/UserProfile";
 import Settings from "./pages/Settings";
+import HomePageLoader from "./components/Loaders/Homepage";
 
 const App = () => {
   return (
@@ -21,8 +22,10 @@ const App = () => {
           <div className="fixed w-full top-0 left-0 z-3">
             <Navbar />
           </div>
+
           <div className="pt-18">
             <Routes>
+              <Route path="/loader" element={<HomePageLoader />} />
               <Route path="/" element={<Home />} />
               {/* Auth */}
               <Route path="/auth/login" element={<Login />} />

@@ -8,7 +8,7 @@ import { cloudinary } from "../config/cloudinary.js";
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "name email")
+      .populate("user", "name email prifile_img")
       .sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
@@ -16,6 +16,7 @@ export const getPosts = async (req, res) => {
   }
 };
 
+/* ✓ */
 export const getSinglePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate(
@@ -34,7 +35,7 @@ export const getSinglePost = async (req, res) => {
   } catch (error) {}
 };
 
-/* x */
+/* ✓ */
 export const getUserPosts = async (req, res) => {
   // const posts = await Post.find({ user: req.user }); //.populate("user", "name email");
   const posts = await Post.find({ user: req.params.id })
@@ -122,7 +123,7 @@ export const updatePost = async (req, res) => {
   res.status(200).json(updatedPost);
 };
 
-/* x */
+/* ✓ */
 export const deletePost = async (req, res) => {
   const post = await Post.findById(req.params.id);
 

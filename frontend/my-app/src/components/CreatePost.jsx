@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { API } from "../api/Axios";
 import ImageUpload from "./ImageUpload";
+import { Loader2 } from "lucide-react";
 
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -26,7 +28,7 @@ const CreatePost = ({ onPostCreated }) => {
     }
 
     if (!image) {
-      setError("Please select an image");
+      setError("Please upload an image");
       return;
     }
 
@@ -62,7 +64,6 @@ const CreatePost = ({ onPostCreated }) => {
       // Auto-hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
-      // Handle different error scenarios
       if (error.response) {
         // Server responded with error
         setError(error.response.data?.message || "Failed to create post");
@@ -144,6 +145,7 @@ const CreatePost = ({ onPostCreated }) => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full border p-2 border-gray-400 bg-gray-100"
+                disabled={loading}
               >
                 <option value="">Select Category</option>
                 <option value="Technology">Technology</option>
@@ -168,48 +170,26 @@ const CreatePost = ({ onPostCreated }) => {
               <label className="block text-sm font-medium text-gray-700">
                 Image <span className="text-red-500">*</span>
               </label>
-              <ImageUpload onImageSelect={setImage} currentImage={null} />
+              <ImageUpload
+                onImageSelect={setImage}
+                currentImage={null}
+                disabled={loading}
+              />
             </div>
 
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-                <div className="flex items-center">
-                  <svg
-                    className="h-5 w-5 text-red-500 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <p className="text-red-700 text-sm">{error}</p>
-                </div>
+                <p className="text-red-700 text-sm">{error}</p>
               </div>
             )}
 
             {/* Success Message */}
             {success && (
               <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-                <div className="flex items-center">
-                  <svg
-                    className="h-5 w-5 text-green-500 mr-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <p className="text-green-700 text-sm">
-                    Post created successfully!
-                  </p>
-                </div>
+                <p className="text-green-700 text-sm">
+                  Post created successfully!
+                </p>
               </div>
             )}
 
@@ -220,27 +200,8 @@ const CreatePost = ({ onPostCreated }) => {
               className="w-full bg-black  text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
+                <span className="flex items-center gap-0.5 justify-center">
+                  <Loader2 size={15} />
                   Creating Post...
                 </span>
               ) : (

@@ -148,7 +148,7 @@ const Register = () => {
           <div className="relative mb-4">
             <Lock className="absolute right-3 top-3 text-slate-400" size={18} />
             <input
-              type="confirmPassword"
+              type="password"
               name="confirmPassword"
               id="confirmPassword"
               value={confirmPassword}
@@ -158,8 +158,6 @@ const Register = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-
-          {/* ... Repeat for Email, Password, ConfirmPassword ... */}
 
           <button
             disabled={loading}

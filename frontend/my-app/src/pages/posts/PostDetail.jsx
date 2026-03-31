@@ -15,6 +15,7 @@ import {
   SquaresIntersect,
 } from "lucide-react";
 import Footer from "../../components/Footer";
+import EditPost from "./EditPost";
 
 const PostDetail = () => {
   const { id } = useParams();
