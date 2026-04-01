@@ -8,7 +8,7 @@ import { cloudinary } from "../config/cloudinary.js";
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "name email prifile_img")
+      .populate("user", "name email profile_img")
       .sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
@@ -21,28 +21,25 @@ export const getSinglePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate(
       "user",
-      " name email",
+      " name email profile_img",
     );
     if (!post) {
       return res.status(404).json({ msg: "post not found" });
     }
-    res.json(post);
-
-    if (!post) {
-      res.status(404);
-      throw new Error("Post not found");
-    }
-  } catch (error) {}
+    return res.json(post);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 /* ✓ */
 export const getUserPosts = async (req, res) => {
   // const posts = await Post.find({ user: req.user }); //.populate("user", "name email");
-  const posts = await Post.find({ user: req.params.id })
+  const posts = await Post.find({ user: String(req.params.id) })
     .sort({
       createdAt: -1,
     })
-    .populate("user", "name email");
+    .populate("user", "name email profile_img");
 
   if (posts.length === 0) {
     return res.status(404).json({ msg: "No posts found for this user" });
@@ -59,21 +56,13 @@ export const createPost = [
   upload.single("image"),
   async (req, res) => {
     try {
-      const post = await Post.find({ user: req.user._id });
+      if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-      if (!post) {
-        return res.status(404).json({ msg: "No posts found for this user" });
-      }
-      if (!req.user) {
-        return res.status(401).json({ msg: "Unauthorized" });
-      }
       const { title, content, category } = req.body;
-
-      if (!title || !content) {
-        return res.status(400).json({ msg: "Please add all fields" });
-      }
-      if (!req.file) {
-        return res.status(400).json({ message: "Please upload an image" });
+      if (!title || !content || !req.file) {
+        return res
+          .status(400)
+          .json({ msg: "Please provide title, content, and image" });
       }
 
       const newPost = await Post.create({
@@ -85,11 +74,13 @@ export const createPost = [
           url: req.file.path,
         },
         user: req.user._id,
-        username: req.user.name,
-        email: req.user.email,
       });
 
-      const populatedPost = await newPost.populate("user", "name email");
+      // Populate everything for the frontend
+      const populatedPost = await newPost.populate(
+        "user",
+        "name email profile_img",
+      );
 
       res.status(201).json(populatedPost);
     } catch (error) {

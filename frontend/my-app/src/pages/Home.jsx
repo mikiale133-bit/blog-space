@@ -35,7 +35,7 @@ const Home = () => {
     };
     fetchPosts();
   }, []);
-  // console.log(posts);
+  console.log(posts);
 
   // useEffect(() => {
   //   const func = async () => {
@@ -109,7 +109,7 @@ const Home = () => {
                   <div className="flex-1 justify-between flex flex-col">
                     <Link to={`/posts/${p._id}`}>
                       <h4
-                        className={`font-bold line-clamp-2 mb-2 ${index === 0 && "text-3xl"}`}
+                        className={`font-bold line-clamp-2 mb-2  ${index === 0 && "text-3xl"}`}
                       >
                         {p.title}
                       </h4>
@@ -123,7 +123,18 @@ const Home = () => {
                     {/* card footer */}
                     <div className="flex-1 flex justify-between items-center mt-2 lg:mt-0 lg:hidden border-t border-gray-200 p-2">
                       <div className="flex items-center gap-1 ">
-                        <p className="w-7 h-7 rounded-full bg-gray-300"></p>
+                        {p.user.profile_img && p.user.profile_img.url ? (
+                          <img
+                            src={p.user.profile_img.url}
+                            alt=""
+                            className="w-7 h-7 rounded-full"
+                          />
+                        ) : (
+                          <p className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center text-sm text-gray-600">
+                            {p.user?.name?.charAt(0).toUpperCase()}
+                          </p>
+                        )}
+
                         <p>{p.user.name}</p>
                       </div>
 
@@ -209,7 +220,9 @@ const Home = () => {
                             </div>
                           )} */}
 
-                          <div className="w-7 h-7 rounded-full bg-gray-300"></div>
+                          <p className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center text-sm text-gray-600">
+                            {post.user?.name?.charAt(0).toUpperCase()}
+                          </p>
                           <div className="hover:text-green-700  hover:underline text-sm text-green-800">
                             {post.user.name}
                           </div>
