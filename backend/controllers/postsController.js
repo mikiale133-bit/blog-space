@@ -76,7 +76,6 @@ export const createPost = [
         user: req.user._id,
       });
 
-      // Populate everything for the frontend
       const populatedPost = await newPost.populate(
         "user",
         "name email profile_img",
@@ -118,17 +117,15 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   const post = await Post.findById(req.params.id);
 
-  // 1. Check if post exists FIRST
   if (!post) {
     return res.status(404).json({ msg: "Post not found" });
   }
 
-  // 2. Check for user (from protect middleware)
+  // Check for user (from protect middleware)
   if (!req.user) {
     return res.status(404).json({ msg: "User Not Found" });
   }
 
-  // check if the loggein user is the post's user
   if (post.user.toString() !== req.user.id) {
     return res.status(400).json({ msg: "User Not authorized" });
   }

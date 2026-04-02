@@ -10,14 +10,15 @@ const Register = () => {
   const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
-  const [success, setSuccess] = useState(false);
+  const [image, setImage] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [image, setImage] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,7 +75,6 @@ const Register = () => {
 
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-          {/* Example Input - Apply this pattern to all fields */}
           <div className="mb-5 flex justify-center flex-col items-center -ml-10">
             <div className="mb-5 flex justify-center flex-col items-center">
               <ImageUpload onImageSelect={setImage} currentImage={null} />
@@ -166,6 +166,13 @@ const Register = () => {
             {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
           </button>
         </form>
+
+        <div className="mt-2 flex items-center ga-2 ">
+          <h2>Do you have an account?</h2>
+          <Link to={"/auth/login"} className="text-blue-500 hover:underline">
+            Login here
+          </Link>
+        </div>
       </div>
 
       <Footer />

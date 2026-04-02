@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { API } from "../../api/Axios";
-import { Lock, Mail, Loader2 } from "lucide-react";
+import { Lock, Mail, Loader2, Link } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -86,6 +86,16 @@ const Login = () => {
               )}
             </button>
           </form>
+
+          <div className="mt-2 flex items-center ga-2 ">
+            <h2>Don't have an account?</h2>
+            <Link
+              to={"/auth/register"}
+              className="text-blue-500 hover:underline"
+            >
+              Create one
+            </Link>
+          </div>
         </div>
       </div>
     </div>
