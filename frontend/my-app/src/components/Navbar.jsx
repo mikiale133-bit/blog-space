@@ -11,6 +11,9 @@ import {
   Link2,
   Mail,
   MailCheck,
+  ArrowRight,
+  ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -34,9 +37,9 @@ export const Navbar = () => {
 
   return (
     <div>
-      <nav className="bg-white border-b border-slate-200 py-4 px-4 mb-8">
+      <nav className="bg-white border-b border-slate-200 py-4  mb-8">
         <div className="max-w-5xl mx-auto">
-          {/* Desktop and Mobile Header */}
+          {/* Desktop Header */}
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link
@@ -50,65 +53,67 @@ export const Navbar = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation - Hidden on mobile */}
-            <div className="hidden md:flex items-center gap-2">
-              <Link
-                to={"/create-post"}
-                className="flex items-center gap-1 bg-blue-600 text-white px-2 pr-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
-              >
-                <Plus size={16} />
-                Create Post
-              </Link>
-
-              <Link
-                to={"/users"}
-                className="bg-green-500 text-white px-2 py-1 rounded border border-gray-400 text-sm"
-              >
-                People
-              </Link>
-
-              {user ? (
-                <div className="relative">
-                  <button
-                    className="hover:bg-gray-200 px-2 py-1 rounded-lg cursor-pointer flex gap-2 items-center border border-gray-400 text-sm group"
-                    onClick={() => setLogoutModalOpen(true)}
-                  >
-                    <p className="w-7 h-7 group-hover:bg-white bg-gray-200 flex items-center justify-center">
-                      {user?.name.charAt(0).toUpperCase()}
-                    </p>{" "}
-                    {user.name}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex gap-2">
-                  <Link
-                    to={"/auth/login"}
-                    className="bg-gray-200 px-2 py-1 rounded border border-gray-400 flex gap-1 items-center text-sm"
-                  >
-                    <LogIn size={16} /> Login
-                  </Link>
-                  <Link
-                    to={"/auth/register"}
-                    className="bg-gray-200 px-2 py-1 rounded flex items-center gap-1 border border-gray-400 text-sm"
-                  >
-                    <User size={16} /> Register
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile Menu Button - Visible only on mobile */}
+            {/* right sidebar */}
             <div className="flex gap-1 items-center">
-              {user ? (
-                <button
-                  onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
-                  className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer md:hidden"
+              {/* Navigation - nav center*/}
+              <div className="hidden md:flex items-center gap-2">
+                <div className="px-2 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
+                  News
+                </div>
+
+                <div className="px-2 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
+                  Announcement
+                </div>
+
+                <div className="flex gap-1 items-center px-2 py-2 rounded font-medium transition hover:bg-amber-100 cursor-pointer">
+                  Blog
+                  <ChevronDown size={18} />
+                </div>
+
+                <Link
+                  to={"/users"}
+                  className=" px-2 py-2 rounded font-medium transition hover:bg-gray-100 cursor-pointer"
                 >
-                  {user.name.charAt(0).toUpperCase()}
-                </button>
-              ) : (
-                ""
-              )}
+                  People
+                </Link>
+
+                <Link
+                  to={"/create-post"}
+                  className="bg-gray-100 flex items-center gap-1 px-2 pr-4 py-2 rounded  font-medium transition "
+                >
+                  <Plus size={16} />
+                  Create Post
+                </Link>
+              </div>
+
+              {/* right  */}
+              <div className="ml-4">
+                {user ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
+                      className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer"
+                    >
+                      {user.name.charAt(0).toUpperCase()}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Link
+                      to={"/auth/login"}
+                      className="bg-gray-200 px-2 py-1 rounded border border-gray-400 flex gap-1 items-center text-sm"
+                    >
+                      <LogIn size={16} /> Login
+                    </Link>
+                    <Link
+                      to={"/auth/register"}
+                      className="bg-gray-200 px-2 py-1 rounded flex items-center gap-1 border border-gray-400 text-sm"
+                    >
+                      <User size={16} /> Register
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -121,28 +126,38 @@ export const Navbar = () => {
 
           {/* Mobile Navigation - Visible when menu is open */}
           {mobileMenuOpen && (
-            <div className="p-3 md:hidden mt-4 pt-4 border-t border-gray-200 space-y-3">
+            <div className="px-2 flex flex-col gap-1 items-start md:hidden mt-4 py-4 border-t border-gray-200 shadow-md">
+              <div className="px-2 pr-10 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
+                News
+              </div>
+
+              <div className="px-2 pr-10 py-2  font-medium transition hover:bg-gray-100 cursor-pointer">
+                Announcement
+              </div>
+
+              <div className="flex gap-1 items-center px-2 pr-10 py-2 rounded font-medium transition hover:bg-amber-100 cursor-pointer">
+                Blog
+                <ChevronDown size={18} />
+              </div>
+
+              <Link
+                to={"/users"}
+                className=" px-2 pr-10 py-2 rounded font-medium transition hover:bg-gray-100 cursor-pointer"
+              >
+                People
+              </Link>
+
               <Link
                 to={"/create-post"}
-                className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-full"
-                onClick={() => setMobileMenuOpen(false)}
+                className="bg-gray-100 flex items-center gap-1 px-2 pr-10 py-2 rounded  font-medium transition "
               >
                 <Plus size={16} />
                 Create Post
               </Link>
 
-              <Link
-                to={"/users"}
-                className="flex items-center gap-2 bg-green-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition w-full"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <User size={16} />
-                People
-              </Link>
-
               {user ? (
-                <div className="text-gray-600">
-                  <h2>Logged-in as {user.name}</h2>
+                <div className="text-gray-800">
+                  <h2 className="text-lg italic mt-5">{user.name}</h2>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -168,7 +183,7 @@ export const Navbar = () => {
 
         {logoutModalOpen && (
           <div className="absolute right-7 mt-2 w-48 bg-white border shadow-xl border-gray-50 border-b-black  z-10 rounded-md overflow-hidden">
-            <div className="p-2  bg-green-100 rounded-b-xxl mb-2">
+            <div className="p-2  bg-gray-200 rounded-b-xxl mb-2">
               {user && user.profile_img && user.profile_img.url && (
                 <img
                   src={user.profile_img.url}
@@ -178,10 +193,8 @@ export const Navbar = () => {
               )}
 
               <div>
-                <h2 className="font-bold text-lg text-green-600">
-                  {user.name}
-                </h2>
-                <p className="flex text-xs items-center gap-1 pl-1 text-green-500">
+                <h2 className="font-bold text-lg">{user.name}</h2>
+                <p className="flex text-xs items-center gap-1 pl-0.5 text-gray-700">
                   <MailCheck size={15} /> {user.email}
                 </p>
               </div>
