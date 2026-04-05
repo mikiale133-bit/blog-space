@@ -24,7 +24,7 @@ const Home = () => {
       } catch (error) {
         setError(`Failed to load posts: ${error.message}`);
       } finally {
-        setLoading(false);
+        setLoading(true);
       }
     };
     fetchPosts();
@@ -33,8 +33,8 @@ const Home = () => {
   const blogs = posts.slice(4);
 
   return (
-    <main className="min-h-screen bg-gray-100">
-      <main className="mx-auto">
+    <main className="min-h-screen bg-white">
+      <main className="">
         <div className="space-y-2">
           {loading ? (
             <HeroSkeleton />
@@ -46,15 +46,15 @@ const Home = () => {
 
               {posts.length === 0 && <p>No posts found.</p>}
 
-              <div className="flex flex-col items-center bg-white mx-auto">
+              <div className="flex flex-col items-center bg-gray-100 mx-auto py-5 px-2">
                 <div className="mt-10 mb-5 grid max-w-7xl gap-2 md:grid-cols-3 lg:max-h-100 lg:grid-cols-2 lg:grid-rows-3 max-sm:space-y-3">
                   {news?.map((p, index) => (
                     <div
                       key={p._id}
-                      className={`h-full bg-white transition-all duration-500 max-lg:shadow-md lg:flex lg:justify-between lg:gap-2 max-lg:flex max-lg:flex-col max-lg:justify-between ${
+                      className={`h-full lg:bg-white transition-all duration-500 max-lg:shadow-md lg:flex lg:justify-between lg:gap-1 max-lg:flex max-lg:flex-col max-lg:justify-between ${
                         index === 0
-                          ? "flex-col justify-between rounded-lg p-1 lg:row-span-3"
-                          : "rounded transition-all duration-500 max-sm:p-1 lg:row-span-1 lg:border-5 lg:border-gray-300 lg:p-1 hover:lg:border-gray-900"
+                          ? "flex-col justify-between rounded-lg lg:row-span-3 shadow-lg "
+                          : "rounded-xl transition-all duration-700 lg:row-span-1 lg:border-5 lg:border-gray-500 lg:p-1 hover:lg:border-gray-900 cursor-pointer"
                       }`}
                     >
                       <Link to={`/posts/${p._id}`}>
@@ -66,8 +66,8 @@ const Home = () => {
                                 alt="Post image"
                                 className={`video object-cover w-full ${
                                   index !== 0
-                                    ? "lg:h-25 lg:w-30"
-                                    : "w-full rounded-lg"
+                                    ? "lg:h-27 lg:w-35 rounded-lg"
+                                    : "w-full rounded-lg max-h-70"
                                 }`}
                               />
                             </div>
@@ -75,7 +75,8 @@ const Home = () => {
                         </div>
                       </Link>
 
-                      <div className="flex flex-1 flex-col justify-between h-full bg-white">
+                      <div className="flex flex-1 flex-col justify-between h-full ">
+                        {/* contents */}
                         <div className="pl-2">
                           <div className="mt-2 inline-flex rounded-full bg-yellow-100 px-2 py-1 -ml-1 lg:hidden">
                             <p className="text-xs font-semibold uppercase tracking-wider text-slate-800">
@@ -94,6 +95,7 @@ const Home = () => {
                           </p>
                         </div>
 
+                        {/* card footer */}
                         <div className="mt-2 flex flex-1 items-center justify-between border-t border-gray-200 p-2 lg:mt-0 lg:hidden">
                           <div className="flex items-center gap-1">
                             {p.user.profile_img?.url ? (
@@ -103,7 +105,7 @@ const Home = () => {
                                 className="h-7 w-7 rounded-full"
                               />
                             ) : (
-                              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-300 text-sm text-gray-600">
+                              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-800 text-sm text-gray-300">
                                 {p.user?.name?.charAt(0).toUpperCase()}
                               </p>
                             )}
@@ -119,29 +121,31 @@ const Home = () => {
             </div>
           )}
 
-          <div className="relative py-10">
-            <div
-              className="absolute inset-0 flex items-center"
-              aria-hidden="true"
-            >
-              <div className="w-full border-t border-gray-300"></div>
+          {!loading && (
+            <div className="relative py-10">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-white px-6 font-serif text-3xl italic text-gray-700">
+                  Continue Blogging
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center">
-              <span className="bg-gray-100 px-6 font-serif text-3xl italic text-gray-700">
-                Continue Blogging
-              </span>
-            </div>
-          </div>
+          )}
 
-          <div className="mx-auto flex max-w-7xl justify-between gap-2 space-y-2 lg:flex">
+          <div className="mx-auto  max-w-7xl  gap-2 lg:flex">
             {loading ? (
               <ExploreSkeleton />
             ) : (
-              <div className="grid gap-3 space-y-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
+              <div className="grid gap-3 space-y-2 md:grid-cols-3 lg:grid-cols-4 justify-center px-2 max-sm:shadow-lg pb-10 mb-2">
                 {blogs.map((post) => (
                   <article
                     key={post._id}
-                    className="group relative flex flex-col justify-between rounded-lg bg-white shadow-xs transition-all duration-500"
+                    className="group relative flex flex-col justify-between rounded-lg bg-white shadow-lg transition-all duration-500"
                   >
                     <div>
                       <Link to={`/posts/${post._id}`} className="mb-2">

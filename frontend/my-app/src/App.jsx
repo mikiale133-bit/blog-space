@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/auth/Login";
-import CreatePost from "./components/CreatePost";
+import CreatePost from "./pages/posts/CreatePost";
 import { AuthProvider } from "./context/AuthContext";
 // import UserPosts from "./pages/posts/UserPosts";
 import AllUsers from "./pages/users/AllUsers";

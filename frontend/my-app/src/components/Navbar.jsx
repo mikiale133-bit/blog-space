@@ -14,6 +14,7 @@ import {
   ArrowRight,
   ChevronRight,
   ChevronDown,
+  LogInIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -40,7 +41,7 @@ export const Navbar = () => {
       <nav className="bg-white border-b border-slate-200 py-4  mb-8">
         <div className="max-w-5xl mx-auto">
           {/* Desktop Header */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center px-4">
             {/* Logo */}
             <Link
               to={"/"}
@@ -82,7 +83,7 @@ export const Navbar = () => {
                   className="bg-gray-100 flex items-center gap-1 px-2 pr-4 py-2 rounded  font-medium transition "
                 >
                   <Plus size={16} />
-                  Create Post
+                  Create
                 </Link>
               </div>
 
@@ -98,18 +99,18 @@ export const Navbar = () => {
                     </button>
                   </div>
                 ) : (
-                  <div className="flex gap-2">
-                    <Link
-                      to={"/auth/login"}
-                      className="bg-gray-200 px-2 py-1 rounded border border-gray-400 flex gap-1 items-center text-sm"
-                    >
-                      <LogIn size={16} /> Login
-                    </Link>
+                  <div className="flex gap-2 ">
                     <Link
                       to={"/auth/register"}
-                      className="bg-gray-200 px-2 py-1 rounded flex items-center gap-1 border border-gray-400 text-sm"
+                      className="bg-black text-white px-3 py-1 rounded-full flex items-center gap-1 border max-md:hidden"
                     >
-                      <User size={16} /> Register
+                      <User size={16} /> Get started
+                    </Link>
+                    <Link
+                      to={"/auth/login"}
+                      className="px-3 py-1 rounded-full flex items-center gap-1 border border-gray-500 hover:bg-gray-100 md:hidden"
+                    >
+                      <LogInIcon size={16} />
                     </Link>
                   </div>
                 )}
@@ -160,20 +161,13 @@ export const Navbar = () => {
                   <h2 className="text-lg italic mt-5">{user.name}</h2>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="flex gap-2 items-center mt-5">
                   <Link
                     to={"/auth/login"}
-                    className="flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-lg border border-gray-400 text-sm w-full hover:bg-gray-300 transition"
+                    className="flex items-center gap-2 bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-900 text-sm w-full "
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <LogIn size={16} /> Login
-                  </Link>
-                  <Link
-                    to={"/auth/register"}
-                    className="flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-lg border border-gray-400 text-sm w-full hover:bg-gray-300 transition"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User size={16} /> Register
+                    <User size={16} /> Get Started
                   </Link>
                 </div>
               )}

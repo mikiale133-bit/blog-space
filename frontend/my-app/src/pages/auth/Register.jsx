@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { API } from "../../api/Axios";
-import { User, Mail, Lock, Loader2, CheckCircle, Image } from "lucide-react";
+import { User, Mail, Lock, Loader2 } from "lucide-react";
 import Footer from "../../components/Footer";
 import { useAuthStore } from "../../store/useAuthStore";
 import ImageUpload from "../../components/ImageUpload2";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const register = useAuthStore((state) => state.register);
@@ -165,14 +165,18 @@ const Register = () => {
           >
             {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
           </button>
+          <div className="mt-2 ">
+            <h2>
+              Do you have an account?{" "}
+              <NavLink
+                to={"/auth/login"}
+                className="text-blue-500 hover:underline"
+              >
+                Login here
+              </NavLink>
+            </h2>
+          </div>
         </form>
-
-        <div className="mt-2 flex items-center ga-2 ">
-          <h2>Do you have an account?</h2>
-          <Link to={"/auth/login"} className="text-blue-500 hover:underline">
-            Login here
-          </Link>
-        </div>
       </div>
 
       <Footer />

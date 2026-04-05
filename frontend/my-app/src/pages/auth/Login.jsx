@@ -3,6 +3,7 @@ import { API } from "../../api/Axios";
 import { Lock, Mail, Loader2, Link } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import { useAuthStore } from "../../store/useAuthStore";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const login = useAuthStore((state) => state.login);
@@ -87,14 +88,16 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-2 flex items-center ga-2 ">
-            <h2>Don't have an account?</h2>
-            <Link
-              to={"/auth/register"}
-              className="text-blue-500 hover:underline"
-            >
-              Create one
-            </Link>
+          <div className="mt-2">
+            <h2>
+              Don't have an account?
+              <NavLink
+                to={"/auth/register"}
+                className="text-blue-500 hover:underline ml-1"
+              >
+                Create one
+              </NavLink>
+            </h2>
           </div>
         </div>
       </div>
