@@ -24,7 +24,7 @@ const Home = () => {
       } catch (error) {
         setError(`Failed to load posts: ${error.message}`);
       } finally {
-        setLoading(true);
+        setLoading(false);
       }
     };
     fetchPosts();
