@@ -24,7 +24,7 @@ app.use(
   }),
 );
 
-app.all("*", cors());
+app.all(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
