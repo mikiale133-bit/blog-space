@@ -86,7 +86,7 @@ const PostDetail = () => {
     }
   }, [post?.user?._id, post?.user]);
 
-  console.log(user);
+  console.log(post);
 
   if (loading) {
     return (

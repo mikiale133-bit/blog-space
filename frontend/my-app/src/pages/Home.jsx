@@ -12,6 +12,7 @@ const Home = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // const [errorDisplay, setErrorDisplay] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -30,7 +31,9 @@ const Home = () => {
         setNews(recentPosts.data);
         setPosts(resp.data.posts);
       } catch (error) {
-        setError(`Failed to load posts: ${error.message}`);
+        setError(
+          `${error.response.status === 500 ? "Server error" : "Failed to load posts"}`,
+        );
       } finally {
         setLoading(false);
       }
@@ -38,98 +41,103 @@ const Home = () => {
     fetchPosts();
   }, []);
 
-  const blogs = Array.isArray(posts) ? posts.slice(4) : [];
+  const blogs = Array.isArray(posts) ? posts.slice(2) : [];
 
   return (
-    <main className="min-h-screen bg-white">
-      <main className="">
+    <main className="bg-white">
+      <main className="min-h-screen">
         <div className="space-y-2">
           {loading ? (
             <HeroSkeleton />
           ) : (
             <div>
               {error && (
-                <p className="rounded bg-red-50 p-4 text-red-500">{error}</p>
+                <div>
+                  <p className="rounded bg-red-50 p-4 text-red-500">{error}</p>
+                </div>
               )}
 
-              {posts.length === 0 && <p>No posts found.</p>}
+              {!error && posts.length === 0 && <p>No posts found.</p>}
 
-              <div className="flex flex-col items-center bg-gray-100 mx-auto py-5 px-2">
+              <div
+                className={`flex flex-col items-center ${!error && "bg-gray-100 py-5"}  mx-auto  px-2`}
+              >
                 <div className="mt-10 mb-5 grid max-w-7xl gap-2 md:grid-cols-3 lg:max-h-100 lg:grid-cols-2 lg:grid-rows-3 max-sm:space-y-3">
-                  {news?.map((p, index) => (
-                    <div
-                      key={p._id}
-                      className={`h-full lg:bg-white transition-all duration-500 max-lg:shadow-md lg:flex lg:justify-between lg:gap-1 max-lg:flex max-lg:flex-col max-lg:justify-between ${
-                        index === 0
-                          ? "flex-col justify-between rounded-lg lg:row-span-3 shadow-lg "
-                          : "rounded-xl transition-all duration-700 lg:row-span-1 lg:border-5 lg:border-gray-500 lg:p-1 hover:lg:border-gray-900 cursor-pointer"
-                      }`}
-                    >
-                      <Link to={`/posts/${p._id}`}>
-                        <div>
-                          {p.image?.url && (
-                            <div>
-                              <img
-                                src={p.image.url}
-                                alt="Post image"
-                                className={`video object-cover w-full ${
-                                  index !== 0
-                                    ? "lg:h-27 lg:w-35 rounded-lg"
-                                    : "w-full rounded-lg max-h-70"
-                                }`}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </Link>
+                  {!error &&
+                    news?.map((p, index) => (
+                      <div
+                        key={p._id}
+                        className={`h-full  transition-all duration-500 max-lg:shadow-md lg:flex lg:justify-between lg:gap-1 max-lg:flex max-lg:flex-col max-lg:justify-between ${
+                          index === 0
+                            ? "flex-col justify-between rounded-lg lg:row-span-3 shadow-lg lg:bg-white"
+                            : "rounded-xl transition-all duration-700 lg:row-span-1  cursor-pointer"
+                        }`}
+                      >
+                        <Link to={`/posts/${p._id}`}>
+                          <div>
+                            {p.image?.url && (
+                              <div>
+                                <img
+                                  src={p.image.url}
+                                  alt="Post image"
+                                  className={`video object-cover w-full ${
+                                    index !== 0
+                                      ? "lg:h-27 lg:w-35 rounded-lg"
+                                      : "w-full rounded-lg max-h-70"
+                                  }`}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </Link>
 
-                      <div className="flex flex-1 flex-col justify-between h-full ">
-                        {/* contents */}
-                        <div className="pl-2">
-                          <div className="mt-2 inline-flex rounded-full bg-yellow-100 px-2 py-1 -ml-1 lg:hidden">
-                            <p className="text-xs font-semibold uppercase tracking-wider text-slate-800">
-                              {new Date(p.createdAt).toLocaleDateString()}
+                        <div className="flex flex-1 flex-col justify-between h-full ">
+                          {/* contents */}
+                          <div className="pl-2">
+                            <div className="mt-2 inline-flex rounded-full bg-yellow-100 px-2 py-1 -ml-1 lg:hidden">
+                              <p className="text-xs font-semibold uppercase tracking-wider text-slate-800">
+                                {new Date(p.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <Link to={`/posts/${p._id}`}>
+                              <h4 className="mb-2 font-serif font-bold line-clamp-2">
+                                {p.title}
+                              </h4>
+                            </Link>
+                            <p
+                              className={`italic text-gray-600 line-clamp-2 ${index === 0 ? "text-xl line-clamp-3" : "text-md"}`}
+                            >
+                              {p.content}
                             </p>
                           </div>
-                          <Link to={`/posts/${p._id}`}>
-                            <h4 className="mb-2 font-serif font-bold line-clamp-2">
-                              {p.title}
-                            </h4>
-                          </Link>
-                          <p
-                            className={`italic text-gray-600 line-clamp-2 ${index === 0 ? "text-xl line-clamp-3" : "text-md"}`}
-                          >
-                            {p.content}
-                          </p>
-                        </div>
 
-                        {/* card footer */}
-                        <div className="mt-2 flex flex-1 items-center justify-between border-t border-gray-200 p-2 lg:mt-0 lg:hidden">
-                          <div className="flex items-center gap-1">
-                            {p.user.profile_img?.url ? (
-                              <img
-                                src={p.user.profile_img.url}
-                                alt=""
-                                className="h-7 w-7 rounded-full"
-                              />
-                            ) : (
-                              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-800 text-sm text-gray-300">
-                                {p.user?.name?.charAt(0).toUpperCase()}
-                              </p>
-                            )}
-                            <p>{p.user.name}</p>
+                          {/* card footer */}
+                          <div className="mt-2 flex flex-1 items-center justify-between border-t border-gray-200 p-2 lg:mt-0 lg:hidden">
+                            <div className="flex items-center gap-1">
+                              {p.user?.profile_img ? (
+                                <img
+                                  src={p.user.profile_img.url}
+                                  alt=""
+                                  className="h-7 w-7 rounded-full"
+                                />
+                              ) : (
+                                <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-800 text-sm text-gray-300">
+                                  {p.user?.name?.charAt(0).toUpperCase()}
+                                </p>
+                              )}
+                              <p>{p.user.name}</p>
+                            </div>
+                            <Bookmark size={15} />
                           </div>
-                          <Bookmark size={15} />
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>
           )}
 
-          {!loading && (
+          {!loading && !error && (
             <div className="relative py-10">
               <div
                 className="absolute inset-0 flex items-center"
@@ -149,7 +157,7 @@ const Home = () => {
             {loading ? (
               <ExploreSkeleton />
             ) : (
-              <div className="grid gap-3 space-y-2 md:grid-cols-3 lg:grid-cols-4 justify-center px-2 max-sm:shadow-lg pb-10 mb-2">
+              <div className="grid gap-3 space-y-2 md:grid-cols-3 lg:grid-cols-4 justify-center px-2 pb-10 mb-2">
                 {blogs?.map((post) => (
                   <article
                     key={post._id}
@@ -192,9 +200,20 @@ const Home = () => {
                           state={{ user: post.user }}
                           className="flex items-center gap-0.5"
                         >
-                          <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-xs text-gray-400">
-                            {post.user?.name?.charAt(0).toUpperCase()}
-                          </p>
+                          <div className="flex items-center gap-1">
+                            {post.user?.profile_img ? (
+                              <img
+                                src={post.user.profile_img.url}
+                                alt=""
+                                className="h-7 w-7 rounded-full"
+                              />
+                            ) : (
+                              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-800 text-sm text-gray-300">
+                                {post.user?.name?.charAt(0).toUpperCase()}
+                              </p>
+                            )}
+                            <p>{post.user.name}</p>
+                          </div>
                         </Link>
 
                         <div className="flex cursor-pointer items-center justify-center gap-1 rounded px-2 py-0.5 hover:bg-gray-100">

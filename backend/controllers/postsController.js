@@ -154,7 +154,7 @@ export const getRecentPosts = async (req, res) => {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
       .limit(4)
-      .populate("user", "name email");
+      .populate("user", "name email profile_img");
 
     if (posts.length === 0) {
       res.status(404).json({ msg: "No posts found" });
