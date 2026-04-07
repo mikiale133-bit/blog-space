@@ -200,8 +200,10 @@ const CreatePost = ({ onPostCreated }) => {
               className="w-full bg-black  text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
-                <span className="flex items-center gap-0.5 justify-center">
-                  <Loader2 size={15} />
+                <span className="flex items-center gap-0.5 justify-center ">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500">
+                    <Loader2 size={15} />
+                  </div>
                   Creating Post...
                 </span>
               ) : (

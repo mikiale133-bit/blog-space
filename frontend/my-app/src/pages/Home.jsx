@@ -19,8 +19,16 @@ const Home = () => {
         setLoading(true);
         const resp = await API.get("/api/posts");
         const recentPosts = await API.get("/api/posts/recents");
+
+        console.log("posts:", resp.data.posts);
+        console.log(
+          "Is resp.data.posts an array?",
+          Array.isArray(resp.data.posts),
+        );
+
+        console.log("Type of resp.data.posts:", typeof resp.data.posts);
         setNews(recentPosts.data);
-        setPosts(resp.data);
+        setPosts(resp.data.posts);
       } catch (error) {
         setError(`Failed to load posts: ${error.message}`);
       } finally {
@@ -30,7 +38,7 @@ const Home = () => {
     fetchPosts();
   }, []);
 
-  const blogs = posts.slice(4);
+  const blogs = Array.isArray(posts) ? posts.slice(4) : [];
 
   return (
     <main className="min-h-screen bg-white">
@@ -142,7 +150,7 @@ const Home = () => {
               <ExploreSkeleton />
             ) : (
               <div className="grid gap-3 space-y-2 md:grid-cols-3 lg:grid-cols-4 justify-center px-2 max-sm:shadow-lg pb-10 mb-2">
-                {blogs.map((post) => (
+                {blogs?.map((post) => (
                   <article
                     key={post._id}
                     className="group relative flex flex-col justify-between rounded-lg bg-white shadow-lg transition-all duration-500"
