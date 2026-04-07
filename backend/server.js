@@ -24,6 +24,10 @@ app.use(
   }),
 );
 
+<<<<<<< HEAD
+=======
+// app.all(cors());
+>>>>>>> f5d406e021a80ccf2a051e305328c69119288cb1
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
