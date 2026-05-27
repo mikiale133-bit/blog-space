@@ -1,3 +1,4 @@
+import { Upload } from "lucide-react";
 import React, { useState, useRef } from "react";
 
 const ImageUpload = ({ onImageSelect, currentImage }) => {
@@ -12,13 +13,7 @@ const ImageUpload = ({ onImageSelect, currentImage }) => {
       if (!file) return;
 
       // Validate file type
-      const validImageTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-      ];
+      const validImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
       if (!validImageTypes.includes(file.type)) {
         setError("Please select a valid image file (JPG, PNG, GIF, or WEBP)");
         return;
@@ -62,15 +57,11 @@ const ImageUpload = ({ onImageSelect, currentImage }) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+      <div className="">
         {preview ? (
           <div className="relative group">
             <div className="relative">
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-full h-64 object-cover rounded-lg shadow-md"
-              />
+              <img src={preview} alt="Preview" className="w-full h-64 object-cover rounded-lg shadow-md" />
               <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center">
                 <button
                   type="button"
@@ -94,13 +85,7 @@ const ImageUpload = ({ onImageSelect, currentImage }) => {
               id="imageInput"
             />
             <label htmlFor="imageInput" className="cursor-pointer block">
-              <div className="mb-4 text-4xl">📷</div>
-              <div className="text-gray-600 font-medium mb-2">
-                Click to upload image
-              </div>
-              <div className="text-gray-400 text-sm">
-                (Max 5MB, JPG/PNG/GIF/WEBP)
-              </div>
+              <Upload />
             </label>
           </div>
         )}

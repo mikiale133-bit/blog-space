@@ -37,16 +37,12 @@ export const registerUser = [
     try {
       const { name, email, password } = req.body;
 
-      // 1. Basic Validation
+      // 1. Validation
       if (!name || !email || !password) {
         return res.status(400).json({ msg: "All fields are required" });
       }
 
-      if (!req.file) {
-        return res.status(400).json({ msg: "Please upload an image" });
-      }
-
-      // 2. Check if user exists (Added RETURN here)
+      // 2. Check if user exists
       const userExists = await User.findOne({ email });
       if (userExists) {
         return res.status(400).json({ msg: "User already exists" });
@@ -56,8 +52,8 @@ export const registerUser = [
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      // 2. THE MISSING STEP: Upload the file to Cloudinary
-      // req.file.path comes from Multer, result comes from Cloudinary
+      // MISSING STEP: Upload the file to Cloudinary
+      // req.file.path comes from Multer, // result comes from Cloudinary
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "user_profiles", // Optional: organizes images in Cloudinary
       });
@@ -97,9 +93,10 @@ export const registerUser = [
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  // Check for user email - Find the user by email
+  // 1. Check for user email - Find the user by email
   const user = await User.findOne({ email });
 
+  // 2. compare the password
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,

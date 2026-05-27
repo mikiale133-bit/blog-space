@@ -6,98 +6,88 @@ import { useAuthStore } from "../../store/useAuthStore";
 import ImageUpload from "../../components/ImageUpload2";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-/* ZOD SCHEMA */
-const registerSchema = z
-  .object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-/* COMPONENT  */
 const Register = () => {
-  const registerUser = useAuthStore((state) => state.register);
+  const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-  /* REACT HOOK FORM  */
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: zodResolver(registerSchema),
-  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  /* SUBMIT HANDLER */
-  const onSubmit = async (data) => {
+    // 1. Validation happens HERE, right before the API call
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
-    setServerError("");
+    setError("");
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("image", image);
+    // formData.append("confirmPassword", confirmPassword);
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("email", data.email);
-      formData.append("password", data.password);
-
-      if (image) {
-        formData.append("image", image);
-      }
+      // 2. Destructure to send only what the server expects
 
       const resp = await API.post("/api/users/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       localStorage.setItem("token", resp.data.token);
-      registerUser(resp.data);
 
-      // clear form
-      reset();
-      setImage(null);
-
-      navigate("/"); // better than navigate(-1)
+      register(resp.data);
+      setSuccess(true);
     } catch (err) {
-      setServerError(err.response?.data?.message || "Registration failed");
+      setError(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
+
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setImage(null);
+
+    navigate(-1);
   };
 
   return (
     <div>
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit}
           className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
         >
           <h2 className="text-2xl font-bold mb-6">Create Account</h2>
 
-          {/* SERVER ERROR */}
-          {serverError && (
-            <p className="text-red-500 text-sm mb-4">{serverError}</p>
-          )}
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-          {/* IMAGE UPLOAD */}
-          <div className="mb-5 flex flex-col items-center">
-            <ImageUpload onImageSelect={setImage} currentImage={null} />
-            <label className="font-bold mt-2">Profile Image</label>
+          <div className="mb-5 flex justify-center flex-col items-center -ml-10">
+            <div className="mb-5 flex justify-center flex-col items-center">
+              <ImageUpload onImageSelect={setImage} currentImage={null} />
+              <label className="font-bold">Profile Image</label>
+            </div>
           </div>
 
-          {/* NAME */}
-          <div className="mb-4">
+          {success && (
+            <p className="text-green-500 text-sm mb-4">
+              Registered successfully !
+            </p>
+          )}
+          <div>
             <label className="block text-sm font-medium mb-1">Full Name</label>
             <div className="relative">
               <User
@@ -105,33 +95,37 @@ const Register = () => {
                 size={18}
               />
               <input
-                {...register("name")}
+                type="text"
+                name="name"
+                id="name"
+                value={name}
                 className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
                 placeholder="e.g. John Doe"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <p className="text-red-500 text-sm">{errors.name?.message}</p>
           </div>
 
-          {/* EMAIL */}
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Email</label>
-            <div className="relative">
+            <div className="relative mb-4">
               <Mail
                 className="absolute right-3 top-3 text-slate-400"
                 size={18}
               />
               <input
-                {...register("email")}
                 type="email"
-                className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
+                name="email"
+                id="email"
+                value={email}
+                className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring focus:ring-blue-900 outline-none"
                 placeholder="example@gmail.com"
+                required
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <p className="text-red-500 text-sm">{errors.email?.message}</p>
           </div>
 
-          {/* PASSWORD */}
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Password</label>
             <div className="relative">
@@ -140,44 +134,38 @@ const Register = () => {
                 size={18}
               />
               <input
-                {...register("password")}
                 type="password"
+                name="password"
+                id="password"
+                value={password}
                 className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
                 placeholder="••••••••"
+                required
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <p className="text-red-500 text-sm">{errors.password?.message}</p>
+          </div>
+          <div className="relative mb-4">
+            <Lock className="absolute right-3 top-3 text-slate-400" size={18} />
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              value={confirmPassword}
+              className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
+              placeholder="Confirm password..."
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </div>
 
-          {/* CONFIRM PASSWORD */}
-          <div className="mb-4">
-            <div className="relative">
-              <Lock
-                className="absolute right-3 top-3 text-slate-400"
-                size={18}
-              />
-              <input
-                {...register("confirmPassword")}
-                type="password"
-                className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
-                placeholder="Confirm password..."
-              />
-            </div>
-            <p className="text-red-500 text-sm">
-              {errors.confirmPassword?.message}
-            </p>
-          </div>
-
-          {/* SUBMIT BTN */}
           <button
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold flex justify-center items-center gap-2"
           >
             {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
           </button>
-
-          {/* LOGIN LINK */}
-          <div className="mt-3">
+          <div className="mt-2 ">
             <h2>
               Do you have an account?{" "}
               <NavLink
@@ -197,3 +185,5 @@ const Register = () => {
 };
 
 export default Register;
+
+// Previous version with issues:

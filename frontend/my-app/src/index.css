@@ -1,21 +1,109 @@
 @import "tailwindcss";
 
-.animate {
-  background-size: 200% 100%;
+@custom-variant dark (&:where(.dark, .dark *));
 
-  animation: animate 2s linear infinite;
-  background-image: linear-gradient(
-    90deg,
-    rgb(244, 242, 242),
-    /* bumped opacity slightly to see it better */ transparent
-  );
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-card: var(--card);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
 }
 
-@keyframes animate {
-  0% {
-    background-position: 200% 0;
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+
+  --primary: #22c55e;
+  --primary-foreground: #ffffff;
+
+  --secondary: #6b7280;
+  --secondary-foreground: #ffffff;
+
+  --accent: #22c55e;
+  --accent-foreground: #ffffff;
+
+  --muted: #ededed;
+  --muted-foreground: #6b7280;
+
+  --border: #e6e6e6;
+  --card: #ffffff;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+.dark {
+  background-color: #010101;
+  color: #ffffff;
+
+  --bg: #01082d;
+  --text: #e5e7eb;
+
+  --primary: #039eff;
+  --primary-foreground: #0d0d0d;
+
+  --secondary: #334155;
+  --secondary-foreground: #e5e7eb;
+
+  --accent: #a78bfa;
+  --accent-foreground: #0d0d0d;
+
+  --muted: #2e3c4f;
+  --muted-foreground: #9ca3af;
+
+  --border: #5b5b5b;
+  --card: #070a2d;
+
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+}
+
+@media screen and (min-width: 412px) {
+  .post-card {
+    flex-direction: column;
+    grid-template-columns: repeat(2, 1fr);
   }
-  100% {
-    background-position: -200% 0;
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .post-card img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1020px) {
+  .posts-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media screen and (min-width: 1400px) {
+  .posts-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }

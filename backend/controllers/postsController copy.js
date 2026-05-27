@@ -2,7 +2,8 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
 import { upload } from "../middleware/imgUpload.js";
-// import { cloudinary } from "../config/cloudinary.js";
+import { cloudinary } from "../config/cloudinary.js";
+import { response } from "express";
 
 /* ✓ */
 export const getPosts = async (req, res) => {
@@ -12,7 +13,11 @@ export const getPosts = async (req, res) => {
     const skip = (page - 1) * limit;
     const totalPosts = await Post.countDocuments();
 
-    const posts = await Post.find().populate("user", "name email profile_img").sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const posts = await Post.find()
+      .populate("user", "name email profile_img")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     res.status(200).json({
       posts,
@@ -28,7 +33,10 @@ export const getPosts = async (req, res) => {
 /* ✓ */
 export const getSinglePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate("user", " name email profile_img");
+    const post = await Post.findById(req.params.id).populate(
+      "user",
+      " name email profile_img",
+    );
     if (!post) {
       return res.status(404).json({ msg: "post not found" });
     }
@@ -59,43 +67,39 @@ export const getUserPosts = async (req, res) => {
 
 /* ✓ */
 export const createPost = [
-  upload.single("image"),
+  upload.array("image", 5),
   async (req, res) => {
     try {
       if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-      // 1. DEBUG: Look at your console to see exactly what keys are present inside req.file
-      console.log("MULTER REQ.FILE OUTPUT:", req.file);
-
       const { title, content, category } = req.body;
-      if (!title || !content || !req.file) {
-        return res.status(400).json({ msg: "Please provide title, content, and image" });
-      }
 
-      // 2. FALLBACK MECHANISM: Extracts whichever keys your specific version generated
-      const publicId = req.file.filename || req.file.public_id;
-      const imageUrl = req.file.path || req.file.secure_url || req.file.url;
-
-      // Double-check fallback resolution before hitting Mongoose
-      if (!publicId || !imageUrl) {
-        return res.status(400).json({
-          msg: "Cloudinary upload failed to populate file properties correctly.",
-          debug_received: { filename: req.file.filename, path: req.file.path },
-        });
+      if (!title || !content || !req.files) {
+        return res
+          .status(400)
+          .json({ msg: "Please provide title, content, and image" });
       }
 
       const newPost = await Post.create({
         title,
         content,
         category,
-        image: {
-          public_id: publicId,
-          url: imageUrl,
+        //cover_image
+        cover_image: {
+          public_id: req.files[0].filename,
+          url: req.files[0].path,
         },
+        gallaries: req.files.map((file) => ({
+          public_id: file.filename,
+          url: file.path,
+        })),
         user: req.user._id,
       });
 
-      const populatedPost = await newPost.populate("user", "name email profile_img");
+      const populatedPost = await newPost.populate(
+        "user",
+        "name email profile_img",
+      );
 
       res.status(201).json(populatedPost);
     } catch (error) {
@@ -143,7 +147,7 @@ export const deletePost = async (req, res) => {
   }
 
   if (post.user.toString() !== req.user.id) {
-    return res.status(400).json({ msg: "You are Not authorized to delete this post" });
+    return res.status(400).json({ msg: "User Not authorized" });
   }
 
   await Post.findByIdAndDelete(req.params.id); // or post.deleteOne()
@@ -153,7 +157,10 @@ export const deletePost = async (req, res) => {
 // recent posts
 export const getRecentPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 }).limit(4).populate("user", "name email profile_img");
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .populate("user", "name email profile_img");
 
     if (posts.length === 0) {
       res.status(404).json({ msg: "No posts found" });

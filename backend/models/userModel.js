@@ -16,8 +16,8 @@ const userSchema = mongoose.Schema(
       required: [true, "password is required"],
     },
     profile_img: {
-      public_id: { type: String, required: true },
-      url: { type: String, required: true },
+      public_id: { type: String },
+      url: { type: String },
     },
     // contacts: {
     //   phone: {

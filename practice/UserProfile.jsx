@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { API } from "../../api/Axios";
 import { Link, useParams } from "react-router-dom";
 import { Loader2, FileText, RefreshCcw } from "lucide-react";
+
+import { API } from "../../api/Axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 const UserPosts = () => {
+  // zod schema for validation
+
   const { userId } = useParams(); // Grabs the ID from the URL: /user/:userId
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);

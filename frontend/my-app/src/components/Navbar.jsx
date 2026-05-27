@@ -15,156 +15,146 @@ import {
   ChevronRight,
   ChevronDown,
   LogInIcon,
+  Moon,
+  Sun,
 } from "lucide-react";
+
+import { useTheme } from "@/context/ThemeContext";
 import { Link } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
 
 export const Navbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
 
-  // const navigate = useNavigate();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // close logout modal when clicked on any screen
-  // const handleOutsideClick = (e) => {
-  //   if (logoutModalOpen && e.target !== e.currentTarget) {
-  //     setLogoutModalOpen(false);
-  //   }
-  // };
-  // window.addEventListener("click", handleOutsideClick);
+  const closeMobileMenus = () => {
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div>
-      <nav className="bg-white border-b border-slate-200 py-4  mb-8">
-        <div className="max-w-5xl mx-auto">
+      <nav className="py-4 shadow-md dark:border-b bg-background dark:bg-gray-900 text-foreground border-gray-800">
+        <div>
           {/* Desktop Header */}
-          <div className="flex justify-between items-center px-4">
+          <div className="flex items-center justify-between px-4">
             {/* Logo */}
-            <Link
-              to={"/"}
-              className="flex gap-2 items-center text-lg font-bold"
-            >
-              <Signature />{" "}
+            <Link to={"/"} className="flex items-center gap-2 text-lg font-bold">
+              <Signature />
               <div>
-                {" "}
-                Blog<span className="text-yellow-500">Space</span>
+                Blog<span className="text-primary">Space</span>
               </div>
             </Link>
 
             {/* right sidebar */}
-            <div className="flex gap-1 items-center">
-              {/* Navigation - nav center*/}
-              <div className="hidden md:flex items-center gap-2">
-                <div className="px-2 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
-                  News
-                </div>
+            <div className="flex items-center gap-1">
+              {/* Navigation */}
+              <div className="items-center hidden gap-2 md:flex">
+                <div className="px-2 py-2 font-medium transition rounded-lg cursor-pointer hover:bg-muted">News</div>
 
-                <div className="px-2 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
-                  Announcement
-                </div>
+                <div className="px-2 py-2 font-medium transition rounded-lg cursor-pointer hover:bg-muted">Announcement</div>
 
-                <div className="flex gap-1 items-center px-2 py-2 rounded font-medium transition hover:bg-amber-100 cursor-pointer">
+                <div className="flex items-center gap-1 px-2 py-2 font-medium transition rounded cursor-pointer hover:bg-muted">
                   Blog
                   <ChevronDown size={18} />
                 </div>
 
-                <Link
-                  to={"/users"}
-                  className=" px-2 py-2 rounded font-medium transition hover:bg-gray-100 cursor-pointer"
-                >
+                <Link to={"/users"} className="px-2 py-2 font-medium transition rounded cursor-pointer bg-muted hover:bg-muted/70">
                   People
                 </Link>
 
                 <Link
                   to={"/create-post"}
-                  className="bg-gray-100 flex items-center gap-1 px-2 pr-4 py-2 rounded  font-medium transition "
+                  className="flex items-center gap-1 px-2 py-2 pr-4 font-medium transition rounded bg-muted hover:bg-muted/70"
                 >
                   <Plus size={16} />
                   Create
                 </Link>
               </div>
 
-              {/* right  */}
+              {/* right */}
               <div className="ml-4">
                 {user ? (
                   <div className="relative">
                     <button
                       onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
-                      className="relative w-7 h-7 bg-gray-100 flex justify-center items-center p-2 rounded-full hover:bg-gray-300 transition cursor-pointer"
+                      className="relative flex items-center justify-center p-2 transition rounded-full cursor-pointer w-7 h-7 bg-muted hover:bg-muted/70 text-foreground"
                     >
                       {user.name.charAt(0).toUpperCase()}
                     </button>
                   </div>
                 ) : (
-                  <div className="flex gap-2 ">
+                  <div className="flex gap-2">
                     <Link
                       to={"/auth/register"}
-                      className="bg-black text-white px-3 py-1 rounded-full flex items-center gap-1 border max-md:hidden"
+                      className="flex items-center gap-1 px-3 py-1 rounded-full bg-foreground text-background max-md:hidden"
                     >
                       <User size={16} /> Get started
                     </Link>
-                    <Link
-                      to={"/auth/login"}
-                      className="px-3 py-1 rounded-full flex items-center gap-1 border border-gray-500 hover:bg-gray-100 md:hidden"
-                    >
+
+                    <Link to={"/auth/login"} className="flex items-center gap-1 px-3 py-1 border rounded-full border-border hover:bg-muted md:hidden">
                       <LogInIcon size={16} />
                     </Link>
                   </div>
                 )}
               </div>
 
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
-              >
+              {/* mobile toggle */}
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 transition rounded-lg md:hidden hover:bg-muted">
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
 
-          {/* Mobile Navigation - Visible when menu is open */}
+          {/* Mobile Navigation */}
           {mobileMenuOpen && (
-            <div className="px-2 flex flex-col gap-1 items-start md:hidden mt-4 py-4 border-t border-gray-200 shadow-md">
-              <div className="px-2 pr-10 py-2 rounded-lg font-medium transition hover:bg-gray-100 cursor-pointer">
+            <div className="flex flex-col items-start gap-1 px-2 py-4 mt-4 border-t shadow-md border-border bg-background md:hidden">
+              <button onClick={() => closeMobileMenus()} className="px-2 py-2 pr-10 font-medium transition rounded-lg cursor-pointer hover:bg-muted">
                 News
-              </div>
+              </button>
 
-              <div className="px-2 pr-10 py-2  font-medium transition hover:bg-gray-100 cursor-pointer">
+              <button onClick={() => closeMobileMenus()} className="px-2 py-2 pr-10 font-medium transition cursor-pointer hover:bg-muted">
                 Announcement
-              </div>
+              </button>
 
-              <div className="flex gap-1 items-center px-2 pr-10 py-2 rounded font-medium transition hover:bg-amber-100 cursor-pointer">
+              <button
+                onClick={() => closeMobileMenus()}
+                className="flex items-center gap-1 px-2 py-2 pr-10 font-medium transition rounded cursor-pointer hover:bg-muted"
+              >
                 Blog
                 <ChevronDown size={18} />
-              </div>
+              </button>
 
               <Link
+                onClick={() => closeMobileMenus()}
                 to={"/users"}
-                className=" px-2 pr-10 py-2 rounded font-medium transition hover:bg-gray-100 cursor-pointer"
+                className="px-2 py-2 pr-10 font-medium transition rounded cursor-pointer hover:bg-muted"
               >
                 People
               </Link>
 
               <Link
+                onClick={() => closeMobileMenus()}
                 to={"/create-post"}
-                className="bg-gray-100 flex items-center gap-1 px-2 pr-10 py-2 rounded  font-medium transition "
+                className="flex items-center gap-1 px-2 py-2 pr-10 font-medium transition rounded bg-muted hover:bg-muted/70"
               >
                 <Plus size={16} />
                 Create Post
               </Link>
 
               {user ? (
-                <div className="text-gray-800">
-                  <h2 className="text-lg italic mt-5">{user.name}</h2>
+                <div className="mt-5 text-foreground">
+                  <h2 className="text-lg italic">{user.name}</h2>
                 </div>
               ) : (
-                <div className="flex gap-2 items-center mt-5">
+                <div className="flex items-center gap-2 mt-5">
                   <Link
                     to={"/auth/login"}
-                    className="flex items-center gap-2 bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-900 text-sm w-full "
+                    className="flex items-center w-full gap-2 px-3 py-2 text-sm rounded-lg bg-foreground text-background"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User size={16} /> Get Started
@@ -175,20 +165,15 @@ export const Navbar = () => {
           )}
         </div>
 
+        {/* logout modal */}
         {logoutModalOpen && (
-          <div className="absolute right-7 mt-2 w-48 bg-white border shadow-xl border-gray-50 border-b-black  z-10 rounded-md overflow-hidden">
-            <div className="p-2  bg-gray-200 rounded-b-xxl mb-2">
-              {user && user.profile_img && user.profile_img.url && (
-                <img
-                  src={user.profile_img.url}
-                  alt={user.name}
-                  className="w-10 h-10 rounded-full mx-auto"
-                />
-              )}
+          <div className="absolute z-10 w-48 mt-2 overflow-hidden border rounded-md shadow-xl right-7 border-border bg-card">
+            <div className="p-2 mb-2 rounded-b bg-muted">
+              {user?.profile_img?.url && <img src={user.profile_img.url} alt={user.name} className="w-10 h-10 mx-auto rounded-full" />}
 
               <div>
-                <h2 className="font-bold text-lg">{user.name}</h2>
-                <p className="flex text-xs items-center gap-1 pl-0.5 text-gray-700">
+                <h2 className="text-lg font-bold">{user.name}</h2>
+                <p className="flex text-xs items-center gap-1 pl-0.5 text-muted-foreground">
                   <MailCheck size={15} /> {user.email}
                 </p>
               </div>
@@ -196,7 +181,7 @@ export const Navbar = () => {
 
             <button
               onClick={logout}
-              className="px-4 py-2 flex gap-1 items-center  border-b border-b-gray-300 hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+              className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <LogOut size={16} /> Logout
             </button>
@@ -204,7 +189,7 @@ export const Navbar = () => {
             <Link
               to={`users/${user._id}`}
               onClick={() => setLogoutModalOpen(false)}
-              className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center  hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+              className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <User size={16} /> Profile
             </Link>
@@ -212,14 +197,19 @@ export const Navbar = () => {
             <Link
               to={"/settings"}
               onClick={() => setLogoutModalOpen(false)}
-              className="px-4 py-2 border-b border-b-gray-300  flex gap-1 items-center hover:bg-gray-100 w-full text-left cursor-pointer text-sm"
+              className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <Settings size={16} /> Settings
             </Link>
 
+            {/* theme toggle */}
+            <button onClick={toggleTheme} className="p-2 transition-colors rounded hover:bg-muted flex gap-1 items-center w-full pl-4">
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />} Toggle Theme
+            </button>
+
             <button
               onClick={() => setLogoutModalOpen(false)}
-              className="block px-4 py-2 text-white text-center bg-black w-full cursor-pointer  text-sm rounded-b"
+              className="block w-full px-4 py-2 text-sm text-center rounded-b bg-foreground text-background"
             >
               Cancel
             </button>

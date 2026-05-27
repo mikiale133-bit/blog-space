@@ -51,7 +51,7 @@ const Login = () => {
               />
               <input
                 type="text"
-                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-200 outline-none"
                 placeholder="name@company.com"
                 required
                 onChange={(e) =>
@@ -67,7 +67,7 @@ const Login = () => {
               />
               <input
                 type="password"
-                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-200 outline-none"
                 placeholder="••••••••"
                 required
                 onChange={(e) =>
@@ -78,7 +78,7 @@ const Login = () => {
 
             <button
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg flex justify-center items-center gap-2 transition"
+              className="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 rounded-lg flex justify-center items-center gap-2 transition"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />

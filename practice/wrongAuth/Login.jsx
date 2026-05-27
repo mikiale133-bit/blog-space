@@ -2,6 +2,22 @@ import React, { useEffect, useState } from "react";
 import { API } from "../../api/Axios";
 
 const Login = () => {
+  // validation schema using zod
+  const loginUserSchema = z.object({
+    email: z.string().email("invalid email address"),
+    password: z
+      .string()
+      .min(6, "password must be at least 6 characters")
+      .max(15, "password must be at most 15 characters"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginUserSchema),
+  });
   // state values
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

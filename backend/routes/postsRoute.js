@@ -5,12 +5,12 @@ import {
   getPosts,
   getSinglePost,
   getUserPosts,
-  createPost,
   updatePost,
   deletePost,
 
   // added features
   getRecentPosts,
+  createPost,
 } from "../controllers/postsController.js";
 
 // parent route: /api/posts

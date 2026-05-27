@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { API } from "../../api/Axios";
 import ImageUpload from "../../components/ImageUpload";
-import { Loader2 } from "lucide-react";
+import TextEditor from "@/components/TextEditor"; // Import your new editor component
+import { CornerRightDownIcon, Loader2 } from "lucide-react";
 
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(""); // This will now store HTML strings
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
 
@@ -13,16 +14,21 @@ const CreatePost = ({ onPostCreated }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // Helper to strip HTML tags for character length/validation check
+  const isContentEmpty = (htmlString) => {
+    return !htmlString || htmlString.replace(/<[^>]*>/g, "").trim() === "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     if (!title.trim()) {
       setError("Please enter a title");
       return;
     }
 
-    if (!content.trim()) {
+    // Updated validation to look through HTML wrapper tags
+    if (isContentEmpty(content)) {
       setError("Please enter content");
       return;
     }
@@ -38,7 +44,7 @@ const CreatePost = ({ onPostCreated }) => {
 
     const formData = new FormData();
     formData.append("title", title.trim());
-    formData.append("content", content.trim());
+    formData.append("content", content.trim()); // Sends the HTML rich text string
     formData.append("category", category.trim());
     formData.append("image", image);
 
@@ -49,29 +55,23 @@ const CreatePost = ({ onPostCreated }) => {
         },
       });
 
-      // Clear form
       setTitle("");
-      setContent("");
+      setContent(""); // Resets rich text editor
       setCategory("");
       setImage(null);
       setSuccess(true);
 
-      // Notify parent component
       if (onPostCreated) {
         onPostCreated(response.data);
       }
 
-      // Auto-hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       if (error.response) {
-        // Server responded with error
         setError(error.response.data?.message || "Failed to create post");
       } else if (error.request) {
-        // Request was made but no response
         setError("Network error. Please check your connection.");
       } else {
-        // Something else happened
         setError("An unexpected error occurred");
       }
       console.error("Create post error:", error);
@@ -81,11 +81,11 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="min-h-screen pb-8 mt-20 pt-5 px-2 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-2xl mx-auto">
-        <div className="rounded-lg shadow-lg overflow-hidden">
+    <div className="min-h-screen pb-8 px-2 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="rounded-lg shadow-lg overflow-hidden border border-border bg-background">
           {/* Header */}
-          <div className="bg-black px-6 py-4">
+          <div className="bg-black dark:bg-gray-800 px-6 py-4">
             <h2 className="text-2xl font-bold text-white">Create New Post</h2>
             <p className="text-blue-100 text-sm mt-1">Share your thoughts with the community</p>
           </div>
@@ -94,7 +94,7 @@ const CreatePost = ({ onPostCreated }) => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Title Input */}
             <div className="space-y-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="title" className="block text-sm font-medium">
                 Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -109,24 +109,16 @@ const CreatePost = ({ onPostCreated }) => {
               />
             </div>
 
-            {/* Content Textarea */}
+            {/* Content Rich Text Editor (Swapped with textarea) */}
             <div className="space-y-2">
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700">
                 Content <span className="text-red-500">*</span>
               </label>
-              <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your post content here..."
-                rows="6"
-                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-y"
-                required
-                disabled={loading}
-              />
-              <p className="text-xs text-gray-500">{content.length} characters</p>
+
+              <TextEditor value={content} onChange={setContent} disabled={loading} />
             </div>
 
+            {/* Category Select */}
             <div>
               <label className="font-bold text-xl mb-1">Category</label>
               <select
@@ -155,12 +147,17 @@ const CreatePost = ({ onPostCreated }) => {
                 <option value="Politics">Politics</option>
               </select>
             </div>
+
             {/* Image Upload Component */}
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Image <span className="text-red-500">*</span>
               </label>
-              <ImageUpload onImageSelect={setImage} currentImage={null} disabled={loading} />
+              <div className="bg-background p-3 border border-border rounded-md flex items-center justify-between gap-2 relative">
+                <ImageUpload onImageSelect={setImage} currentImage={null} disabled={loading} />
+                <p className="absolute left-10">upload a cover image</p>
+                <CornerRightDownIcon size={17} />
+              </div>
             </div>
 
             {/* Error Message */}
@@ -181,7 +178,7 @@ const CreatePost = ({ onPostCreated }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black  text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black dark:bg-white dark:text-black text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center gap-0.5 justify-center ">

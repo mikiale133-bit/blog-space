@@ -17,22 +17,22 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://mkblog-space.vercel.app",
-    credentials: true,
-  }),
-);
+/*{
+  origin: "http://localhost:5173", /*"https://mkblog-space.vercel.app",
+  credentials: true,
+}*/
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 app.use("/api/posts", postsRouter);
 app.use("/api/users", userRouter);
 
 // error middleware
 app.use(errHanler);
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`),
-);
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
