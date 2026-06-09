@@ -202,3 +202,20 @@ const CreatePost = ({ onPostCreated }) => {
 };
 
 export default CreatePost;
+
+/* 
+ CATEGORIES   
+
+ 1. NEWS  
+ 2. Company Info/Anouncement  
+ 3. HISTORY/ትረካ/ተረት ተረት   
+ 4. Blog = Tech, edu, sport, food, politics, music, science, art, bussiness, travel, health, fasshion/clothing, 
+ 5. CELEBRITY - 
+ 6. BABIES  
+ 7.          
+
+
+wealth -> bussiness, Tags( wealth, money ) => If this post gets 100 views you get 200 Birr, 500 views - 1000 Birr
+ibrahim movick -> sports ->
+
+*/

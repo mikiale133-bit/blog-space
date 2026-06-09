@@ -1,35 +1,18 @@
 import { useState } from "react";
-import {
-  LogIn,
-  LogOut,
-  Plus,
-  Signature,
-  User,
-  Menu,
-  X,
-  Settings,
-  Link2,
-  Mail,
-  MailCheck,
-  ArrowRight,
-  ChevronRight,
-  ChevronDown,
-  LogInIcon,
-  Moon,
-  Sun,
-} from "lucide-react";
-
 import { useTheme } from "@/context/ThemeContext";
 import { Link } from "react-router-dom";
-
 import { useAuthStore } from "../store/useAuthStore";
+import { LogOut, Plus, Signature, User, Menu, X, Settings, MailCheck, ChevronDown, LogInIcon, Moon, Sun } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, user } from "@/features/store";
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const dispatch = useDispatch();
 
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [popupOpened, setPopupOpened] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const closeMobileMenus = () => {
@@ -63,13 +46,13 @@ export const Navbar = () => {
                   <ChevronDown size={18} />
                 </div>
 
-                <Link to={"/users"} className="px-2 py-2 font-medium transition rounded cursor-pointer bg-muted hover:bg-muted/70">
+                <Link to={"/users"} className="px-2 py-2 font-medium transition rounded cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-muted/70">
                   People
                 </Link>
 
                 <Link
                   to={"/create-post"}
-                  className="flex items-center gap-1 px-2 py-2 pr-4 font-medium transition rounded bg-muted hover:bg-muted/70"
+                  className="flex text-white items-center gap-1 px-2 py-2 pr-4 font-medium transition rounded bg-blue-500 hover:bg-blue-600"
                 >
                   <Plus size={16} />
                   Create
@@ -81,7 +64,7 @@ export const Navbar = () => {
                 {user ? (
                   <div className="relative">
                     <button
-                      onClick={() => setLogoutModalOpen(!mobileMenuOpen)}
+                      onClick={() => setPopupOpened(!mobileMenuOpen)}
                       className="relative flex items-center justify-center p-2 transition rounded-full cursor-pointer w-7 h-7 bg-muted hover:bg-muted/70 text-foreground"
                     >
                       {user.name.charAt(0).toUpperCase()}
@@ -165,8 +148,8 @@ export const Navbar = () => {
           )}
         </div>
 
-        {/* logout modal */}
-        {logoutModalOpen && (
+        {/* profile popup */}
+        {popupOpened && (
           <div className="absolute z-10 w-48 mt-2 overflow-hidden border rounded-md shadow-xl right-7 border-border bg-card">
             <div className="p-2 mb-2 rounded-b bg-muted">
               {user?.profile_img?.url && <img src={user.profile_img.url} alt={user.name} className="w-10 h-10 mx-auto rounded-full" />}
@@ -180,7 +163,7 @@ export const Navbar = () => {
             </div>
 
             <button
-              onClick={logout}
+              onClick={dispatch(logout())}
               className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <LogOut size={16} /> Logout
@@ -188,7 +171,7 @@ export const Navbar = () => {
 
             <Link
               to={`users/${user._id}`}
-              onClick={() => setLogoutModalOpen(false)}
+              onClick={() => setPopupOpened(false)}
               className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <User size={16} /> Profile
@@ -196,7 +179,7 @@ export const Navbar = () => {
 
             <Link
               to={"/settings"}
-              onClick={() => setLogoutModalOpen(false)}
+              onClick={() => setPopupOpened(false)}
               className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <Settings size={16} /> Settings
@@ -208,7 +191,7 @@ export const Navbar = () => {
             </button>
 
             <button
-              onClick={() => setLogoutModalOpen(false)}
+              onClick={() => setPopupOpened(false)}
               className="block w-full px-4 py-2 text-sm text-center rounded-b bg-foreground text-background"
             >
               Cancel
