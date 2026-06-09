@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { useTheme } from "@/context/ThemeContext";
+// import { useTheme } from "@/context/ThemeContext";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { LogOut, Plus, Signature, User, Menu, X, Settings, MailCheck, ChevronDown, LogInIcon, Moon, Sun } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { logOut, user } from "@/features/store";
+// import { useDispatch, useSelector } from "react-redux";
+// import { logOut, user } from "@/features/store";
 
 export const Navbar = () => {
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [popupOpened, setPopupOpened] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -163,7 +163,7 @@ export const Navbar = () => {
             </div>
 
             <button
-              onClick={dispatch(logout())}
+              onClick={logout}
               className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <LogOut size={16} /> Logout
@@ -186,9 +186,10 @@ export const Navbar = () => {
             </Link>
 
             {/* theme toggle */}
+            {/* 
             <button onClick={toggleTheme} className="p-2 transition-colors rounded hover:bg-muted flex gap-1 items-center w-full pl-4">
               {theme === "light" ? <Moon size={18} /> : <Sun size={18} />} Toggle Theme
-            </button>
+            </button> */}
 
             <button
               onClick={() => setPopupOpened(false)}

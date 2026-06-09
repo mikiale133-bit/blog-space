@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Bot } from "lucide-react";
 import { API } from "../api/Axios";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -10,6 +10,7 @@ const Home = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [ai, setAi] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,6 +34,14 @@ const Home = () => {
 
   return (
     <main className="text-foreground">
+      {ai && (
+        <Link to="/chat" className="fixed z-100 rounded-lg bottom-1 right-1 flex items-center flex-col justify-center gap-2 p-1 sm:p-2 bg-yellow-100">
+          <div className="p-1 sm:p-2 rounded-lg bg-black text-white">
+            <Bot />
+          </div>
+          <p className="text-sm sm:text-lg font-semibold">Ask AI?</p>
+        </Link>
+      )}
       <main className="min-h-screen">
         <div className="space-y-2">
           {/* LOADING / ERROR / EMPTY */}
@@ -86,17 +95,17 @@ const Home = () => {
 
           {/* SECTION TITLE */}
           {!loading && !error && (
-            <div className="relative py-10">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border"></div>
-              </div>
-
+            <div className="relative pt-10 flex ml-2">
               <div className="relative flex justify-center">
                 <span className="px-6 bg-gray-100 dark:bg-gray-900 font-serif text-3xl italic  text-foreground rounded-full">Picks For You</span>
               </div>
+              <button className="opacity-0 ml-10" onClick={() => setAi(!ai)}>
+                AI
+              </button>
             </div>
           )}
-          <div className="max-sm:bg-blue-100 max-sm:dark:bg-neutral-800 rounded-2xl">
+
+          <div className={`${!loading && !error ? "max-sm:bg-blue-100 max-sm:dark:bg-neutral-800" : ""} rounded-2xl`}>
             {/* BLOG GRID */}
             <div className="gap-2 mx-auto max-w-7xl lg:flex px-2 sm:px-5">
               {loading ? (

@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 // Initialize the Google Gen AI client.
 // It automatically picks up process.env.GEMINI_API_KEY by default.
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const GEMINI_MODEL = "gemini-3.5-flash"; // Or use "gemini-2.5-flash" if available
+const GEMINI_MODEL = "gemini-2.5-flash"; // Or use "gemini-2.5-flash" if available
 
 // Send message and get response
 export const createChat = async (req, res) => {
@@ -39,6 +39,24 @@ export const createChat = async (req, res) => {
       parts: [{ text: msg.content }],
     }));
 
+    // SYSTEM INSTRUCTION
+    const systemInstruction = {
+      role: "system",
+      parts: [
+        {
+          text: `
+          You are the official AI assistant for this platform(mkblog-space.vercel.app), a blogging platform created by Mikiale Tesfay – a solo developer, university student originally from Mekelle, Ethiopia. Your primary role is to help users create, manage, and grow their blogs on this platform while reflecting the vision and pride of its creator.
+
+          About the developer:
+          Mikiale Tesfay is a university student from Mekelle, Ethiopia, building this platform alone.
+
+          His background as a student and developer from a vibrant, resilient region gives mkblog-space.com a unique perspective: accessible, globally minded, but rooted in personal dedication.
+
+          `,
+        },
+      ],
+    };
+
     // 2. Call the official Google Gen AI SDK
     const response = await ai.models.generateContent({
       model: GEMINI_MODEL,
@@ -46,6 +64,7 @@ export const createChat = async (req, res) => {
       config: {
         temperature: 0.7,
         maxOutputTokens: 2000,
+        systemInstruction: systemInstruction, // Add this line
       },
     });
 
