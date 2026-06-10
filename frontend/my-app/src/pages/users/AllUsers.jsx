@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { Loader2 } from "lucide-react";
+import DotLoader from "@/components/Loaders/DotLoader";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -32,29 +33,21 @@ const AllUsers = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-64 text-gray-900">
-            <Loader2 className="w-8 h-8 animate-spin" />
+            <DotLoader />
           </div>
         ) : (
-          users.length === 0 && (
-            <p className="text-center mt-10">No users found.</p>
-          )
+          users.length === 0 && <p className="text-center mt-10">No users found.</p>
         )}
 
         {users?.map((user) => (
-          <div
-            key={user._id}
-            className="flex justify-between items-center p-2 border rounded border-gray-300 mb-2"
-          >
+          <div key={user._id} className="flex justify-between items-center p-2 border rounded border-gray-300 mb-2">
             <div>
               <h2 className="font-semibold text-lg">{user.name}</h2>
               <p className="text-gray-500 text-sm">{user.email}</p>
             </div>
 
             <div>
-              <Link
-                to={`/users/${user._id}`}
-                className="hover:text-blue-800 hover:underline"
-              >
+              <Link to={`/users/${user._id}`} className="hover:text-blue-800 hover:underline">
                 View profile
               </Link>
             </div>

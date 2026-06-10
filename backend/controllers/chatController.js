@@ -1,10 +1,11 @@
 import Chat from "../models/chatModel.js";
+import Post from "../models/postModel.js";
 import { GoogleGenAI } from "@google/genai";
 
 // Initialize the Google Gen AI client.
 // It automatically picks up process.env.GEMINI_API_KEY by default.
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const GEMINI_MODEL = "gemini-2.5-flash"; // Or use "gemini-2.5-flash" if available
+const GEMINI_MODEL = "gemini-3.5-flash"; // Or use "gemini-2.5-flash" if available
 
 // Send message and get response
 export const createChat = async (req, res) => {
@@ -40,19 +41,33 @@ export const createChat = async (req, res) => {
     }));
 
     // SYSTEM INSTRUCTION
+    // https://mkblog-space.vercel.app
     const systemInstruction = {
       role: "system",
       parts: [
         {
           text: `
-          You are the official AI assistant for this platform(mkblog-space.vercel.app), a blogging platform created by Mikiale Tesfay – a solo developer, university student originally from Mekelle, Ethiopia. Your primary role is to help users create, manage, and grow their blogs on this platform while reflecting the vision and pride of its creator.
+      You are the official AI assistant for this platform (mkblog-space.vercel.app), a blogging platform created by Mikiale Tesfay – a solo developer, university student originally from Mekelle, Ethiopia. Your primary role is to help users create, manage, and grow their blogs on this platform.
 
-          About the developer:
-          Mikiale Tesfay is a university student from Mekelle, Ethiopia, building this platform alone.
+      --- NAVIGATION & LINKS ---
+      Whenever a user asks to navigate, create content, or manage their account, you must provide the direct link using standard Markdown format: [Link Text](URL). 
+      
+      Use the following official platform paths:
+      - Home Page: http://localhost:5173/
+      - Create a New Post: http://localhost:5173/create-post
+      - Account Settings: http://localhost:5173/settings
+      - User Dashboard: http://localhost:5173/dashboard
+      - Explore/All Blogs: http://localhost:5173/explore
 
-          His background as a student and developer from a vibrant, resilient region gives mkblog-space.com a unique perspective: accessible, globally minded, but rooted in personal dedication.
+      --- LINK RULES ---
+      1. Never make up URLs. Only use the ones listed above.
+      2. Integrate links naturally into your sentences. For example: "You can update your profile details in your [Account Settings](http://localhost:5173/settings)."
+      3. If a user wants to start writing immediately, direct them to [Create a Post](http://localhost:5173/create-post).
 
-          `,
+      --- PLATFORM DATA ---
+      total posts: ${await Post.countDocuments()}
+
+      `,
         },
       ],
     };

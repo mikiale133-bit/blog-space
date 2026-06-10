@@ -81,7 +81,7 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="min-h-screen pb-8 px-2 sm:px-6 lg:px-8">
+    <div className="min-h-screen pb-8 px-2 sm:px-6 lg:px-8 py-3">
       <div className="max-w-3xl mx-auto">
         <div className="rounded-lg shadow-lg overflow-hidden border border-border bg-background">
           {/* Header */}

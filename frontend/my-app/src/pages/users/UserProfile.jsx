@@ -118,29 +118,19 @@ const UserProfile = () => {
         </div>
 
         <p className="mb-2">{userPosts?.count} posts</p>
-        {error && (
-          <p className="text-gray-700 italic py-2 rounded mb-4">{error}</p>
-        )}
+        {error && <p className="text-gray-700 italic py-2 rounded mb-4">{error}</p>}
 
         {userPosts?.count === 0 ? (
           <p className="text-gray-500">No posts yet</p>
         ) : (
           <div className="grid gap-4">
             {userPosts?.posts.map((post) => (
-              <div
-                key={post._id}
-                className="p-4 bg-white rounded-xl border border-gray-300  transition relative"
-              >
-                <Link
-                  to={`/posts/${post._id}`}
-                  className="font-semibold text-lg hover:text-blue-600 line-clamp-2"
-                >
+              <div key={post._id} className="p-4 bg-white rounded-xl border border-gray-300  transition relative">
+                <Link to={`/posts/${post._id}`} className="font-semibold text-lg hover:text-blue-600 line-clamp-2">
                   {post.title}
                 </Link>
 
-                <p className="text-gray-500 text-sm line-clamp-2">
-                  {post.content}
-                </p>
+                <p className="text-gray-500 text-sm line-clamp-2">{post.content}</p>
 
                 <button className="absolute top-3 right-3 text-gray-400 hover:text-blue-600">
                   <Bookmark size={18} />
@@ -148,10 +138,7 @@ const UserProfile = () => {
 
                 {isOwner && (
                   <div className="flex gap-4 mt-3 text-sm">
-                    <button
-                      onClick={() => deletePost(post._id)}
-                      className="text-red-500 hover:underline flex items-center gap-1"
-                    >
+                    <button onClick={() => deletePost(post._id)} className="text-red-500 hover:underline flex items-center gap-1">
                       <Trash2 size={14} /> Delete
                     </button>
 
