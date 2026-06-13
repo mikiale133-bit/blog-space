@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { API } from "../../api/Axios";
 import {
   MapPin,
-  Calendar,
   User,
   Mail,
-  ArrowLeft,
   ShieldCheck,
   ExternalLink,
-  Loader2,
-  Network,
-  NetworkIcon,
   SquaresIntersect,
-  ChevronLeft,
+  ArrowBigDown,
+  ArrowDownLeft,
+  CornerRightDownIcon,
+  CornerLeftDown,
+  CornerRightDown,
+  CornerDownRightIcon,
+  Dot,
+  Menu,
 } from "lucide-react";
 import Footer from "../../components/Footer";
-import EditPost from "./EditPost";
+import DotLoader from "@/components/Loaders/DotLoader";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const PostDetail = () => {
   const { id } = useParams();
+  const { logged_in_User } = useAuthStore();
 
   const [user, setUser] = useState(null);
+
   const [post, setPost] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
@@ -51,14 +56,16 @@ const PostDetail = () => {
     fetchPost();
   }, [id]);
 
+  const authorId = post?.user?._id;
   // user posts
   useEffect(() => {
-    const authorId = post?.user?._id || post?.user;
+    // GUARD: Don't do anything if authorId isn't loaded
+    if (!authorId) return;
 
     const fetchUserPosts = async () => {
       try {
         const res = await API.get(`/api/posts/users/${authorId}`);
-        setUserPosts(res.data || []);
+        setUserPosts(res.data.posts || []);
       } catch (err) {
         console.error("Failed to fetch author posts:", err);
         setUserPosts([]);
@@ -66,13 +73,14 @@ const PostDetail = () => {
     };
 
     fetchUserPosts();
-  }, [post?.user?._id, post?.user]);
+  }, [authorId]);
 
-  // user
+  // fetch user
   useEffect(() => {
+    if (!authorId) return;
     const fetchUser = async () => {
       try {
-        const res = await API.get(`/api/users/${post?.user?._id || post?.user}`);
+        const res = await API.get(`/api/users/${authorId}`);
         setUser(res.data);
       } catch (err) {
         console.error("Failed to fetch user:", err);
@@ -80,17 +88,59 @@ const PostDetail = () => {
       }
     };
 
-    if (post?.user?._id || post?.user) {
+    if (authorId) {
       fetchUser();
     }
-  }, [post?.user?._id, post?.user]);
+  }, [authorId]);
+  console.log("loged_in: ", logged_in_User);
 
-  console.log(post?.gallaries);
+  // Comment Contoller
+  const [commentContent, setCommentContent] = useState("");
+  const [commentType, setCommentType] = useState("");
+  const [comments, setComments] = useState([]);
 
+  const submitComment = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await API.post(`/api/comments`, {
+        postId: post._id,
+        user: post.user?._id || post.user,
+        content: commentContent,
+        type: commentType,
+      });
+
+      console.log("RES DATA: ", res.data);
+
+      setCommentContent("");
+      setCommentType("");
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (!post?._id) return;
+
+    const fetchComments = async () => {
+      try {
+        const res = await API.get(`/api/comments/${post?._id}`);
+        console.log("Comments API response:", res.data);
+
+        setComments(res.data);
+      } catch (error) {
+        console.error("Failed to fetch comments:", error);
+      }
+    };
+
+    fetchComments();
+  }, [post?._id]);
+
+  console.log("comments: ", comments);
   if (loading) {
     return (
       <div className="h-screen flex justify-center items-center">
-        <Loader2 size={25} className="animate-spin text-emerald-600" />
+        <DotLoader />
       </div>
     );
   }
@@ -110,10 +160,10 @@ const PostDetail = () => {
   }
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="min-h-[80vh] text-foreground">
       <main className="lg:mx-auto px-1 lg:flex justify-between items-start gap-2 max-w-8xl">
         {/* Header / left sidebar */}
-        <header className="bg-background dark:bg-gray-900 border-b border-b-border p-2 lg:sticky top-17 left-0 lg:h-100 ">
+        <header className="bg-background dark:bg-gray-900 max-lg:border-b border-b-border p-2 lg:sticky top-17 left-0 lg:h-100 ">
           <section>
             <div className="max-lg:flex gap-2 items-center">
               <Link to={`/users/${post?.user?._id}`}>
@@ -143,7 +193,7 @@ const PostDetail = () => {
         </header>
 
         {/* Middle - Main Content */}
-        <div className="flex-1 pb-10">
+        <div className="flex-1">
           <div className="grid grid-cols-1 gap-0 rounded-lg overflow-hidden md:px-8">
             <section className="px-2 py-5 mb-5">
               <h1 className="text-2xl lg:text-5xl font-medium max-sm:mb-2 pb-10">{post.title}</h1>
@@ -193,14 +243,64 @@ const PostDetail = () => {
             </div>
           </div>
 
+          {/* comments Section */}
+          <section className="pb-3 pt-15 bg-gray-50 p-2">
+            <h2 className="font-medium text-lg mb-5">Comments</h2>
+
+            <div className="space-y-2">
+              {comments?.map((comment) => (
+                <div key={comment._id} className="relative">
+                  <div className="flex gap-2 items-center">
+                    <Link to={`/users/${comment.user._id}`}>
+                      <img src={comment.user.profile_img.url} alt="" className="w-5 h-5 rounded-full mt-" />
+                    </Link>
+                    <h2 className="text-gray-700 text-sm">{comment.user.name}</h2>
+                  </div>
+                  <CornerDownRightIcon size={17} className="inline text-gray-400 absolute left-3 bottom-0.5" />
+                  <div>
+                    <h2 className="pl-8">{comment.content}</h2>
+                    {comment.user._id === logged_in_User?._id && "Hi"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Write comment */}
+          <section className="pb-15 bg-gray-50 p-2">
+            <h2 className="font-medium text-lg">Leave your comment</h2>
+
+            <form onSubmit={submitComment}>
+              <input
+                type="text"
+                name="comment"
+                id="comment"
+                placeholder="type..."
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                className="border border-gray-400 p-2 rounded"
+              />
+              <input
+                type="text"
+                name="comment"
+                id="comment"
+                placeholder="e.g.. question"
+                value={commentType}
+                onChange={(e) => setCommentType(e.target.value)}
+                className="border block border-gray-400 p-1 mt-2 rounded"
+              />
+              <button className="block bg-linear-to-b from-blue-500 to-indigo-500 text-white px-4 py-1 mt-2">Submit</button>
+            </form>
+          </section>
+
           {/* More by this user */}
-          <div className="px-2">
-            <h2 className="font-bold text-2xl dark:text-gray-300 lg:text-3xl mb-1 flex gap-1 items-center">
+          <div className="px-2 pt-10 pb-5">
+            <h2 className="font-bold text-2xl dark:text-gray-300 lg:text-3xl mb-2 flex gap-1 items-center">
               More by
-              <p>{post.user.name.split(" ")[0][0] + post.user.name.split(" ")[0].slice(2)}</p>
+              <p>{post.user.name.split(" ")[0]}</p>
             </h2>
 
-            <div className="grid gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {userPosts.length > 0 ? (
                 userPosts
                   .filter((p) => p._id !== id)
@@ -208,8 +308,9 @@ const PostDetail = () => {
                     <Link
                       to={`/posts/${p._id}`}
                       key={p._id}
-                      className="p-3 border border-gray-200 rounded-lg hover:border-emerald-500 transition-colors bg-white shadow-sm"
+                      className="p-3  rounded-lg hover:border-emerald-500 transition-colors bg-white shadow-sm"
                     >
+                      <img src={post.image.url} alt="" className="rounded-lg" />
                       <h2 className="text-lg font-medium">{p.title}</h2>
                     </Link>
                   ))
@@ -242,7 +343,7 @@ const PostDetail = () => {
         </aside>
 
         {/* Mobile Recent Posts */}
-        <div className="lg:hidden border-t border-t-border bg-green-50 dark:bg-card p-4 mt-10">
+        <div className="lg:hidden border-t border-t-border bg-gray-100 dark:bg-card pt-10 pb-5 px-2">
           <h2 className="font-bold text-2xl mb-5">Recent Posts</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {recentPosts.map((p) => (

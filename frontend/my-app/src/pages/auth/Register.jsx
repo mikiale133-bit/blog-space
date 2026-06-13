@@ -15,7 +15,7 @@ const registerSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string(),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -79,16 +79,11 @@ const Register = () => {
   return (
     <div>
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
           <h2 className="text-2xl font-bold mb-6">Create Account</h2>
 
           {/* SERVER ERROR */}
-          {serverError && (
-            <p className="text-red-500 text-sm mb-4">{serverError}</p>
-          )}
+          {serverError && <p className="text-red-500 text-sm mb-4">{serverError}</p>}
 
           {/* IMAGE UPLOAD */}
           <div className="mb-5 flex flex-col items-center">
@@ -100,10 +95,7 @@ const Register = () => {
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Full Name</label>
             <div className="relative">
-              <User
-                className="absolute right-3 top-3 text-slate-400"
-                size={18}
-              />
+              <User className="absolute right-3 top-3 text-slate-400" size={18} />
               <input
                 {...register("name")}
                 className="w-full pl-2 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-blue-900 outline-none"
@@ -117,10 +109,7 @@ const Register = () => {
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Email</label>
             <div className="relative">
-              <Mail
-                className="absolute right-3 top-3 text-slate-400"
-                size={18}
-              />
+              <Mail className="absolute right-3 top-3 text-slate-400" size={18} />
               <input
                 {...register("email")}
                 type="email"
@@ -135,10 +124,7 @@ const Register = () => {
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Password</label>
             <div className="relative">
-              <Lock
-                className="absolute right-3 top-3 text-slate-400"
-                size={18}
-              />
+              <Lock className="absolute right-3 top-3 text-slate-400" size={18} />
               <input
                 {...register("password")}
                 type="password"
@@ -152,10 +138,7 @@ const Register = () => {
           {/* CONFIRM PASSWORD */}
           <div className="mb-4">
             <div className="relative">
-              <Lock
-                className="absolute right-3 top-3 text-slate-400"
-                size={18}
-              />
+              <Lock className="absolute right-3 top-3 text-slate-400" size={18} />
               <input
                 {...register("confirmPassword")}
                 type="password"
@@ -163,16 +146,11 @@ const Register = () => {
                 placeholder="Confirm password..."
               />
             </div>
-            <p className="text-red-500 text-sm">
-              {errors.confirmPassword?.message}
-            </p>
+            <p className="text-red-500 text-sm">{errors.confirmPassword?.message}</p>
           </div>
 
           {/* SUBMIT BTN */}
-          <button
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold flex justify-center items-center gap-2"
-          >
+          <button disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold flex justify-center items-center gap-2">
             {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
           </button>
 
@@ -180,10 +158,7 @@ const Register = () => {
           <div className="mt-3">
             <h2>
               Do you have an account?{" "}
-              <NavLink
-                to={"/auth/login"}
-                className="text-blue-500 hover:underline"
-              >
+              <NavLink to={"/auth/login"} className="text-blue-500 hover:underline">
                 Login here
               </NavLink>
             </h2>

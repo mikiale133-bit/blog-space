@@ -9,6 +9,9 @@ import { errHanler } from "./middleware/errorMiddleware.js";
 import postsRouter from "./routes/postsRoute.js";
 import userRouter from "./routes/usersRoute.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import likesRouter from "./routes/likes.js";
+import commentsRouter from "./routes/comments.js";
+import followsRouter from "./routes/follows.js";
 
 // configs
 dotenv.config();
@@ -26,9 +29,13 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 app.use("/api/posts", postsRouter);
 app.use("/api/users", userRouter);
 app.use("/api/chats", chatRoutes);
+app.use("/api/likes", likesRouter);
+app.use("/api/comments", commentsRouter);
+app.use("/api/follows", followsRouter);
 
 // error middleware
 app.use(errHanler);

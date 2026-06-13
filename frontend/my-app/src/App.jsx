@@ -10,6 +10,7 @@ import PostDetail from "./pages/posts/PostDetail";
 import Navbar from "./components/Navbar";
 
 import UserProfile from "./pages/users/UserProfile";
+import PostProfile from "./pages/posts/postProfile";
 import Settings from "./pages/Settings";
 import HomePageLoader from "./components/Loaders/Homepage";
 import Upload from "./imageUpload/Upload";
@@ -47,6 +48,7 @@ const App = () => {
               {/* Users */}
               <Route path="/users" element={<AllUsers />} />
               <Route path="/users/:id" element={<UserProfile />} />
+              <Route path="/posts/:id/profile" element={<PostProfile />} />
 
               <Route path="/settings" element={<Settings />} />
               <Route path="/images" element={<Upload />} />

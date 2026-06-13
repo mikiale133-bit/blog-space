@@ -42,6 +42,9 @@ const userSchema = mongoose.Schema(
     //   type: Array,
     //   enum: ["daily", "weekely", "monthly", "yearly"],
     // },
+
+    followers: Number,
+    followings: Number,
   },
   { timestamps: true },
 );
