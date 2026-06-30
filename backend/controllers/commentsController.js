@@ -3,6 +3,7 @@ import Post from "../models/postModel.js";
 
 export const createComment = async (req, res) => {
   try {
+    const { type } = req.body;
     const alreadyCommented = await Comment.findOne({
       post: req.body.postId,
       user: req.user._id,
@@ -16,7 +17,7 @@ export const createComment = async (req, res) => {
       post: req.body.postId,
       user: req.user._id,
       content: req.body.content,
-      type: req.body.type,
+      type: type ? type : "comment",
     });
 
     await Post.findByIdAndUpdate(req.body.postId, { $inc: { num_comments: 1 } });

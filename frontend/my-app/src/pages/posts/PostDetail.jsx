@@ -1,7 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API } from "../../api/Axios";
-import { MapPin, User, Mail, ShieldCheck, ExternalLink, SquaresIntersect, CornerDownRightIcon, Dot, Menu, Clock3, CalendarDays } from "lucide-react";
+import {
+  MapPin,
+  User,
+  Mail,
+  ShieldCheck,
+  ExternalLink,
+  SquaresIntersect,
+  CornerDownRightIcon,
+  Dot,
+  Menu,
+  Clock3,
+  CalendarDays,
+  Loader2,
+} from "lucide-react";
 import Footer from "../../components/Footer";
 import DotLoader from "@/components/Loaders/DotLoader";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -82,44 +95,51 @@ const PostDetail = () => {
   // Comment Contoller
   const [commentContent, setCommentContent] = useState("");
   const [commentType, setCommentType] = useState("");
+  const [fetchingComments, setFetchingComments] = useState(false);
+  const [sendingComment, setSendingComment] = useState(false);
   const [comments, setComments] = useState([]);
 
   const submitComment = async (e) => {
     e.preventDefault();
+    setSendingComment(true);
 
     try {
       const res = await API.post(`/api/comments`, {
         postId: post._id,
         user: post.user?._id || post.user,
         content: commentContent,
-        type: commentType,
+        type: commentType ? commentType : "comment",
       });
 
       console.log("RES DATA: ", res.data);
-
+      fetchComments();
       setCommentContent("");
       setCommentType("");
     } catch (error) {
       alert(error.response.data.message);
+    } finally {
+      setSendingComment(false);
     }
   };
 
+  const fetchComments = useCallback(async () => {
+    setFetchingComments(true);
+    try {
+      const res = await API.get(`/api/comments/${post?._id}`);
+      console.log("Comments API response:", res.data);
+
+      setComments(res.data);
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+    } finally {
+      setFetchingComments(false);
+    }
+  }, [post?._id]);
+
   useEffect(() => {
     if (!post?._id) return;
-
-    const fetchComments = async () => {
-      try {
-        const res = await API.get(`/api/comments/${post?._id}`);
-        console.log("Comments API response:", res.data);
-
-        setComments(res.data);
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-      }
-    };
-
     fetchComments();
-  }, [post?._id]);
+  }, [fetchComments, post?._id]);
 
   console.log("comments: ", comments);
   if (loading) {
@@ -203,7 +223,6 @@ const PostDetail = () => {
             </section>
           </div>
 
-          {/* About author */}
           <div className="p-5 mt-3 text-lg rounded-xl mb-10 leading-10">
             <p className="text-lg leading-10">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure nemo incidunt, ducimus et exercitationem atque quisquam nesciunt error,
@@ -228,24 +247,31 @@ const PostDetail = () => {
           {/* comments Section */}
           <section className="pb-5 pt-15 ml-3 p-2 bg-white">
             <h2 className="font-medium text-lg mb-5">Comments</h2>
-
-            <div className="space-y-2">
-              {comments?.map((comment) => (
-                <div key={comment._id} className="relative rounded-lg">
-                  <div className="flex gap-2 items-center">
-                    <Link to={`/users/${comment.user._id}`}>
-                      <img src={comment.user.profile_img.url} alt="" className="w-5 h-5 rounded-full mt-" />
-                    </Link>
-                    <h2 className="text-gray-700 text-sm">{comment.user.name}</h2>
+            {fetchingComments ? (
+              <div className="flex flex-col gap-1">
+                <p className="w-full max-w-100 h-6 bg-gray-200 animate-shimmer"></p>
+                <p className="w-[70%] max-w-70 h-3 bg-gray-200 animate-shimmer"></p>
+                <p className="w-[50%] max-w-70 h-3 bg-gray-200 animate-shimmer"></p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {comments?.map((comment) => (
+                  <div key={comment._id} className="relative rounded-lg">
+                    <div className="flex gap-2 items-center">
+                      <Link to={`/users/${comment.user._id}`}>
+                        <img src={comment.user.profile_img.url} alt="" className="w-5 h-5 rounded-full mt-" />
+                      </Link>
+                      <h2 className="text-gray-700 text-sm">{comment.user.name}</h2>
+                    </div>
+                    <CornerDownRightIcon size={17} className="inline text-gray-400 absolute left-3 top-6" />
+                    <div>
+                      <h2 className="pl-8 italic line-clamp-3">{comment.content}</h2>
+                      {comment.user._id === logged_in_User?._id && "Hi"}
+                    </div>
                   </div>
-                  <CornerDownRightIcon size={17} className="inline text-gray-400 absolute left-3 bottom-0.5" />
-                  <div>
-                    <h2 className="pl-8">{comment.content}</h2>
-                    {comment.user._id === logged_in_User?._id && "Hi"}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Write comment */}
@@ -262,7 +288,7 @@ const PostDetail = () => {
                 onChange={(e) => setCommentContent(e.target.value)}
                 className="border border-gray-300 p-2 rounded-lg w-full h-40"
               />
-              <input
+              {/* <input
                 type="text"
                 name="comment"
                 id="comment"
@@ -270,8 +296,20 @@ const PostDetail = () => {
                 value={commentType}
                 onChange={(e) => setCommentType(e.target.value)}
                 className="border block border-gray-400 p-1 mt-2 rounded"
-              />
-              <button className="block bg-linear-to-b from-blue-500 to-indigo-500 text-white px-4 py-1 mt-2">Submit</button>
+              /> */}
+              <button
+                disabled={sendingComment}
+                className={`block bg-linear-to-b ${sendingComment ? "bg-gray-500" : "bg-linear-to-b from-blue-500 to-indigo-500"}  text-white px-4 py-1 mt-21`}
+              >
+                {sendingComment ? (
+                  <div className="flex gap-1 items-center">
+                    <Loader2 size={14} className="animate-spin" />
+                    Posting
+                  </div>
+                ) : (
+                  "Submit"
+                )}
+              </button>
             </form>
           </section>
 
