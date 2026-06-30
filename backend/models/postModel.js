@@ -8,20 +8,24 @@ const postSchema = mongoose.Schema(
       ref: "User",
       index: true, // For faster population
     },
+
     title: {
       type: String,
       required: true,
       index: true, // For search features
     },
+
     content: {
       type: String,
       required: true,
     },
+
     category: {
       type: String,
       required: true,
       index: true, // For filtering by category
     },
+
     // tags: [String],
     image: {
       //cover image
@@ -36,6 +40,18 @@ const postSchema = mongoose.Schema(
     },
 
     gallaries: [{ public_id: String, url: String }],
+
+    num_comments: {
+      type: Number,
+      min: 0,
+      default: 20,
+    },
+
+    num_likes: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
   },
   { timestamps: true },
 );

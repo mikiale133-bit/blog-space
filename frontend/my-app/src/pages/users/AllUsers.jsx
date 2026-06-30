@@ -30,7 +30,7 @@ const AllUsers = () => {
 
   return (
     <div>
-      <main className="px-2 pr-4 max-w-5xl mx-auto min-h-screen">
+      <main className="px-2 pr-4 max-w-5xl mx-auto min-h-screen mt-10">
         {/* People you may know */}
         <div className="">
           <h1 className="my-5 font-bold text-2xl">You May Know These People</h1>
@@ -59,14 +59,14 @@ const AllUsers = () => {
           </div>
         </div>
 
-        <section className="md:flex gap-4 space-y-1">
+        <section className="md:flex gap-4 space-y-4 mt-10 lg:mt-15">
           {/* Staff Members */}
           <section className="border border-gray-200 p-2 rounded-lg">
-            <h2 className="my-5 font-semibold text-2xl">Staff Members</h2>
+            <h2 className="my-5 font-semibold text-2xl">Members</h2>
 
-            <div className="flex flex-wrap gap-2 mb-2">
+            <div className="members-grid grid grid-cols-2 gap-3 sm:grid-cols-3">
               {KnownUsers?.map((user) => (
-                <div key={user._id} className="flex flex-col items-center justify-between max-w-30 border border-transparent p-2 rounded-lg">
+                <div key={user._id} className="flex flex-col items-center justify-between border border-transparent p-2 bg-gray-100 rounded-lg">
                   <Link to={`/users/${user._id}`} className="flex align-middle gap-2 mb-2">
                     <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
                   </Link>
@@ -84,12 +84,12 @@ const AllUsers = () => {
 
           {/* Students */}
           {/* Staff Members */}
-          <section className="border border-gray-200 p-2 rounded-lg">
-            <h2 className="my-5 font-semibold text-2xl">University Students</h2>
+          <section className="border-2 border-gray-200 p-2 rounded-lg mb-3">
+            <h2 className="my-5 font-semibold text-2xl">Instructors</h2>
 
-            <div className="flex flex-wrap gap-2 mb-2">
+            <div className="members-grid grid gap-3 grid-cols-2">
               {KnownUsers?.map((user) => (
-                <div key={user._id} className="flex flex-col items-center justify-between max-w-30 border border-gray-300 p-2 rounded-lg">
+                <div key={user._id} className="flex flex-col items-center justify-between shadow-sm p-2 rounded-lg">
                   <Link to={`/users/${user._id}`} className="flex align-middle gap-2 mb-2">
                     <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
                   </Link>

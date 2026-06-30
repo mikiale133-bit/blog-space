@@ -12,7 +12,7 @@ export default function ParticleBackground() {
 
     const { width, height } = container.getBoundingClientRect();
 
-    const particles = Array.from({ length: 50 }, () => ({
+    const particles = Array.from({ length: 20 }, () => ({
       id: crypto.randomUUID(),
       x: Math.random() * width,
       y: Math.random() * height,
@@ -21,7 +21,7 @@ export default function ParticleBackground() {
       vx: (Math.random() - 0.5) * 1.5,
       vy: (Math.random() - 0.5) * 1.5,
 
-      size: Math.random() * 4 + 2,
+      size: Math.random() * 40 + 2,
       opacity: Math.random() * 0.5 + 0.3,
     }));
 
@@ -61,7 +61,7 @@ export default function ParticleBackground() {
       {dots.map((dot) => (
         <div
           key={dot.id}
-          className="absolute rounded-full bg-white-500"
+          className="absolute rounded-full bg-purple-500"
           style={{
             width: dot.size,
             height: dot.size,

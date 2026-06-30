@@ -1,4 +1,5 @@
 import Comment from "../models/comments.js";
+import Post from "../models/postModel.js";
 
 export const createComment = async (req, res) => {
   try {
@@ -17,6 +18,8 @@ export const createComment = async (req, res) => {
       content: req.body.content,
       type: req.body.type,
     });
+
+    await Post.findByIdAndUpdate(req.body.postId, { $inc: { num_comments: 1 } });
 
     await newComment.populate("user", "name email profile_img");
 
@@ -49,6 +52,8 @@ export const deleteComment = async (req, res) => {
     _id: req.params.id,
     user: req.user._id,
   });
+
+  await Post.findByIdAndUpdate(req.body.postId, { $inc: { num_comments: -1 } });
 
   if (!comment) {
     return res.status(404).json({ msg: "Comment not found" });

@@ -9,6 +9,13 @@ export const likePost = async (req, res) => {
     user: req.user._id,
     post,
   });
+
+  await Post.findByIdAndUpdate(postId, { $inc: { num_likes: 1 } });
+
+  res.status(200).json({
+    success: true,
+    message: "Post liked successfully",
+  });
 };
 
 export const unlikePost = async (req, res) => {

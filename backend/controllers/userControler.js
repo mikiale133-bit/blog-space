@@ -74,6 +74,7 @@ export const registerUser = [
           _id: user.id,
           name: user.name,
           email: user.email,
+          profile_img: user.profile_img,
           token: generateToken(user._id),
         });
       } else {
@@ -102,6 +103,7 @@ export const loginUser = async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
+      profile_img: user.profile_img,
       token: generateToken(user._id),
     });
   } else {

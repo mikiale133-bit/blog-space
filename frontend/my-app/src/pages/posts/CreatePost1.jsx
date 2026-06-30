@@ -3,6 +3,7 @@ import { API } from "../../api/Axios";
 import ImageUpload from "../../components/ImageUpload";
 import TextEditor from "@/components/TextEditor"; // Import your new editor component
 import { CornerRightDownIcon, Loader2 } from "lucide-react";
+import ParticleBackground from "@/components/animations/DotsAnimation";
 
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState("");
@@ -81,17 +82,18 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="min-h-screen pb-8 px-2 sm:px-6 lg:px-8 py-3">
+    <div className="relative min-h-screen pb-8 px-2 sm:px-6 lg:px-8 py-3 mt-10">
+      {/* <ParticleBackground /> */}
       <div className="max-w-3xl mx-auto">
-        <div className="rounded-lg shadow-lg overflow-hidden border border-border bg-background">
+        <div className="rounded-lg overflow-hidden  border-border ">
           {/* Header */}
-          <div className="bg-black dark:bg-gray-800 px-6 py-4">
-            <h2 className="text-2xl font-bold text-white">Create New Post</h2>
-            <p className="text-blue-100 text-sm mt-1">Share your thoughts with the community</p>
+          <div className=" dark:bg-gray-800 px-6 py-4 text-center">
+            <h2 className="text-2xl font-bold ">Create New Post</h2>
+            <p className="text mt-1 font-medium text-gray-600">Share your thoughts with the community</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="py-6 px-1 space-y-6">
             {/* Title Input */}
             <div className="space-y-2">
               <label htmlFor="title" className="block text-sm font-medium">
@@ -149,15 +151,16 @@ const CreatePost = ({ onPostCreated }) => {
             </div>
 
             {/* Image Upload Component */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Image <span className="text-red-500">*</span>
+
+            <div className=" gap-2 items-center">
+              <label className="block text-lg font-medium text-gray-700 mb-3">
+                Upload Cover Image <span className="text-red-500">*</span>
               </label>
-              <div className="bg-background p-3 border border-border rounded-md flex items-center justify-between gap-2 relative">
+              <div className="p-3 border inline-block border-blue-400 rounded-md gap-2 ">
                 <ImageUpload onImageSelect={setImage} currentImage={null} disabled={loading} />
-                <p className="absolute left-10">upload a cover image</p>
-                <CornerRightDownIcon size={17} />
               </div>
+
+              <p></p>
             </div>
 
             {/* Error Message */}

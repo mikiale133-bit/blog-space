@@ -1,22 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API } from "../../api/Axios";
-import {
-  MapPin,
-  User,
-  Mail,
-  ShieldCheck,
-  ExternalLink,
-  SquaresIntersect,
-  ArrowBigDown,
-  ArrowDownLeft,
-  CornerRightDownIcon,
-  CornerLeftDown,
-  CornerRightDown,
-  CornerDownRightIcon,
-  Dot,
-  Menu,
-} from "lucide-react";
+import { MapPin, User, Mail, ShieldCheck, ExternalLink, SquaresIntersect, CornerDownRightIcon, Dot, Menu, Clock3, CalendarDays } from "lucide-react";
 import Footer from "../../components/Footer";
 import DotLoader from "@/components/Loaders/DotLoader";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -160,49 +145,56 @@ const PostDetail = () => {
   }
 
   return (
-    <div className="min-h-[80vh] text-foreground">
-      <main className="lg:mx-auto px-1 lg:flex justify-between items-start gap-2 max-w-8xl">
+    <div className="min-h-[80vh] text-foreground bg-slate-50 post-details pt-10">
+      <main className="mx-auto px-1 md:flex justify-between items-start gap-2 max-w-6xl">
         {/* Header / left sidebar */}
-        <header className="bg-background dark:bg-gray-900 max-lg:border-b border-b-border p-2 lg:sticky top-17 left-0 lg:h-100 ">
-          <section>
-            <div className="max-lg:flex gap-2 items-center">
-              <Link to={`/users/${post?.user?._id}`}>
-                {user?.profile_img && user?.profile_img?.url ? (
-                  <img src={user.profile_img.url} alt="profile" className="w-15 h-15 rounded-full object-cover border border-gray-200" />
-                ) : (
-                  <div className="bg-gray-100 w-15 h-15 rounded-full border border-gray-500 flex items-center justify-center">
-                    <User size={24} className="text-gray-400" />
-                  </div>
-                )}
-              </Link>
-              <div className="">
-                <p className="text-3xl italic">{post?.user?.name || "Unknown Author"}</p>
-              </div>
-            </div>
-            <div className="p-1">
-              <div className="flex flex-wrap  gap-2 text-sm text-slate-600 mb-2">
-                <span className="flex items-center gap-1.5 text-emerald-700 italic font-medium">
-                  Posted {post?.createdAt ? new Date(post.createdAt).toLocaleDateString() : "recently"}
-                </span>
-                <span className="flex items-center gap-1">
-                  <MapPin size={16} /> Member
-                </span>
-              </div>
-            </div>
-          </section>
-        </header>
 
         {/* Middle - Main Content */}
-        <div className="flex-1">
+        <main className="flex-1 max-w-200 justify-end">
           <div className="grid grid-cols-1 gap-0 rounded-lg overflow-hidden md:px-8">
             <section className="px-2 py-5 mb-5">
-              <h1 className="text-2xl lg:text-5xl font-medium max-sm:mb-2 pb-10">{post.title}</h1>
+              <div className="flex gap-2 italic items-center">
+                <div className="w-5 h-5 bg-yellow-500 rounded-full">
+                  <img src={post.user.profile_img.url} />
+                </div>
+                <h2>{post.user.name}</h2>
+              </div>
+
+              <h1 className="text-2xl lg:text-5x font-extrabold max-sm:mb-2 pb-5 leading-10 capitalize italic">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas excepturi modi
+              </h1>
 
               {post.image?.url && (
-                <div className="mb-5 rounded-xl overflow-hidden">
+                <div className="mb-5 rounded-xl overflow-hidden aspect-square max-h-70 w-full bg-gray-300">
                   <img src={post.image.url} alt="Post content" className="w-full h-auto object-cover" />
                 </div>
               )}
+
+              {/* Stats */}
+              <div className="ml-3 flex gap-4 items-center my-3 font-serif text-gray-900">
+                <div className="flex gap-0.5 items-center">
+                  <p className="w-5 h-5 -mr-4 rounded-full bg-blue-500"></p>
+                  <p className="w-5 h-5 rounded-full bg-yellow-500"></p>
+                  <p className="w-5 h-5 -ml-4 rounded-full bg-green-500"></p>
+                  <p className="text-xs">4 people</p>
+                </div>
+
+                <div className="text-xs text-gray-400">|</div>
+
+                <div className="flex gap-1 items-center">
+                  <CalendarDays className={"text-blue-500"} size={15} />
+                  <p className="text-sm">Jun 14, 2026</p>
+                </div>
+
+                <div className="text-xs text-gray-400">|</div>
+
+                <div className="flex gap-1 items-center">
+                  <Clock3 className={"text-blue-500"} size={15} />
+                  <p className="text-sm ">
+                    <span className=" font-bold">5</span> min read
+                  </p>
+                </div>
+              </div>
 
               <div
                 className="prose max-w-none dark:prose-invert [&_h2]:text-lg [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-blue-500 [&_blockquote]:p-1 [&_blockquote]:rounded [&_blockquote]:bg-muted [&_blockquote]:italic"
@@ -212,44 +204,34 @@ const PostDetail = () => {
           </div>
 
           {/* About author */}
-          <div className="p-5 border border-border mt-3 rounded-xl mb-10">
-            <div className="pt-2">
-              <h3 className="text-base font-medium mb-4">About the author</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-2 text-sm text-slate-600">
-                  <Mail size={16} className="mt-0.5" />
-                  <span className="break-all">{post?.user?.email || "No email provided"}</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-slate-700 font-medium">
-                  <SquaresIntersect size={16} className="text-blue-600" />
-                  <span>www.website.com</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-slate-700 font-medium">
-                  <ShieldCheck size={16} className="text-blue-600" />
-                  <span>verified</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 mt-4 border-t border-border">
-              <Link
-                to={`/users/${post?.user?._id || post?.user}`}
-                className="text-emerald-700 text-sm font-medium hover:underline flex items-center gap-1"
-              >
-                View author profile <ExternalLink size={14} />
-              </Link>
-            </div>
+          <div className="p-5 mt-3 text-lg rounded-xl mb-10 leading-10">
+            <p className="text-lg leading-10">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure nemo incidunt, ducimus et exercitationem atque quisquam nesciunt error,
+              ex quod nisi hic est dolores consequatur aspernatur qui maxime. Ullam, recusandae? Lorem ipsum dolor sit, amet consectetur adipisicing
+              elit. Iure nemo incidunt, ducimus et exercitationem atque quisquam nesciunt error, ex quod nisi hic est dolores consequatur aspernatur
+              qui maxime. Ullam, recusandae?
+            </p>
+            <br />
+            <h2 className="font-bold text-2xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, itaque?</h2>
+            <br />
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure nemo incidunt, ducimus et exercitationem atque quisquam nesciunt error, ex
+            quod nisi hic est dolores consequatur aspernatur qui maxime. Ullam, recusandae?
+            <br /> <br />
+            <h2 className="font-bold text-2xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, itaque?</h2>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea unde cupiditate quis consequuntur molestias earum odit velit veniam, eveniet
+            <p>
+              quod! Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam provident omnis inventore soluta! Odio ullam repellendus
+              delectus. Enim, cupiditate itaque!
+            </p>
           </div>
 
           {/* comments Section */}
-          <section className="pb-3 pt-15 bg-gray-50 p-2">
+          <section className="pb-5 pt-15 ml-3 p-2 bg-white">
             <h2 className="font-medium text-lg mb-5">Comments</h2>
 
             <div className="space-y-2">
               {comments?.map((comment) => (
-                <div key={comment._id} className="relative">
+                <div key={comment._id} className="relative rounded-lg">
                   <div className="flex gap-2 items-center">
                     <Link to={`/users/${comment.user._id}`}>
                       <img src={comment.user.profile_img.url} alt="" className="w-5 h-5 rounded-full mt-" />
@@ -267,18 +249,18 @@ const PostDetail = () => {
           </section>
 
           {/* Write comment */}
-          <section className="pb-15 bg-gray-50 p-2">
-            <h2 className="font-medium text-lg">Leave your comment</h2>
+          <section className="pb-15 ml-3 p-5 bg-linear-to-br from-white via-indigo-100 to-gray-50 rounded-lg border-gray-300">
+            <h2 className="font-medium text-xl mb-3 italic ">Leave your comment</h2>
 
-            <form onSubmit={submitComment}>
-              <input
+            <form onSubmit={submitComment} className="space-y-3">
+              <textarea
                 type="text"
                 name="comment"
                 id="comment"
-                placeholder="type..."
+                placeholder="What is your opinion..."
                 value={commentContent}
                 onChange={(e) => setCommentContent(e.target.value)}
-                className="border border-gray-400 p-2 rounded"
+                className="border border-gray-300 p-2 rounded-lg w-full h-40"
               />
               <input
                 type="text"
@@ -295,10 +277,12 @@ const PostDetail = () => {
 
           {/* More by this user */}
           <div className="px-2 pt-10 pb-5">
-            <h2 className="font-bold text-2xl dark:text-gray-300 lg:text-3xl mb-2 flex gap-1 items-center">
-              More by
-              <p>{post.user.name.split(" ")[0]}</p>
-            </h2>
+            {userPosts.length > 0 && (
+              <h2 className="font-bold text-2xl dark:text-gray-300 lg:text-3xl mb-2 flex gap-1 items-center">
+                More by
+                <p>{post.user.name.split(" ")[0]}</p>
+              </h2>
+            )}
 
             <div className="grid grid-cols-2 gap-2">
               {userPosts.length > 0 ? (
@@ -315,49 +299,52 @@ const PostDetail = () => {
                     </Link>
                   ))
               ) : (
-                <p className="text-slate-500 italic">This component is In dvelopment.</p>
+                <p className="text-slate-500 italic"></p>
               )}
             </div>
           </div>
-        </div>
+        </main>
 
         {/* Right Tab Bar - Desktop */}
-        <aside className="max-lg:hidden lg:sticky top-18 bg-background rounded-lg lg:p-3 h-[90vh] overflow-y-auto min-w-50 max-w-110 border-l border-border">
-          <div className="sticky top-0 flex justify-between items-center border-b  border-border mb-4 pb-2">
+        <aside className="rounded-lg lg:p-3 grow flex-1 overflow-y-auto min-w-40  max-w-90  border-border">
+          <section className="flex flex-col items-center justify-start fap-3 px- py-10 rounded-xl bg-white border-blue-200 min-h-100 border">
+            <Link to={`/users/${post?.user?._id}`}>
+              {user?.profile_img && user?.profile_img?.url ? (
+                <img src={user.profile_img.url} alt="profile" className="w-15 h-15 rounded-full object-cover border border-gray-200" />
+              ) : (
+                <div className="bg-gray-100 w-15 h-15 rounded-full border border-gray-500 flex items-center justify-center">
+                  <User size={24} className="text-gray-400" />
+                </div>
+              )}
+            </Link>
+
+            <div className="">
+              <p className="text-blue-500">{post?.user?.name || "Unknown Author"}</p>
+            </div>
+          </section>
+
+          <div className="sticky top-0 flex justify-between mt-8 bg-white items-center p-3  border-border mb-1 rounded-b-[1%] border-b-blue-300">
             <h2 className="font-bold">Latest Posts</h2>
-            <div className="text-xs text-slate-500">{recentPosts.length} posts</div>
+            <div className="text-sm font-bold text-gray-400">{recentPosts.length} posts</div>
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-2 grid ">
             {recentPosts.map((p) => (
-              <Link
-                key={p._id}
-                to={`/posts/${p._id}`}
-                className="group flex gap-3 items-start p-2 rounded hover:bg-gray-50 dark:hover:bg-black transition-all"
-              >
-                {p.image?.url && <img src={p.image.url} alt="" className="w-20 h-14 object-cover rounded bg-gray-100" />}
-                <h2 className="group-hover:text-emerald-600 line-clamp-2 text-sm font-semibold leading-tight">{p.title}</h2>
-              </Link>
+              <div key={p._id} className="flex gap-2 items-center">
+                <Link
+                  to={`/posts/${p._id}`}
+                  className="w-full group flex items-center gap-3 border-b border-b-gray-300 p-1 sition-all bg-white rounded-xl hover:shadow"
+                >
+                  <div>
+                    <div src={p.image?.url} alt="" className="w-20 h-20 object-cover rounded-xl bg-gray-100" />
+                  </div>
+
+                  <h2 className="group-hover:text-gray-600 line-clamp-2 text-sm font-semibold leading-relaxed">{p.title}</h2>
+                </Link>
+              </div>
             ))}
           </div>
         </aside>
-
-        {/* Mobile Recent Posts */}
-        <div className="lg:hidden border-t border-t-border bg-gray-100 dark:bg-card pt-10 pb-5 px-2">
-          <h2 className="font-bold text-2xl mb-5">Recent Posts</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {recentPosts.map((p) => (
-              <Link key={p._id} to={`/posts/${p._id}`} className=" rounded-xl dark:bg-bgray-600 overflow-hidden shadow-sm border-b border-b-border">
-                <div className="overflow-hidden">
-                  {p.image?.url && <img src={p.image.url} alt="" className="w-full h-32 object-cover hover:scale-105 transition-all duration-100" />}
-                </div>
-                <div className="p-2">
-                  <h2 className="line-clamp-2 text-sm font-medium">{p.title}</h2>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
       </main>
       <Footer />
     </div>

@@ -111,12 +111,12 @@ const UserProfile = () => {
         </div>
 
         {/* Subtle Cover Image Placeholder */}
-        <div className="relative h-20 md:h-30 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded z-0">
+        <div className="relative shadow-xl h-50 md:h-60 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded z-0">
           <div className="absolute inset-0 bg-black/20 rounded"></div>
         </div>
 
         {/* Profile Content - Overlapping Cover */}
-        <div className="relative z-1 max-w-6xl mx-auto px-1 sm:px-4 lg:px-8 -mt-19 md:-mt-20">
+        <div className="relative z-1 max-w-6xl mx-auto px-1 sm:px-4 lg:px-8 -mt-45 md:-mt-45">
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow-sm md:shadow-lg p-6 md:p-8 border border-white/40">
             {/* Avatar and Basic Info */}
@@ -226,13 +226,14 @@ const UserProfile = () => {
               Posts
               {activeTab === "posts" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
             </button>
+
             <button
               onClick={() => setActiveTab("followers")}
               className={`flex gap-2 items-center px-2 sm:px-6 py-3 text-sm font-medium transition-all relative ${
                 activeTab === "followers" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
               }`}
             >
-              <span>Followers</span> <p className="text-xs text-indigo-500">({following.length})</p>
+              <span>Followers</span> <p className="text-xs text-indigo-500">({followers.length})</p>
               {activeTab === "followers" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
             </button>
 
@@ -349,7 +350,7 @@ const UserProfile = () => {
                 ) : (
                   <div className="grid grid-cols-1">
                     {following.map((f) => (
-                      <div key={f._id} className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 transition">
+                      <div key={f._id} className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 active:bg-gray-100 transition">
                         <div className="flex items-center gap-3 flex-1 w-full">
                           <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-200 to-gray-300  flex items-center justify-center">
                             <img src={f.following.profile_img.url} alt="" className="w-9 h-9 aspect-video rounded-full" />

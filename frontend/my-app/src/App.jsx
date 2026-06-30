@@ -16,6 +16,7 @@ import HomePageLoader from "./components/Loaders/Homepage";
 import Upload from "./imageUpload/Upload";
 import Dashbord from "./pages/dashboard/Dashbord";
 import ChatInterface from "./bot/ChatInterface";
+import BestSelling from "./BestSellings";
 
 // dashboard
 
@@ -55,6 +56,8 @@ const App = () => {
               {/* <Route path="/editor" element={<Editor />} /> */}
 
               <Route path="/chat" element={<ChatInterface />} />
+
+              <Route path="/best" element={<BestSelling />} />
             </Routes>
           </div>
         </BrowserRouter>
