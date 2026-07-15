@@ -20,7 +20,7 @@ import BestSelling from "./BestSellings";
 import Quize from "./pages/accademy/Quize";
 import MyStudents from "./pages/accademy/teachers/MyStudents";
 import Assignments from "./pages/accademy/teachers/Assignments";
-import CreateClasses from "./pages/accademy/admin/createClasses";
+import CreateClasses from "./pages/accademy/admin/CreateClasses";
 import ClassDetails from "./pages/accademy/admin/ClassDetails";
 import Teachers from "./pages/accademy/teachers/Teachers";
 import TeacherDashboard from "./components/layout/TeacherDashboard";
