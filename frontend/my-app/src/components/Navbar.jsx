@@ -253,8 +253,9 @@ export const Navbar = () => {
               <Settings size={16} /> Settings
             </Link>
 
-            <div className="w-full gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted">
+            <div className="w-full flex items-center gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted">
               <ThemeToggle />
+              <p>ToggleTheme</p>
             </div>
           </div>
         )}
