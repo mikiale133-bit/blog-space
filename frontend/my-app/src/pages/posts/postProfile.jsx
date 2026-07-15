@@ -1,6 +1,6 @@
 import React from "react";
 
-const postProfile = () => {
+const PostProfile = () => {
   return (
     <div>
       <h2>Post Profile</h2>
@@ -8,4 +8,4 @@ const postProfile = () => {
   );
 };
 
-export default postProfile;
+export default PostProfile;
