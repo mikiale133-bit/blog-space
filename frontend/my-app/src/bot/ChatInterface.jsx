@@ -11,7 +11,7 @@ const ChatInterface = () => {
   const [loading, setLoading] = useState(false);
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [messages, setMessages] = useState([{ role: "assistant", content: "Click this link: [Test Link](https://google.com)" }]);
+  const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
 
   //fetch chats
@@ -77,8 +77,8 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="p-5">
-      <div className="p-5 border border-green-500 rounded-xl m-3 max-w-4xl mx-auto">
+    <div className="p-3">
+      <div className="p-3 border border-green-500 rounded-xl m-3 max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold my-5 border-b text-center">Your Personal Assistant</h2>
 
         {/* CHAT HISTORY */}

@@ -3,12 +3,13 @@ import { API } from "../../api/Axios";
 import { User, Mail, Lock, Loader2 } from "lucide-react";
 import Footer from "../../components/Footer";
 import { useAuthStore } from "../../store/useAuthStore";
-import ImageUpload from "../../components/ImageUpload2";
+
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import ImageUpload from "@/components/ImageUpload";
 
 /* ZOD SCHEMA */
 const registerSchema = z

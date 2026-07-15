@@ -1,0 +1,28 @@
+/* Modern standard (Firefox) */
+.small-scrollbar {
+  scrollbar-width: thin; /* Makes scrollbar thin */
+  scrollbar-color: #888 #f1f1f1; /* thumb color | track color */
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) */
+.small-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Width of vertical scrollbar */
+  height: 6px; /* Height of horizontal scrollbar */
+}
+
+/* The background track */
+.small-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* The draggable thumb */
+.small-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Hover effect for the thumb */
+.small-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

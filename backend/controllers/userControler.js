@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-import { upload } from "../middleware/imgUpload.js";
+import { upload } from "../config/cloudinary.js";
 import { cloudinary } from "../config/cloudinary.js";
 
 /*@desc    Register new user
@@ -53,20 +53,23 @@ export const registerUser = [
       const hashedPassword = await bcrypt.hash(password, salt);
 
       // MISSING STEP: Upload the file to Cloudinary
-      // req.file.path comes from Multer, // result comes from Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "user_profiles", // Optional: organizes images in Cloudinary
-      });
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file?.path, {
+          folder: "user_profiles", // Optional: organizes images in Cloudinary
+        });
+      }
 
       // 4. Create user
       const user = await User.create({
         name,
         email,
         password: hashedPassword,
-        profile_img: {
-          public_id: req.file.filename,
-          url: req.file.path,
-        },
+        profile_img: req.file
+          ? {
+              public_id: req.file?.filename,
+              url: req.file?.path,
+            }
+          : null,
       });
 
       if (user) {
@@ -78,7 +81,7 @@ export const registerUser = [
           token: generateToken(user._id),
         });
       } else {
-        res.status(400).json({ msg: "Invalid user data" });
+        res.status(400).json({ message: "Invalid user data" });
       }
     } catch (error) {
       console.error("Register Error:", error);

@@ -12,6 +12,9 @@ import chatRoutes from "./routes/chatRoutes.js";
 import likesRouter from "./routes/likes.js";
 import commentsRouter from "./routes/comments.js";
 import followsRouter from "./routes/follows.js";
+import studentsRouter from "./routes/students.js";
+import classRoutes from "./routes/class.js";
+import teachersRouter from "./routes/teacherRoutes.js";
 
 // configs
 dotenv.config();
@@ -36,6 +39,11 @@ app.use("/api/chats", chatRoutes);
 app.use("/api/likes", likesRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/follows", followsRouter);
+
+//
+app.use("/api/students", studentsRouter);
+app.use("/api/classes", classRoutes);
+app.use("/api/teachers", teachersRouter);
 
 // error middleware
 app.use(errHanler);

@@ -57,14 +57,14 @@ export const deleteComment = async (req, res) => {
   await Post.findByIdAndUpdate(req.body.postId, { $inc: { num_comments: -1 } });
 
   if (!comment) {
-    return res.status(404).json({ msg: "Comment not found" });
+    return res.status(404).json({ message: "Comment not found" });
   }
 
   if (comment.user.toString() !== req.user._id.toString()) {
-    return res.status(401).json({ msg: "Not authorized" });
+    return res.status(401).json({ message: "Not authorized" });
   }
 
-  res.status(200).json({ msg: "Comment deleted" });
+  res.status(200).json({ message: "Comment deleted" });
 };
 
 export const updateComment = async (req, res) => {
@@ -72,11 +72,11 @@ export const updateComment = async (req, res) => {
   const comment = await Comment.findById(req.params.id);
 
   if (!comment) {
-    return res.status(404).json({ msg: "Comment not found" });
+    return res.status(404).json({ message: "Comment not found" });
   }
 
   if (comment.user.toString() !== req.user._id.toString()) {
-    return res.status(401).json({ msg: "Not authorized" });
+    return res.status(401).json({ message: "Not authorized" });
   }
 
   comment.content = req.body.content || comment.content;

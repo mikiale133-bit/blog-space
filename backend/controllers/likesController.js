@@ -7,7 +7,7 @@ export const likePost = async (req, res) => {
 
   const newLike = await Like.create({
     user: req.user._id,
-    post,
+    post: post._id,
   });
 
   await Post.findByIdAndUpdate(postId, { $inc: { num_likes: 1 } });
@@ -19,16 +19,16 @@ export const likePost = async (req, res) => {
 };
 
 export const unlikePost = async (req, res) => {
-  const { likeId, postId } = req.body;
+  const { postId } = req.body;
 
   const post = await Post.findById(postId);
 
   const like = await Like.findById({
     user: req.user._id,
-    post,
+    post: post._id,
   });
 
-  await like.deleteOne();
+  await Like.findByIdAndDelete(req.params.likeId);
 
   res.json({ msg: "Post unliked" });
 };

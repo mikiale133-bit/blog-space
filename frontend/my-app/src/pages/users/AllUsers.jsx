@@ -53,6 +53,7 @@ const AllUsers = () => {
                   <h2 className="font-semibold text-lg">{user.name}</h2>
 
                   <FollowBtn userId={user._id} />
+                  <h2>ID: {user._id}</h2>
                 </div>
               </div>
             ))}

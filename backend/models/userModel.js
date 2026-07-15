@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema(
       public_id: { type: String },
       url: { type: String },
     },
+    role: {
+      type: String,
+      enum: ["user", "student", "teacher", "admin", "staff"],
+      default: "user",
+    },
     // contacts: {
     //   phone: {
     //     type: String,

@@ -1,7 +1,7 @@
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
-import { upload } from "../middleware/imgUpload.js";
+import { upload } from "../config/cloudinary.js";
 // import { cloudinary } from "../config/cloudinary.js";
 
 /* ✓ */
@@ -64,7 +64,7 @@ export const createPost = [
     try {
       if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-      // 1. DEBUG: Look at your console to see exactly what keys are present inside req.file
+      // DEBUG: Look at your console to see exactly what keys are present inside req.file
       console.log("MULTER REQ.FILE OUTPUT:", req.file);
 
       const { title, content, category } = req.body;
@@ -72,14 +72,14 @@ export const createPost = [
         return res.status(400).json({ msg: "Please provide title, content, and image" });
       }
 
-      // 2. FALLBACK MECHANISM: Extracts whichever keys your specific version generated
+      //  FALLBACK MECHANISM: Extracts whichever keys your specific version generated
       const publicId = req.file.filename || req.file.public_id;
       const imageUrl = req.file.path || req.file.secure_url || req.file.url;
 
       // Double-check fallback resolution before hitting Mongoose
       if (!publicId || !imageUrl) {
         return res.status(400).json({
-          msg: "Cloudinary upload failed to populate file properties correctly.",
+          message: "Cloudinary upload failed to populate file properties correctly.",
           debug_received: { filename: req.file.filename, path: req.file.path },
         });
       }

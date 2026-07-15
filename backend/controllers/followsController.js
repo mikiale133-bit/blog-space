@@ -88,7 +88,6 @@ export const getFollowings = async (req, res) => {
   }
 };
 
-// Add this new controller function
 export const checkFollowStatus = async (req, res) => {
   try {
     const { userId } = req.params;

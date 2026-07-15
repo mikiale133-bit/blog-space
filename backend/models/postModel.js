@@ -44,7 +44,7 @@ const postSchema = mongoose.Schema(
     num_comments: {
       type: Number,
       min: 0,
-      default: 20,
+      default: 0,
     },
 
     num_likes: {

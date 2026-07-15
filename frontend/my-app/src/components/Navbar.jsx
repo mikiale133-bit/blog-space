@@ -1,10 +1,27 @@
 import { useState } from "react";
-// import { useTheme } from "@/context/ThemeContext";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, Plus, Signature, User, Menu, X, Settings, MailCheck, ChevronDown, LogInIcon, Moon, Sun, Search } from "lucide-react";
+import {
+  LogOut,
+  Plus,
+  Signature,
+  User,
+  Menu,
+  X,
+  Settings,
+  MailCheck,
+  ChevronDown,
+  LogInIcon,
+  Moon,
+  Sun,
+  Search,
+  Filter,
+  FilterXIcon,
+  FilterIcon,
+  FileTypeCornerIcon,
+} from "lucide-react";
 import NavbarDropdownMenus from "./parts/Navbar";
-import { DropdownMenu } from "radix-ui";
+import ThemeToggle from "@/context/Toggle";
 // import { useDispatch, useSelector } from "react-redux";
 // import { logOut, user } from "@/features/store";
 
@@ -25,22 +42,22 @@ export const Navbar = () => {
   // console.log(user);
 
   return (
-    <div>
-      <nav className="py-4 dark:border-b bg-white/98 to-gray-50 from-white dark:bg-gray-900 text-foreground border-gray-800 border-b border-b-neutral-200">
+    <div className="sticky top-0 z-50">
+      <nav className="py-4 bg-white/95 dark:bg-background/95 backdrop-blur-md border-b border-border ">
         <div>
           {/* Desktop Header */}
           <div className="flex items-center justify-between px-4">
             {/* Logo */}
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-3 items-center">
               {/* mobile toggle */}
               <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p- transition rounded-lg hover:bg-muted">
                 {mobileMenuOpen ? (
                   <X size={24} />
                 ) : (
                   <div className="flex flex-col gap-1 mt-0.5 pr-0.5">
-                    <p className="w-7 h-0.5 text-black bg-black"></p>
-                    <p className="w-7 h-0.5 bg-black"></p>
-                    <p className="w-5 h-0.5 bg-black"></p>
+                    <p className="w-7 h-0.5 text-foreground bg-foreground"></p>
+                    <p className="w-7 h-0.5 bg-foreground"></p>
+                    <p className="w-5 h-0.5 bg-foreground"></p>
                   </div>
                 )}
               </button>
@@ -50,30 +67,18 @@ export const Navbar = () => {
               </Link>
             </div>
 
+            {/* Searchbar */}
+            <div className="relative">
+              <input type="search" name="search" id="search" placeholder="Search..." className="p-2 py-1.5 border-3 pl-7 rounded border-[#0009b6]" />
+              <Search size={16} className="absolute top-3.25 left-2 text-gray-500" />
+              <FileTypeCornerIcon size={15} className="absolute top-2.75 right-2 text-gray-700" />
+            </div>
+
             {/* right Navbar */}
             <div className="flex items-center gap-1">
-              <div className="relative shrink text-center lg:mr-5">
-                <input
-                  type="search"
-                  name=""
-                  id=""
-                  placeholder="search..."
-                  className="border w-full max-w-50 shrink border-gray-300 rounded-full pl-7 p-1 bg-white"
-                />
-                <Search size={15} className="text-gray-500 absolute top-2.5 left-1.5 shrink" />
-              </div>
               {/* Navigation */}
               <div className="flex gap-5 items-center">
-                <div className="items-center hidden gap-2 md:flex">
-                  <div className="px-2 py-2 font-medium transition rounded-lg cursor-pointer hover:bg-muted">News</div>
-
-                  <div className="px-2 py-2 font-medium transition rounded-lg cursor-pointer hover:bg-muted">Announcement</div>
-
-                  <div className="flex items-center gap-1 px-2 py-2 font-medium transition rounded cursor-pointer hover:bg-muted">
-                    Blog
-                    <ChevronDown size={18} />
-                  </div>
-
+                <div className="items-center hidden gap-2 lg:flex">
                   <Link
                     to={"/users"}
                     className="px-2 py-2 font-medium transition rounded cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-muted/70"
@@ -82,7 +87,6 @@ export const Navbar = () => {
                   </Link>
                 </div>
 
-                {/* right */}
                 <div className="flex gap-1 items-center">
                   {user ? (
                     <div className="relative ml-1 flex gap-5 items-center">
@@ -112,17 +116,10 @@ export const Navbar = () => {
                   ) : (
                     <div className="flex gap-2">
                       <Link
-                        to={"/auth/register"}
-                        className="flex text-sm items-center gap-1 px-4 py-1 pb-1.5 rounde bg-foreground text-background max-md:hidden"
+                        to={"/auth/login"}
+                        className="flex rounded-md text-sm items-center gap-1 px-4 py-1 pb-1.5 rounde bg-linear-to-bl from-blue-600 to-purple-500 text-background"
                       >
                         Get started
-                      </Link>
-
-                      <Link
-                        to={"/auth/login"}
-                        className="flex items-center gap-1 px-3 py-1 border rounded-full border-border hover:bg-muted md:hidden"
-                      >
-                        <LogInIcon size={16} />
                       </Link>
                     </div>
                   )}
@@ -132,13 +129,12 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation or Sidebar */}
         {mobileMenuOpen && (
           <div className="fixed left-0 top-0 h-screen w-64 flex flex-col items-start gap-1 px-2 py-4 border-t shadow-md border-border bg-background md:hidden">
             {/* Logo */}
             <div className="flex justify-between w-full items-center mb-5">
               <Link to={"/"} className="flex items-center gap-2 text-lg font-bold ">
-                <Signature />
                 <div>
                   Blog<span className="">Space</span>
                 </div>
@@ -166,7 +162,7 @@ export const Navbar = () => {
               <div className={`flex flex-col items-start`}>
                 <button
                   onClick={() => setDropdownMenus(!dropDownMenus)}
-                  className="w-full flex justify-between items-center gap-1 px-2 py-2 text-start font-medium transition cursor-pointer bg-gray-50 hover:bg-muted"
+                  className="w-full flex justify-between items-center gap-1 px-2 py-2 text-start font-medium transition cursor-pointer bg-muted/70 hover:bg-muted"
                 >
                   <h2>Blog</h2>
                   <ChevronDown size={18} />
@@ -219,26 +215,27 @@ export const Navbar = () => {
 
         {/* profile popup */}
         {popupOpened && (
-          <div className="absolute z-10 w-50 mt-2 overflow-hidden border rounded-md shadow-xl right-7 border-border bg-card">
-            <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3">
-              <div>
-                <h2 className="text-lg font-bold mt-1 text-center">{user.name}</h2>
+          <div className="absolute bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7">
+            <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3 w-full">
+              <div className="flex justify-between items-center w-full">
+                <h2 className="text-lg font-bold mt-1 text-center">{user?.name}</h2>
+                <X onClick={() => setPopupOpened(false)} className="cursor-pointer" />
               </div>
             </div>
 
             <button
               onClick={logout}
-              className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
+              className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <LogOut size={16} /> Logout
             </button>
 
             <Link
-              to={`users/${user._id}`}
+              to={`users/${user?._id}`}
               onClick={() => setPopupOpened(false)}
-              className="flex items-center w-full gap-1 px-2.5 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
+              className="flex items-center w-full gap-2 px-2.5 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
-              {user.profile_img ? (
+              {user?.profile_img ? (
                 <img src={user.profile_img?.url} alt={user.name} className="w-5 h-5 rounded-full" />
               ) : (
                 <div className="p-1 border border-gray-400 bg-white rounded-full text-gray-500">
@@ -251,23 +248,14 @@ export const Navbar = () => {
             <Link
               to={"/settings"}
               onClick={() => setPopupOpened(false)}
-              className="flex items-center w-full gap-1 px-4 py-2 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
+              className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
             >
               <Settings size={16} /> Settings
             </Link>
 
-            {/* theme toggle */}
-            {/* 
-            <button onClick={toggleTheme} className="p-2 transition-colors rounded hover:bg-muted flex gap-1 items-center w-full pl-4">
-              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />} Toggle Theme
-            </button> */}
-
-            <button
-              onClick={() => setPopupOpened(false)}
-              className="block w-full px-4 py-2 text-sm text-center rounded-b bg-foreground text-background"
-            >
-              Cancel
-            </button>
+            <div className="w-full gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted">
+              <ThemeToggle />
+            </div>
           </div>
         )}
       </nav>

@@ -1,0 +1,22 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "(?i)(googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|roisbot|applebot)"
+        }
+      ],
+      "destination": "https://service.prerender.io/https://blogplace123.vercel.app/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

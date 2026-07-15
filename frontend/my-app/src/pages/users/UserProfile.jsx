@@ -23,6 +23,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("posts");
 
+  // Fetch user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -39,6 +40,7 @@ const UserProfile = () => {
     fetchUser();
   }, [id]);
 
+  // Fetch user posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -67,7 +69,7 @@ const UserProfile = () => {
     }
   };
 
-  // Get Followers
+  // Get Followers and followings
   useEffect(() => {
     if (!user?._id) return;
     const fetchFollowData = async () => {
@@ -78,9 +80,6 @@ const UserProfile = () => {
 
       setFollowers(followersResp.data);
       setFollowing(followingResp.data);
-
-      console.log("Followers resp: ", followersResp.data);
-      console.log("Following: ", followingResp.data);
     };
     fetchFollowData();
   }, [user?._id]);
@@ -103,26 +102,21 @@ const UserProfile = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-[#fffff5]">
       {/* Hero Section with Cover Image */}
       <div className="relative">
-        <div className="absolute inset-0 z-0">
-          <ParticleBackground />
-        </div>
-
         {/* Subtle Cover Image Placeholder */}
-        <div className="relative shadow-xl h-50 md:h-60 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded z-0">
+        <div className="relative shadow-xl h-20 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded z-0">
           <div className="absolute inset-0 bg-black/20 rounded"></div>
         </div>
 
         {/* Profile Content - Overlapping Cover */}
-        <div className="relative z-1 max-w-6xl mx-auto px-1 sm:px-4 lg:px-8 -mt-45 md:-mt-45">
+        <div className="relative z-1 max-w-6xl mx-auto px-1 sm:px-4 lg:px-8 -mt-6">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-sm md:shadow-lg p-6 md:p-8 border border-white/40">
-            {/* Avatar and Basic Info */}
+          <div className="bg-white rounded shadow p-6 md:p-8 border border-white/40">
             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
               {/* Avatar */}
-              <div className="relative">
+              <div className="relative shadow-lg rounded-full">
                 {user?.profile_img && user?.profile_img?.url ? (
                   <img
                     src={user?.profile_img?.url}
@@ -185,24 +179,6 @@ const UserProfile = () => {
               </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="mt-8 max-w-5xl mx-auto">
-              <section className="flex gap-3 justify-center rounded-xl overflow-hidden bg-white">
-                <div className="flex flex-1 flex-col items-center bg-linear-to-br from-blue-300 to-blue-100 py-4 rounded-lg transition-all hover:shadow-md">
-                  <span className="text-2xl font-bold text-blue-700">{followers.length}</span>
-                  <span className="text-sm font-medium text-blue-600">Followers</span>
-                </div>
-                <div className="flex flex-1 flex-col items-center bg-linear-to-br from-pink-300 to-pink-100 py-4 rounded-lg transition-all hover:shadow-md">
-                  <span className="text-2xl font-bold text-pink-700">{following.length}</span>
-                  <span className="text-sm font-medium text-pink-600">Following</span>
-                </div>
-                <div className="flex flex-1 flex-col items-center bg-linear-to-br from-emerald-300 to-emerald-100 py-4 rounded-lg transition-all hover:shadow-md">
-                  <span className="text-2xl font-bold text-emerald-700">{userPosts?.count || 0}</span>
-                  <span className="text-sm font-medium text-emerald-600">Posts</span>
-                </div>
-              </section>
-            </div>
-
             {/* Social Links - EXACT STRUCTURE PRESERVED */}
             {!isOwner && (
               <div className="flex gap-2 mt-6 justify-center">
@@ -215,161 +191,188 @@ const UserProfile = () => {
             )}
           </div>
 
-          {/* Tabs Navigation */}
-          <div className="mt-8 flex gap-1 border-b border-gray-200">
-            <button
-              onClick={() => setActiveTab("posts")}
-              className={`px-6 py-3 text-sm font-medium transition-all relative ${
-                activeTab === "posts" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Posts
-              {activeTab === "posts" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
-            </button>
-
-            <button
-              onClick={() => setActiveTab("followers")}
-              className={`flex gap-2 items-center px-2 sm:px-6 py-3 text-sm font-medium transition-all relative ${
-                activeTab === "followers" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <span>Followers</span> <p className="text-xs text-indigo-500">({followers.length})</p>
-              {activeTab === "followers" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
-            </button>
-
-            <button
-              onClick={() => setActiveTab("following")}
-              className={`flex gap-1 items-center px-2 sm:px-6 py-3 text-sm font-medium transition-all relative ${
-                activeTab === "following" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <span>Following</span> <p className="text-xs text-indigo-500">({following.length})</p>
-              {activeTab === "following" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
-            </button>
-          </div>
-
-          {/* Tab Content */}
-          <div className="mt-6 pb-12">
-            {/* Posts Tab */}
-            {activeTab === "posts" && (
-              <div>
-                {error && <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg mb-6">{error}</div>}
-
-                {userPosts?.count === 0 ? (
-                  <div className="text-center py-12 bg-gray-50 rounded-xl">
-                    <p className="text-gray-500">No posts yet</p>
-                    {isOwner && (
-                      <Link to="/create-post" className="inline-block mt-3 text-indigo-600 hover:text-indigo-700 font-medium">
-                        Create your first post →
-                      </Link>
-                    )}
+          <div className="mt-2 mb-2">
+            <section className="flex gap-2">
+              {/* Left Sidebar */}
+              <div className="bg-white w-70 shadow-lg ">
+                {/* Stats Cards */}
+                <div className="mt-8 max-w-5xl mx-auto flex flex-col gap-1 border-y py-2 p-3">
+                  <div className="flex gap-2">
+                    <span className="text-xl">{followers.length}</span>
+                    <span className="font-medium text-lg">Followers</span>
                   </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-sm:gap-0">
-                    {userPosts?.posts.map((post) => (
-                      <div
-                        key={post._id}
-                        className="group bg-white rounded-xl overflow-hidden transition-all duration-300 border border-gray-100 max-sm:border-b max-sm:rounded-none max-sm:border-b-gray-300"
-                      >
-                        {/* Post Image */}
-                        <div className="relative overflow-hidden">
-                          <img
-                            src={post?.image?.url}
-                            alt={post.title}
-                            className="aspect-video w-full h-full max-h-50 max-sm:p-2 max-sm:rounded-2xl"
-                          />
-                          {/* Overlay gradient for text readability if needed */}
-                          {/* <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-transparent to-transparent"></div> */}
-                        </div>
 
-                        {/* Post Content */}
-                        <div className="p-4">
-                          <Link to={`${isOwner ? `/posts/${post._id}/profile` : `/posts/${post._id}`}`} className="block">
-                            <h3 className="font-semibold text-lg text-gray-800 hover:text-indigo-600 line-clamp-2 transition">{post.title}</h3>
+                  <div className="flex gap-2">
+                    <span className="text-xl">{userPosts?.count || 0}</span>
+                    <span className="font-medium text-lg">Posts Published</span>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <span className="text-xl ">{following.length}</span>
+                    <span className="font-medium tex-lg ">Following</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tab Content */}
+              <div className="mt-6 pb-12">
+                {/* Tabs Navigation */}
+                <div className="mt-8 flex gap-1 border-b border-gray-200">
+                  <button
+                    onClick={() => setActiveTab("posts")}
+                    className={`px-6 py-3 text-sm font-medium transition-all relative ${
+                      activeTab === "posts" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Posts
+                    {activeTab === "posts" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("followers")}
+                    className={`flex gap-2 items-center px-2 sm:px-6 py-3 text-sm font-medium transition-all relative ${
+                      activeTab === "followers" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <span>Followers</span> <p className="text-xs text-indigo-500">({followers.length})</p>
+                    {activeTab === "followers" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("following")}
+                    className={`flex gap-1 items-center px-2 sm:px-6 py-3 text-sm font-medium transition-all relative ${
+                      activeTab === "following" ? "text-indigo-600" : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <span>Following</span> <p className="text-xs text-indigo-500">({following.length})</p>
+                    {activeTab === "following" && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full"></span>}
+                  </button>
+                </div>
+                {/* Posts Tab */}
+                {activeTab === "posts" && (
+                  <div>
+                    {error && <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg mb-6">{error}</div>}
+
+                    {userPosts?.count === 0 ? (
+                      <div className="text-center py-12 bg-gray-50 rounded-xl">
+                        <p className="text-gray-500">No posts yet</p>
+                        {isOwner && (
+                          <Link to="/create-post" className="inline-block mt-3 text-indigo-600 hover:text-indigo-700 font-medium">
+                            Create your first post →
                           </Link>
-                          {/* <p className="text-gray-500 text-sm mt-2 line-clamp-2">
+                        )}
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-sm:gap-0">
+                        {userPosts?.posts.map((post) => (
+                          <div
+                            key={post._id}
+                            className="group bg-white rounded-xl overflow-hidden transition-all duration-300 border border-gray-100 max-sm:border-b max-sm:rounded-none max-sm:border-b-gray-300"
+                          >
+                            {/* Post Image */}
+                            <div className="relative overflow-hidden">
+                              <img
+                                src={post?.image?.url}
+                                alt={post.title}
+                                className="aspect-video w-full h-full max-h-50 max-sm:p-2 max-sm:rounded-2xl"
+                              />
+                              {/* Overlay gradient for text readability if needed */}
+                              {/* <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-transparent to-transparent"></div> */}
+                            </div>
+
+                            {/* Post Content */}
+                            <div className="p-4">
+                              <Link to={`${isOwner ? `/posts/${post._id}/profile` : `/posts/${post._id}`}`} className="block">
+                                <h3 className="font-semibold text-lg text-gray-800 hover:text-indigo-600 line-clamp-2 transition">{post.title}</h3>
+                              </Link>
+                              {/* <p className="text-gray-500 text-sm mt-2 line-clamp-2">
                             {post.excerpt || "Click to read more about this amazing story..."}
                           </p> */}
 
-                          {/* Post Meta */}
-                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                            <span className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleDateString()}</span>
-                            {isOwner && (
-                              <div className="flex gap-2">
-                                <button onClick={() => deletePost(post._id)} className="text-red-400 hover:text-red-600 transition p-1">
-                                  <Trash2 size={14} />
-                                </button>
-                                <button className="text-blue-400 hover:text-blue-600 transition p-1">
-                                  <Pencil size={14} />
-                                </button>
+                              {/* Post Meta */}
+                              <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                                <span className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleDateString()}</span>
+                                {isOwner && (
+                                  <div className="flex gap-2">
+                                    <button onClick={() => deletePost(post._id)} className="text-red-400 hover:text-red-600 transition p-1">
+                                      <Trash2 size={14} />
+                                    </button>
+                                    <button className="text-blue-400 hover:text-blue-600 transition p-1">
+                                      <Pencil size={14} />
+                                    </button>
+                                  </div>
+                                )}
                               </div>
-                            )}
+                            </div>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
+                  </div>
+                )}
+
+                {/* Followers Tab */}
+                {activeTab === "followers" && (
+                  <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-300">
+                    {followers.length === 0 ? (
+                      <p className="text-center text-gray-500 py-8">No followers yet</p>
+                    ) : (
+                      <div className="grid grid-cols-1">
+                        {followers.map((f) => (
+                          <div key={f._id} className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 transition">
+                            <div className="flex items-center gap-3 flex-1 w-full">
+                              <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-200 to-gray-300  flex items-center justify-center">
+                                <img src={f.follower.profile_img?.url} alt="" className="w-9 h-9 aspect-video rounded-full" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-800">{f.follower.name}</p>
+                                <p className="text-xs text-gray-400">@{f.follower.username || "user"}</p>
+                              </div>
+                            </div>
+
+                            <div>
+                              <FollowBtn userId={f.follower._id} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Following Tab */}
+                {activeTab === "following" && (
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    {following.length === 0 ? (
+                      <p className="text-center text-gray-500 py-8">Not following anyone yet</p>
+                    ) : (
+                      <div className="grid grid-cols-1">
+                        {following.map((f) => (
+                          <div
+                            key={f._id}
+                            className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 active:bg-gray-100 transition"
+                          >
+                            <div className="flex items-center gap-3 flex-1 w-full">
+                              <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-200 to-gray-300  flex items-center justify-center">
+                                <img src={f.following.profile_img.url} alt="" className="w-9 h-9 aspect-video rounded-full" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-800">{f.following.name}</p>
+                                <p className="text-xs text-gray-400">@{f.following.username || "user"}</p>
+                              </div>
+                            </div>
+
+                            <div>
+                              <FollowBtn userId={f.following._id} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
-
-            {/* Followers Tab */}
-            {activeTab === "followers" && (
-              <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-300">
-                {followers.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">No followers yet</p>
-                ) : (
-                  <div className="grid grid-cols-1">
-                    {followers.map((f) => (
-                      <div key={f._id} className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 transition">
-                        <div className="flex items-center gap-3 flex-1 w-full">
-                          <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-200 to-gray-300  flex items-center justify-center">
-                            <img src={f.follower.profile_img.url} alt="" className="w-9 h-9 aspect-video rounded-full" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">{f.follower.name}</p>
-                            <p className="text-xs text-gray-400">@{f.follower.username || "user"}</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <FollowBtn userId={f.follower._id} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Following Tab */}
-            {activeTab === "following" && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                {following.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">Not following anyone yet</p>
-                ) : (
-                  <div className="grid grid-cols-1">
-                    {following.map((f) => (
-                      <div key={f._id} className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 active:bg-gray-100 transition">
-                        <div className="flex items-center gap-3 flex-1 w-full">
-                          <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-200 to-gray-300  flex items-center justify-center">
-                            <img src={f.following.profile_img.url} alt="" className="w-9 h-9 aspect-video rounded-full" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">{f.following.name}</p>
-                            <p className="text-xs text-gray-400">@{f.following.username || "user"}</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <FollowBtn userId={f.following._id} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+            </section>
           </div>
         </div>
       </div>

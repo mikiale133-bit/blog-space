@@ -6,7 +6,7 @@ import { likePost, unlikePost, getLikes } from "../controllers/likesController.j
 import { protect } from "../middleware/authMiddleware.js";
 
 likesRouter.post("/", protect, likePost);
-likesRouter.delete("/:id", protect, unlikePost);
+likesRouter.delete("/:likeId", protect, unlikePost);
 likesRouter.get("/", protect, getLikes);
 
 export default likesRouter;
