@@ -116,7 +116,7 @@ const classesData = [
 
 export default function Results() {
   const [selectedClass, setSelectedClass] = useState("all");
-  const [selectedAssessment, setSelectedAssessment] = useState("all");
+
   const [search, setSearch] = useState("");
 
   // Stats per class
