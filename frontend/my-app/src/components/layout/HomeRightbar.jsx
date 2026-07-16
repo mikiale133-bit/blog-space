@@ -23,13 +23,15 @@ const HomeRightbar = () => {
     fetchPosts();
   }, []);
 
+  if (loading) {
+    return (
+      <h2 className="bg-white p-3 dark:bg-muted/50 h-158 w-70 flex justify-center items-center">
+        <Loader2 className="animate-spin" />
+      </h2>
+    );
+  }
   return (
-    <aside className="rounded-lg bg-white h-158 max-lg:hidden dark:border-gray-900 p-3 sticky top-20 overflow-y-auto w-70 lg:w-80  border-border no-scrollbar">
-      {loading && (
-        <h2 className="w-full bg-red-500 h-full max-h-screen flex justify-center items-center ">
-          <Loader2 className="animate-spin" />
-        </h2>
-      )}
+    <aside className="bg-white dark:bg-muted/50 h-158 max-lg:hidden dark:border-gray-900 p-3 sticky top-20 overflow-y-auto w-70 lg:w-80  border-border no-scrollbar">
       <div className="">
         <h2 className="mb-4 text-xl font-bold">Latest News</h2>
       </div>

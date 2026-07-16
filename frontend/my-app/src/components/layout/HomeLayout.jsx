@@ -6,9 +6,9 @@ import Navbar from "../Navbar";
 
 const HomeLayout = () => {
   return (
-    <div className="bg-[#faf8f2]">
+    <div className="bg-[#faf8f2] dark:bg-background">
       <Navbar />
-      <div className="flex mt-2 justify-between max-w-7xl mx-auto ">
+      <div className="flex mt-2 dark:mt-2 justify-between max-w-7xl mx-auto ">
         <div>
           <HomeLeftbar />
         </div>

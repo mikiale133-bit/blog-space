@@ -1,43 +1,23 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import {
-  LogOut,
-  Plus,
-  Signature,
-  User,
-  Menu,
-  X,
-  Settings,
-  MailCheck,
-  ChevronDown,
-  LogInIcon,
-  Moon,
-  Sun,
-  Search,
-  Filter,
-  FilterXIcon,
-  FilterIcon,
-  FileTypeCornerIcon,
-} from "lucide-react";
-import NavbarDropdownMenus from "./parts/Navbar";
+import { LogOut, Plus, User, X, Settings, Search, FileTypeCornerIcon, Text } from "lucide-react";
 import ThemeToggle from "@/context/Toggle";
+import { useToggleStore } from "@/store/toggle";
+import HomeLeftbar from "./layout/HomeLeftbar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { logOut, user } from "@/features/store";
 
 export const Navbar = () => {
   // const { theme, toggleTheme } = useTheme();
+  const openSidebar = useToggleStore((state) => state.openSidebar);
+  const closeSidebar = useToggleStore((state) => state.closeSidebar);
+  const sidebarOpen = useToggleStore((state) => state.sidebarOpen);
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   // const dispatch = useDispatch();
 
   const [popupOpened, setPopupOpened] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropDownMenus, setDropdownMenus] = useState(false);
-
-  const closeMobileMenus = () => {
-    setMobileMenuOpen(false);
-  };
 
   // console.log(user);
 
@@ -50,28 +30,31 @@ export const Navbar = () => {
             {/* Logo */}
             <div className="flex gap-3 items-center">
               {/* mobile toggle */}
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p- transition rounded-lg hover:bg-muted">
-                {mobileMenuOpen ? (
-                  <X size={24} />
+              <button className="md:hidden transition rounded-lg hover:bg-muted">
+                {sidebarOpen ? (
+                  <X size={24} onClick={closeSidebar} />
                 ) : (
                   <div className="flex flex-col gap-1 mt-0.5 pr-0.5">
-                    <p className="w-7 h-0.5 text-foreground bg-foreground"></p>
-                    <p className="w-7 h-0.5 bg-foreground"></p>
-                    <p className="w-5 h-0.5 bg-foreground"></p>
+                    <Text onClick={openSidebar} />
                   </div>
                 )}
               </button>
               {/* Logo */}
               <Link to={"/"} className="flex items-center gap-2 text-lg italic mr-3">
-                <div className="max-sm:">Blog</div>
+                Blog
               </Link>
             </div>
 
             {/* Searchbar */}
-            <div className="relative">
-              <input type="search" name="search" id="search" placeholder="Search..." className="p-2 py-1.5 border-3 pl-7 rounded border-[#0009b6]" />
+            <div className="relative shrink max-sm:hidden">
+              <input
+                type="search"
+                name="search"
+                id="search"
+                placeholder="Search..."
+                className="p-2 w-full py-1.5 border-3 pl-7 rounded-full border-[#0009b6] shrink"
+              />
               <Search size={16} className="absolute top-3.25 left-2 text-gray-500" />
-              <FileTypeCornerIcon size={15} className="absolute top-2.75 right-2 text-gray-700" />
             </div>
 
             {/* right Navbar */}
@@ -99,7 +82,7 @@ export const Navbar = () => {
                       </Link>
 
                       <button
-                        onClick={() => setPopupOpened(!mobileMenuOpen)}
+                        onClick={() => setPopupOpened(!popupOpened)}
                         className="relative flex items-center justify-center transition rounded-full cursor-pointer"
                       >
                         {user.profile_img ? (
@@ -129,93 +112,9 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation or Sidebar */}
-        {mobileMenuOpen && (
-          <div className="fixed left-0 top-0 h-screen w-64 flex flex-col items-start gap-1 px-2 py-4 border-t shadow-md border-border bg-background md:hidden">
-            {/* Logo */}
-            <div className="flex justify-between w-full items-center mb-5">
-              <Link to={"/"} className="flex items-center gap-2 text-lg font-bold ">
-                <div>
-                  Blog<span className="">Space</span>
-                </div>
-              </Link>
-
-              <X onClick={() => setMobileMenuOpen(false)} />
-            </div>
-
-            {/* Navigation Links */}
-            <div className="w-full flex flex-col gap-0 pt-5">
-              <button
-                onClick={() => closeMobileMenus()}
-                className="w-full px-2 py-2 text-start font-medium transition rounded- cursor-pointer hover:bg-muted hover:underline"
-              >
-                News
-              </button>
-
-              <button
-                onClick={() => closeMobileMenus()}
-                className="w-full px-2 py-2 text-start font-medium transition cursor-pointer hover:bg-muted hover:underline"
-              >
-                Announcement
-              </button>
-
-              <div className={`flex flex-col items-start`}>
-                <button
-                  onClick={() => setDropdownMenus(!dropDownMenus)}
-                  className="w-full flex justify-between items-center gap-1 px-2 py-2 text-start font-medium transition cursor-pointer bg-muted/70 hover:bg-muted"
-                >
-                  <h2>Blog</h2>
-                  <ChevronDown size={18} />
-                </button>
-
-                {dropDownMenus && (
-                  <div className="pl-5 transition-all duration-75">
-                    <NavbarDropdownMenus />
-                  </div>
-                )}
-              </div>
-
-              <Link
-                onClick={() => closeMobileMenus()}
-                to={"/users"}
-                className="px-2 py-2 text-start w-full font-medium transition rounded cursor-pointer hover:bg-muted"
-              >
-                People
-              </Link>
-
-              <Link
-                onClick={() => closeMobileMenus()}
-                to={"/create-post"}
-                className="w-full mt-2 flex items-center gap-1 px-2 py-2 pr-10 font-medium transition rounded bg-linear-to-br from-purple-500 to-blue-500 text-gray-200"
-              >
-                <Plus size={16} />
-                Create Post
-              </Link>
-            </div>
-
-            <div className="mt-auto w-full">
-              {user ? (
-                <div className="mt-5 text-foreground">
-                  <h2 className="text-lg italic">{user.name}</h2>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 mt-5">
-                  <Link
-                    to={"/auth/login"}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-md rounded-lg bg-foreground text-background"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User size={16} /> Get Started
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* profile popup */}
         {popupOpened && (
-          <div className="absolute bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7">
+          <div className="absolute bg-white dark:bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7">
             <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3 w-full">
               <div className="flex justify-between items-center w-full">
                 <h2 className="text-lg font-bold mt-1 text-center">{user?.name}</h2>
@@ -254,12 +153,21 @@ export const Navbar = () => {
             </Link>
 
             <div className="w-full flex items-center gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted">
-              <ThemeToggle />
-              <p>ToggleTheme</p>
+              <div className="w-full">
+                <ThemeToggle />
+              </div>
+              <p className="absolute left-11 mb-1 z-0">ToggleTheme</p>
             </div>
           </div>
         )}
       </nav>
+
+      {sidebarOpen && (
+        <div className="absolute top-0 z-50 md:hidden">
+          <HomeLeftbar />
+          <X onClick={closeSidebar} className="absolute top-5 right-5" />
+        </div>
+      )}
     </div>
   );
 };

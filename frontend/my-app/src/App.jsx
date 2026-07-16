@@ -9,7 +9,7 @@ import AllUsers from "./pages/users/AllUsers";
 import PostDetail from "./pages/posts/PostDetail";
 
 import UserProfile from "./pages/users/UserProfile";
-import PostProfile from "./pages/posts/PostProfile";
+import PostProfile from "./pages/posts/postProfile";
 import Settings from "./pages/Settings";
 import HomePageLoader from "./components/Loaders/Homepage";
 import Upload from "./imageUpload/Upload";

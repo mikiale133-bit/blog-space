@@ -1,10 +1,12 @@
+import { useToggleStore } from "@/store/toggle";
 import { DatabaseSearch, Grid2X2XIcon, History, PlusCircle } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
 const HomeLeftbar = () => {
+  const sidebarOpen = useToggleStore((state) => state.sidebarOpen);
   return (
-    <aside className="h-158 p-3 pt-5 bg-white top-20 w-60 flex-1 max-lg:hidden sticky">
+    <aside className={` bg-white dark:bg-muted/50 top-20 w-60 h-158 p-3 pt-5 ${sidebarOpen ? "" : "max-md:hidden"} sticky`}>
       <h2 className="font-bold text-lg mb-3">Sidebar</h2>
 
       <div className="pt-7 flex flex-col gap-1">

@@ -45,7 +45,7 @@ const AllUsers = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {KnownUsers?.map((user) => (
-              <div key={user._id} className="flex flex-col justify-between p-2 border rounded border-gray-300 mb-2">
+              <div key={user._id} className="flex flex-col justify-between p-2 border rounded border-border mb-2">
                 <Link to={`/users/${user._id}`} className="flex items-center gap-2 mb-2">
                   <img src={user.profile_img?.url} alt="" className="aspect-[1/1]" />
                 </Link>
@@ -53,7 +53,6 @@ const AllUsers = () => {
                   <h2 className="font-semibold text-lg">{user.name}</h2>
 
                   <FollowBtn userId={user._id} />
-                  <h2>ID: {user._id}</h2>
                 </div>
               </div>
             ))}
@@ -62,7 +61,7 @@ const AllUsers = () => {
 
         <section className="md:flex gap-4 space-y-4 mt-10 lg:mt-15">
           {/* Staff Members */}
-          <section className="border border-gray-200 p-2 rounded-lg">
+          <section className="border border-border p-2 rounded-lg">
             <h2 className="my-5 font-semibold text-2xl">Members</h2>
 
             <div className="members-grid grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -85,7 +84,7 @@ const AllUsers = () => {
 
           {/* Students */}
           {/* Staff Members */}
-          <section className="border-2 border-gray-200 p-2 rounded-lg mb-3">
+          <section className="border-2 border-border p-2 rounded-lg mb-3">
             <h2 className="my-5 font-semibold text-2xl">Instructors</h2>
 
             <div className="members-grid grid gap-3 grid-cols-2">
