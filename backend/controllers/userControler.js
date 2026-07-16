@@ -78,6 +78,7 @@ export const registerUser = [
           name: user.name,
           email: user.email,
           profile_img: user.profile_img,
+          role: user.role,
           token: generateToken(user._id),
         });
       } else {
@@ -108,6 +109,7 @@ export const loginUser = async (req, res) => {
       email: user.email,
       profile_img: user.profile_img,
       token: generateToken(user._id),
+      role: user.role,
     });
   } else {
     res.status(400).json({ msg: "Invalid credentials" });

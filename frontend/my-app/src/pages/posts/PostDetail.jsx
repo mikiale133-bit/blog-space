@@ -1,7 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API } from "../../api/Axios";
-import { CornerDownRightIcon, Clock3, CalendarDays, Loader2 } from "lucide-react";
+import {
+  CornerDownRightIcon,
+  Clock3,
+  CalendarDays,
+  Loader2,
+  Bookmark,
+  MessageSquare,
+  Share,
+  Share2,
+  HeartPlus,
+  EllipsisVertical,
+} from "lucide-react";
 import Footer from "../../components/Footer";
 import DotLoader from "@/components/Loaders/DotLoader";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -127,17 +138,17 @@ const PostDetail = () => {
   }
 
   return (
-    <div>
-      <div className="mx-auto max-w-3xl pt-5">
+    <div className="relative">
+      <div className="mx-auto max-w-3xl pt-5 mb-1 bg-white dark:bg-muted/50">
         <main className="flex-1 max-w-200 justify-end">
           {/* Header & image */}
-          <div className="px-2">
+          <div className="p-2 md:p-6">
             <h1 className="text-2xl lg:text-5x font-extrabold max-sm:mb-2 pb-5 leading-10 capitalize italic">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas excepturi modi
             </h1>
 
             {post.image?.url && (
-              <div className="mb-5 rounded-xl overflow-hidden aspect-square max-h-70 w-full bg-muted/30 max-w-150">
+              <div className="mb-5 rounded-xl overflow-hidden aspect-square max-h-70 w-full bg-muted/30 max-w-180">
                 <img src={post.image.url} alt="Post content" className="w-full h-auto object-cover" />
               </div>
             )}
@@ -151,26 +162,22 @@ const PostDetail = () => {
                 <p className="text-xs">4 people</p>
               </div>
 
-              <div className="text-xs text-gray-400">|</div>
-
               <div className="flex gap-1 items-center">
                 <CalendarDays className={"text-blue-500"} size={15} />
                 <p className="text-sm">Jun 14, 2026</p>
               </div>
 
-              <div className="text-xs text-gray-400">|</div>
-
               <div className="flex gap-1 items-center">
                 <Clock3 className={"text-blue-500"} size={15} />
                 <p className="text-sm ">
-                  <span className=" font-bold">5</span> min read
+                  <span className="">6</span> min read
                 </p>
               </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="p-2">
+          <div className="p-2 md:p-6">
             <div
               className="prose max-w-none dark:prose-invert [&_h2]:text-lg [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-blue-500 [&_blockquote]:p-1 [&_blockquote]:rounded [&_blockquote]:bg-muted [&_blockquote]:italic"
               dangerouslySetInnerHTML={{ __html: post.content }}
@@ -200,10 +207,10 @@ const PostDetail = () => {
           </div>
 
           {/* comment section */}
-          <div>
+          <div className="">
             {/* comments List */}
-            <section className="pb-5 pt-15 ml-3 p-2 bg-muted/50">
-              <h2 className="font-medium text-lg mb-5">Comments</h2>
+            <section className="pb-5 pt-15 p-2 md:p-6 bg-muted/50">
+              <h2 className="font-medium text-lg mb-5">Responses</h2>
               {fetchingComments ? (
                 <div className="flex flex-col gap-1">
                   <p className="w-full max-w-100 h-6 bg-muted animate-shimmer"></p>
@@ -211,31 +218,33 @@ const PostDetail = () => {
                   <p className="w-[50%] max-w-70 h-3 bg-muted animate-shimmer"></p>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {comments?.map((comment) => (
-                    <div key={comment._id} className="relative rounded-lg">
+                    <div key={comment._id} className="relative bg-background p-3">
                       <div className="flex gap-2 items-center">
-                        <div to={`/users/${comment.user._id}`} className="w-5 h-5 bg-card rounded-full">
-                          <img src={comment.user.profile_img.url} alt="" className="w-5 h-5 rounded-full mt-" />
+                        <div to={`/users/${comment.user._id}`} className="w-5 h-5 bg-muted rounded-full">
+                          <img src={comment.user.profile_img?.url} alt="" className="w-5 h-5 rounded-full mt-" />
                         </div>
                         <h2 className="text-text-primary text-sm">{comment.user.name}</h2>
                       </div>
-                      <CornerDownRightIcon size={17} className="inline absolute left-3 top-6" />
+
                       <div>
                         <h2 className="pl-8 italic line-clamp-3">{comment.content}</h2>
                         {comment.user._id === logged_in_User?._id && "Hi"}
                       </div>
                     </div>
                   ))}
+
+                  <button className="underline ml-2 mt-1">See all comments</button>
                 </div>
               )}
             </section>
 
             {/* Write comment */}
-            <section className="pb-15 ml-3 p-5 bg-linear-to-br  bg-muted/50 border-gray-300">
+            <section className="pb-15 p-2 md:p-6 bg-linear-to-br  bg-muted/50 border-gray-300">
               <h2 className="font-medium text-xl mb-3 italic ">Leave your comment</h2>
 
-              <form onSubmit={submitComment} className="space-y-3">
+              <form onSubmit={submitComment} className="">
                 <textarea
                   type="text"
                   name="comment"
@@ -256,7 +265,7 @@ const PostDetail = () => {
               /> */}
                 <button
                   disabled={sendingComment}
-                  className={`block bg-linear-to-b ${sendingComment ? "bg-gray-500" : "bg-linear-to-b from-blue-500 to-indigo-500"}  text-white px-4 py-1 mt-21`}
+                  className={`block bg-linear-to-b ${sendingComment ? "bg-gray-500" : "bg-linear-to-b from-blue-500 to-indigo-500"}  text-white px-4 py-3 mt-3 w-full`}
                 >
                   {sendingComment ? (
                     <div className="flex gap-1 items-center">
@@ -264,7 +273,7 @@ const PostDetail = () => {
                       Posting
                     </div>
                   ) : (
-                    "Submit"
+                    "Send comment "
                   )}
                 </button>
               </form>
@@ -280,14 +289,30 @@ const PostDetail = () => {
               </h2>
             )}
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-2">
               {userPosts.length > 0 ? (
                 userPosts
                   .filter((p) => p._id !== id)
                   .map((p) => (
-                    <Link to={`/posts/${p._id}`} key={p._id} className="p-3  rounded-lg transition-colors card shadow-sm">
-                      <img src={post.image.url} alt="" className="rounded-lg" />
-                      <h2 className="text-lg font-medium">{p.title}</h2>
+                    <Link
+                      to={`/posts/${p._id}`}
+                      key={p._id}
+                      className="rounded relative pt-13 transition-colors bg-background p-2 shadow-sm flex gap-2"
+                    >
+                      <div className="shrink">
+                        <img src={post.image.url} alt="" className="rounded object-cover max-h-20 aspect-6/4" />
+                      </div>
+                      <div className="w-full flex-1">
+                        <h2 className="text-lg font-medium ">
+                          {p.title} Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, Lorem ipsum dolor sit amet consectetur
+                          adipisicing elit. Distinctio, corrupti?Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt, blanditiis.
+                        </h2>
+                      </div>
+                      <div className="flex absolute top-0 left-0 w-full mx-auto gap-5 items-center text-[14px] bg-primary/10 p-3">
+                        <HeartPlus size={18} />
+                        <MessageSquare size={18} />
+                        <Bookmark size={18} />
+                      </div>
                     </Link>
                   ))
               ) : (
@@ -297,7 +322,14 @@ const PostDetail = () => {
           </div>
         </main>
       </div>
-      <Footer />
+      {/* <Footer /> */}
+      <div className="flex bg-background justify-around p-3 border-t border-border sticky bottom-0 w-full z-40">
+        <Bookmark />
+        <MessageSquare />
+        <Share2 />
+        <HeartPlus />
+        <EllipsisVertical />
+      </div>
     </div>
   );
 };

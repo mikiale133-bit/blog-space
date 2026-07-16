@@ -52,7 +52,7 @@ export const Navbar = () => {
                 name="search"
                 id="search"
                 placeholder="Search..."
-                className="p-2 w-full py-1.5 border-3 pl-7 rounded-full border-[#0009b6] shrink"
+                className="p-2 w-full py-1.5 border-3 pl-7 border-border rounded shrink"
               />
               <Search size={16} className="absolute top-3.25 left-2 text-gray-500" />
             </div>
@@ -70,7 +70,7 @@ export const Navbar = () => {
                   </Link>
                 </div>
 
-                <div className="flex gap-1 items-center">
+                <div className="flex gap-1 items-center group">
                   {user ? (
                     <div className="relative ml-1 flex gap-5 items-center">
                       <Link
@@ -106,60 +106,68 @@ export const Navbar = () => {
                       </Link>
                     </div>
                   )}
+
+                  {/* profile Popup */}
+                  {popupOpened && (
+                    <div className="absolute group-hover:block bg-white dark:bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7 top-12">
+                      <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3 w-full">
+                        <div className="flex justify-between items-center w-full">
+                          <h2 className="text-lg font-bold mt-1 text-center">{user?.name}</h2>
+                          <X onClick={() => setPopupOpened(false)} className="cursor-pointer" />
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={logout}
+                        className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted active:bg-muted"
+                      >
+                        <LogOut size={16} /> Logout
+                      </button>
+
+                      <Link
+                        to={`users/${user?._id}`}
+                        onClick={() => setPopupOpened(false)}
+                        className="flex items-center w-full gap-2 px-2.5 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted active:bg-muted"
+                      >
+                        {user?.profile_img ? (
+                          <img src={user.profile_img?.url} alt={user.name} className="w-5 h-5 rounded-full" />
+                        ) : (
+                          <div className="p-1 border border-gray-400 bg-white rounded-full text-gray-500">
+                            <User size={20} />
+                          </div>
+                        )}{" "}
+                        Profile
+                      </Link>
+
+                      <Link
+                        to={"/settings"}
+                        onClick={() => setPopupOpened(false)}
+                        className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted active:bg-muted"
+                      >
+                        <Settings size={16} /> Settings
+                      </Link>
+
+                      <div className="w-full flex items-center gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted active:bg-muted">
+                        <div className="w-full">
+                          <ThemeToggle />
+                        </div>
+                        <p className="absolute left-11 mb-1 z-0">ToggleTheme</p>
+                      </div>
+
+                      <Link
+                        to={"/community"}
+                        onClick={() => setPopupOpened(false)}
+                        className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border active:bg-muted hover:bg-muted"
+                      >
+                        Join Our Comunity
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* profile popup */}
-        {popupOpened && (
-          <div className="absolute bg-white dark:bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7">
-            <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3 w-full">
-              <div className="flex justify-between items-center w-full">
-                <h2 className="text-lg font-bold mt-1 text-center">{user?.name}</h2>
-                <X onClick={() => setPopupOpened(false)} className="cursor-pointer" />
-              </div>
-            </div>
-
-            <button
-              onClick={logout}
-              className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
-            >
-              <LogOut size={16} /> Logout
-            </button>
-
-            <Link
-              to={`users/${user?._id}`}
-              onClick={() => setPopupOpened(false)}
-              className="flex items-center w-full gap-2 px-2.5 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
-            >
-              {user?.profile_img ? (
-                <img src={user.profile_img?.url} alt={user.name} className="w-5 h-5 rounded-full" />
-              ) : (
-                <div className="p-1 border border-gray-400 bg-white rounded-full text-gray-500">
-                  <User size={20} />
-                </div>
-              )}{" "}
-              Profile
-            </Link>
-
-            <Link
-              to={"/settings"}
-              onClick={() => setPopupOpened(false)}
-              className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted"
-            >
-              <Settings size={16} /> Settings
-            </Link>
-
-            <div className="w-full flex items-center gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted">
-              <div className="w-full">
-                <ThemeToggle />
-              </div>
-              <p className="absolute left-11 mb-1 z-0">ToggleTheme</p>
-            </div>
-          </div>
-        )}
       </nav>
 
       {sidebarOpen && (

@@ -7,11 +7,32 @@ const resourceSchema = new mongoose.Schema(
       ref: "Class",
       required: true,
     },
-    topic: {
-      type: String,
+    subject: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
       required: true,
-      trim: true,
     },
+    chapter: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chapter",
+      required: true,
+    },
+    topic: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Topic",
+      required: true,
+    },
+    module: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Module",
+      required: true,
+    },
+
+    // topic: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
     title: {
       type: String,
       required: true,

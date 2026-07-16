@@ -15,6 +15,11 @@ export const createTeacher = async (req, res) => {
       return res.status(400).json({ message: "Teacher already existed" });
     }
 
+    const user = await User.findById(req.user._id);
+    if (user.role !== "user") {
+      return res.status(403).json({ message: `${req.user.role}s are not able to register as teacher.` });
+    }
+
     const teacher = await Teacher.create({
       accountId: req.user._id,
       classes,

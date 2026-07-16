@@ -6,14 +6,19 @@ const CreateClasses = () => {
   const [creating, setCreating] = useState(false);
   const [classes, setClasses] = useState([]);
 
-  const createClass = async () => {
+  const [department, setDepartment] = useState("");
+  const [section, setSection] = useState("");
+
+  const createClass = async (e) => {
+    e.preventDefault();
+
     setCreating(true);
     try {
-      const res = await API.post("/api/classes", { department: "freshman, pre_engineer", section: "5" });
+      const res = await API.post("/api/classes", { department, section });
       alert(res.data.message);
     } catch (error) {
       console.log(error);
-      alert("Error");
+      alert(error.response.data.message);
     } finally {
       setCreating(false);
     }
@@ -31,9 +36,30 @@ const CreateClasses = () => {
     <div className="p-3 max-w-4xl mx-auto bg-background">
       <h2 className="font-bold text-2xl my-4 mx-3">Create Class</h2>
 
-      <button disabled={creating} onClick={createClass} className="border px-4 py-1">
-        {creating ? "Creating..." : "Create Class"}
-      </button>
+      <form onSubmit={createClass}>
+        <input
+          type="department"
+          name="department"
+          id="department"
+          placeholder="department"
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          className="p-2 block border"
+        />
+
+        <input
+          type="section"
+          name="section"
+          id="section"
+          placeholder="section"
+          value={section}
+          onChange={(e) => setSection(e.target.value)}
+          className="p-2 border block my-2"
+        />
+        <button type="submit" disabled={creating} className="border px-4 py-1">
+          {creating ? "Creating..." : "Create Class"}
+        </button>
+      </form>
 
       <h2 className="font-bold text-2xl my-4 mx-3">Classes</h2>
       {classes.map((c) => (

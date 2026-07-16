@@ -1,3 +1,4 @@
+import ThemeToggle from "@/context/Toggle";
 import { useToggleStore } from "@/store/toggle";
 import { ChevronLeft, Text } from "lucide-react";
 import React from "react";
@@ -17,8 +18,11 @@ const TeacherTopbar = () => {
         </div>
       </div>
 
-      <div>
-        <Text onClick={openSidebar} className={`md:hidden`} />
+      <div className="flex gap-3 items-center">
+        <div>
+          <ThemeToggle />
+        </div>
+        <Text onClick={openSidebar} className={`md:hidden w-6 h-6`} />
       </div>
     </div>
   );

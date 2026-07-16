@@ -23,7 +23,7 @@ import { addResource, getResources, getResourcesByType } from "../controllers/re
 const classRoutes = express.Router();
 
 // HINT! verify teacher admin or staff
-classRoutes.post("/", createClass);
+classRoutes.post("/", protect, createClass);
 classRoutes.get("/", getClasses);
 classRoutes.get("/teacher/my-classes", getMyClasses);
 classRoutes.get("/:classId", getClass);

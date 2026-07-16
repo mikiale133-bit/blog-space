@@ -11,6 +11,10 @@ export const createClass = async (req, res) => {
       return res.status(400).json({ message: "please include department and section of the class" });
     }
 
+    if (req.user.role === "student") {
+      return res.status(403).json({ message: "sorry, You are not admin." });
+    }
+
     await Class.create({
       department,
       section,

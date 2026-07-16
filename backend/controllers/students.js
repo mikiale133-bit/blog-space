@@ -5,18 +5,20 @@ import User from "../models/userModel.js";
 
 export const createStudent = async (req, res) => {
   try {
-    const { classId, department } = req.body;
+    const { classId } = req.body;
 
-    if (!department || !classId) {
-      return res.status(201).json({ message: "Student already existed." });
+    if (!classId) {
+      return res.status(201).json({ message: "Please provide classId." });
     }
+
     const alreadyExist = await Student.findOne({ accountId: req.user._id });
     if (alreadyExist) {
-      return res.status(400).json({ message: "Student already existed" });
+      return res.status(400).json({ message: "You are already registered. go to your class." });
     }
 
     // check If User role is "user"
     const user = await User.findById(req.user._id);
+
     if (user.role !== "user") {
       return res.status(403).json({ message: "Only users can be registered as students" });
     }
@@ -37,6 +39,7 @@ export const createStudent = async (req, res) => {
   }
 };
 
+// GET CLASS STUDENTS
 export const getMystudents = async (req, res) => {
   try {
     const { classId } = req.params;

@@ -33,28 +33,28 @@ const AllUsers = () => {
       <main className="px-2 pr-4 max-w-5xl mx-auto min-h-screen mt-10">
         {/* People you may know */}
         <div className="">
-          <h1 className="my-5 font-bold text-2xl">You May Know These People</h1>
+          <h1 className="my-5 font-bold text-2xl">You May Know These</h1>
 
           {loading ? (
             <div className="flex justify-center items-center h-64 text-gray-900">
               <DotLoader />
             </div>
           ) : (
-            KnownUsers.length === 0 && <p className="text-center mt-10">No users you know.</p>
+            KnownUsers.length === 0 && <p className="text-center mt-10">We can not find people you know.</p>
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {KnownUsers?.map((user) => (
-              <div key={user._id} className="flex flex-col justify-between p-2 border rounded border-border mb-2">
-                <Link to={`/users/${user._id}`} className="flex items-center gap-2 mb-2">
+              <Link to={`/users/${user._id}`} key={user._id} className="flex flex-col justify-between p-2 border rounded border-border mb-2">
+                <div to={`/users/${user._id}`} className="flex items-center gap-2 mb-2">
                   <img src={user.profile_img?.url} alt="" className="aspect-[1/1]" />
-                </Link>
+                </div>
                 <div>
                   <h2 className="font-semibold text-lg">{user.name}</h2>
 
                   <FollowBtn userId={user._id} />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -66,10 +66,14 @@ const AllUsers = () => {
 
             <div className="members-grid grid grid-cols-2 gap-3 sm:grid-cols-3">
               {KnownUsers?.map((user) => (
-                <div key={user._id} className="flex flex-col items-center justify-between border border-transparent p-2 bg-gray-100 rounded-lg">
-                  <Link to={`/users/${user._id}`} className="flex align-middle gap-2 mb-2">
+                <Link
+                  to={`/users/${user._id}`}
+                  key={user._id}
+                  className="flex flex-col items-center justify-between border border-transparent p-2 bg-gray-100 rounded-lg"
+                >
+                  <div className="flex align-middle gap-2 mb-2">
                     <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
-                  </Link>
+                  </div>
                   <div className="text-center">
                     <h2 className="font-semibold mb-1">{user.name}</h2>
 
@@ -77,7 +81,7 @@ const AllUsers = () => {
                       <FollowBtn userId={user._id} />
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -89,16 +93,16 @@ const AllUsers = () => {
 
             <div className="members-grid grid gap-3 grid-cols-2">
               {KnownUsers?.map((user) => (
-                <div key={user._id} className="flex flex-col items-center justify-between shadow-sm p-2 rounded-lg">
-                  <Link to={`/users/${user._id}`} className="flex align-middle gap-2 mb-2">
+                <Link to={`/users/${user._id}`} key={user._id} className="flex flex-col items-center justify-between shadow-sm p-2 rounded-lg">
+                  <div className="flex align-middle gap-2 mb-2">
                     <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
-                  </Link>
+                  </div>
                   <div className="text-center">
                     <h2 className="font-semibold mb-1">{user.name}</h2>
 
                     <FollowBtn userId={user._id} />
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>

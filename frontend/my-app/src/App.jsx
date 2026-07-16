@@ -48,6 +48,7 @@ import HomeLayout from "./components/layout/HomeLayout";
 import Profile from "./pages/users/Profile";
 import SAssessmentDetails from "./pages/studentDashboard/SAssessmentDetails";
 import Resources1 from "./pages/TeacherDashboard/Resources1";
+import Community from "./pages/accademy/Community";
 
 const App = () => {
   return (
@@ -122,6 +123,8 @@ const App = () => {
               {/* Practice */}
               <Route path="/profile" element={<Profile />} />
               <Route path="/resource" element={<Resources1 />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/students/register" element={<RegisterStudent />} />
             </Routes>
           </div>
         </BrowserRouter>
