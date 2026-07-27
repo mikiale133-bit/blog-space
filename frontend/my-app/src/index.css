@@ -84,12 +84,12 @@
 
 :root {
   /* Light Mode */
-  --bg: #f2fbfd;
+  --bg: #f2f2f2;
   --text: #111111;
 
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-active: #1e40af;
+  --primary: #009e89;
+  --primary-hover: #03b8a0f4;
+  --primary-active: #03b8a0c2;
 
   --secondary: #000000;
   --secondary-hover: #b85600;
@@ -104,7 +104,7 @@
   --muted-active: #cbd5e1;
 
   --card: #fefefe;
-  --card-border: #e2e8f0;
+  --card-border: #c1fff7f4;
 
   --border: #e2e8f0;
   --border-muted: #d9d9d9;
@@ -134,13 +134,13 @@
   --bg: #060916;
   --text: #f1f5f9;
 
-  --primary: #125ed7;
-  --primary-hover: #014291;
-  --primary-active: #2563eb;
+  --primary: #006b5d;
+  --primary-hover: #03b8a0bd;
+  --primary-active: #03b8a05a;
 
-  --secondary: #f97316;
-  --secondary-hover: #fb923c;
-  --secondary-active: #ea580c;
+  --secondary: #00ce4f;
+  --secondary-hover: #00ce4fd1;
+  --secondary-active: #00ce4f95;
 
   --accent: #34d399;
   --accent-hover: #6ee7b7;
@@ -154,7 +154,7 @@
   --outline-muted: #475569;
 
   --card: #0f1216;
-  --card-border: #2c2c2c;
+  --card-border: #273634f4;
 
   --border: #343637;
   --border-muted: #36363b;
@@ -309,8 +309,7 @@ img {
 
 .card {
   background: var(--color-card);
-  border: 1px solid var(--color-card-border);
-  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-card-border);
   padding: var(--spacing-4);
   box-shadow: var(--shadow-sm);
 }

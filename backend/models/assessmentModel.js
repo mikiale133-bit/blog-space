@@ -41,7 +41,10 @@ const assessmentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Class",
     },
-
+    subjectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
+    },
     status: {
       type: String,
       enum: ["draft", "published", "closed"],

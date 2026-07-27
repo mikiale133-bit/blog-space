@@ -33,12 +33,17 @@ export const followUser = async (req, res) => {
       following: userId,
     });
 
-    await User.findByIdAndUpdate(follower, { $inc: { followings: 1 } });
-    await User.findByIdAndUpdate(userId, { $inc: { followers: 1 } });
+    await User.findByIdAndUpdate(follower, {
+      $inc: { following: 11 },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $inc: { followers: 1 },
+    });
 
     // await Follow.save();
 
-    res.status(201).json(newFollow);
+    res.status(201).json({ newFollow, message: "You Followed this user." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -46,17 +51,22 @@ export const followUser = async (req, res) => {
 
 export const unfollowUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
 
     const follower = req.user._id;
 
     const follow = await Follow.findOneAndDelete({
       follower,
-      following: id,
+      following: userId,
     });
 
-    await User.findByIdAndUpdate(follower, { $inc: { following: -1 } });
-    await User.findByIdAndUpdate(id, { $inc: { followers: -1 } });
+    await User.findByIdAndUpdate(follower, {
+      $inc: { following: -1 },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $inc: { followers: -1 },
+    });
 
     res.status(200).json({ message: "Unfollowed Successfully." });
   } catch (error) {
@@ -66,9 +76,9 @@ export const unfollowUser = async (req, res) => {
 
 export const getFollowers = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    const followers = await Follow.find({ following: id }).populate("follower", "name profile_img");
+    const followers = await Follow.find({ following: userId }).populate("follower", "name profile_img");
 
     res.status(200).json(followers);
   } catch (error) {

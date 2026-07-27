@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { API } from "@/api/Axios";
 
-const QuizForm = ({ classId }) => {
+const QuizForm = ({ classId, subjectId }) => {
   // Quiz Metadata States
   const [title, setTitle] = useState("");
   const [topic, setTopic] = useState("");
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // The actual array of questions that will be saved
@@ -60,10 +60,11 @@ const QuizForm = ({ classId }) => {
 
     try {
       await API.post(`/api/classes/${classId}/quizzes`, {
+        subjectId,
         title,
         status: statusType,
         topic,
-        description,
+        // description,
         instructions: ["Read questions carefully"],
         scheduleDate: new Date(),
         duration: 30,

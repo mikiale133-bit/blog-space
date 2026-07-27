@@ -2,6 +2,7 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
 import { upload } from "../config/cloudinary.js";
+import Follow from "../models/followModel.js";
 // import { cloudinary } from "../config/cloudinary.js";
 
 /* ✓ */
@@ -64,19 +65,15 @@ export const createPost = [
     try {
       if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-      // DEBUG: Look at your console to see exactly what keys are present inside req.file
-      console.log("MULTER REQ.FILE OUTPUT:", req.file);
-
       const { title, content, category } = req.body;
       if (!title || !content || !req.file) {
         return res.status(400).json({ msg: "Please provide title, content, and image" });
       }
 
-      //  FALLBACK MECHANISM: Extracts whichever keys your specific version generated
+      //  FALLBACK
       const publicId = req.file.filename || req.file.public_id;
       const imageUrl = req.file.path || req.file.secure_url || req.file.url;
 
-      // Double-check fallback resolution before hitting Mongoose
       if (!publicId || !imageUrl) {
         return res.status(400).json({
           message: "Cloudinary upload failed to populate file properties correctly.",
@@ -163,6 +160,43 @@ export const getRecentPosts = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+export const getFollowingPosts = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    let posts = [];
+
+    const follows = await Follow.find({
+      follower: userId,
+    });
+
+    const followingIds = follows.map((follow) => follow.following);
+
+    if (followingIds.length === 0) {
+      return res.status(200).json({
+        posts: [],
+        message: "You're not following anyone yet",
+      });
+    }
+
+    posts = await Post.find({
+      user: { $in: followingIds },
+    })
+      .populate("user", "username avatar name")
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.status(200).json({
+      posts,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error fetching posts",
+    });
   }
 };
 

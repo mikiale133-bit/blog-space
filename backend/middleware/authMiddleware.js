@@ -47,7 +47,7 @@ export const verifyTeacher = (req, res, next) => {
   }
 };
 
-// Verify if the authenticated user is staff+ administrator
+// Verify if the authenticated user is staff
 export const verifyStaff = (req, res, next) => {
   if (req.user && req.user.role === "staff") {
     next();
@@ -55,3 +55,6 @@ export const verifyStaff = (req, res, next) => {
     res.status(403).json({ message: "Access denied. Staff only." });
   }
 };
+
+// Verify teachers
+// Maths teachers of the campus can develop the curricullum

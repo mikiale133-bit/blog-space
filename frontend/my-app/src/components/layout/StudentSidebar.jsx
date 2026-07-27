@@ -5,28 +5,28 @@ import { useToggleStore } from "@/store/toggle";
 
 const StudentSidebar = () => {
   const location = useLocation();
-  const closeSidebar = useToggleStore((s) => s.closeSidebar);
-  const sidebarOpen = useToggleStore((s) => s.sidebarOpen);
+  const closeSidebar = useToggleStore((s) => s.closeStudentSidebar);
+  const sidebarOpen = useToggleStore((s) => s.studentSidebarOpened);
 
   // Helper to check if a navigation link is currently active
   const isActive = (path) => location.pathname === path;
 
-  // Shared Link Styling utility function using your custom theme tokens
+  // Shared Link Styling utility function using theme tokens
   const linkStyles = (path) => `
-    flex items-center gap-3 px-3 py-2.5 text-[15px] font-semibold rounded transition-all duration-150 group no-underline
-    ${isActive(path) ? "bg-primary/80 text-white shadow-sm" : "text-[var(--text)] opacity-80 hover:opacity-100 hover:bg-[var(--muted-hover)]"}
+    flex items-center gap-3 px-3 py-0.5 font-semibold transition-all duration-150 group no-underline
+    ${isActive(path) ? "text-[#00b39e] font-extrabold text-[16px]" : "text-[var(--text)] text-[15px] opacity-80 hover:opacity-90"}
   `;
 
   return (
     <div
-      className={`${sidebarOpen ? "w-100 md:w-64 overflow-hidden" : "w-0 overflow-hidden"} overflow-hidden transition-all duration-300 max-md:fixed shrink left-0 bg-background border-r z-50 dark:bg-muted/50 border-[var(--border)] h-screen sticky top-0  overflow-y-auto`}
+      className={`${sidebarOpen ? "w-100 md:w-64 overflow-hidden" : "w-0 overflow-hidden"} overflow-hidden transition-all duration-300 max-md:fixed shrink left-0 bg-white z-50 dark:bg-muted h-screen sticky top-0  overflow-y-auto`}
     >
       <div className={`w-64 p-3 h-screen flex flex-col justify-between`}>
         <div>
           {/* Sidebar Header - Student Branding */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 px-2 py-4 mb-6 border-b border-[var(--border-muted)]">
-              <div className="p-2 bg-[var(--accent)] text-white rounded-lg shadow-sm">
+              <div className="p-2 bg-[#00b39e] text-white rounded-lg shadow-sm">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
@@ -44,11 +44,6 @@ const StudentSidebar = () => {
             <Link to="/student-dashboard" className={linkStyles("/student-dashboard")}>
               <LayoutDashboard className="w-4 h-4 shrink-0" />
               <span>Dashboard Home</span>
-            </Link>
-
-            <Link to="/student-dashboard/classes" className={linkStyles("/student-dashboard/classes")}>
-              <BookOpen className="w-4 h-4 shrink-0" />
-              <span>My Classes</span>
             </Link>
           </div>
 
@@ -71,7 +66,7 @@ const StudentSidebar = () => {
               <span>Grades & Progress</span>
             </Link>
 
-            <Link to="/student-dashboard/resources" className={linkStyles("/student-dashboard/resources")}>
+            <Link to="/resources" className={linkStyles("/student-dashboard/resources")}>
               <FolderOpen className="w-4 h-4 shrink-0" />
               <span>Study Resources</span>
             </Link>

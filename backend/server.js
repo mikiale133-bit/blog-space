@@ -15,6 +15,10 @@ import followsRouter from "./routes/follows.js";
 import studentsRouter from "./routes/students.js";
 import classRoutes from "./routes/class.js";
 import teachersRouter from "./routes/teacherRoutes.js";
+import subjectRoutes from "./routes/subjects.js";
+import chapterRoutes from "./routes/chapterRoutes.js";
+import resourceRouter from "./routes/resource.js";
+import topicsRouter from "./routes/topics.js";
 
 // configs
 dotenv.config();
@@ -44,6 +48,11 @@ app.use("/api/follows", followsRouter);
 app.use("/api/students", studentsRouter);
 app.use("/api/classes", classRoutes);
 app.use("/api/teachers", teachersRouter);
+
+app.use("/api/subjects", subjectRoutes);
+app.use("/api/chapters", chapterRoutes);
+app.use("/api/resources", resourceRouter);
+app.use("/api/topics", topicsRouter);
 
 // error middleware
 app.use(errHanler);

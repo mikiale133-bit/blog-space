@@ -3,14 +3,54 @@ import DocumentViewer from "@/components/pages/DocumentViewer";
 import { BookOpen, Dot, X, Eye, Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
+const chapters = [
+  {
+    id: 1,
+    name: "Electromagnetism",
+    chapNo: 1,
+  },
+  {
+    id: 2,
+    name: "Thermodynamics",
+    chapNo: 2,
+  },
+  {
+    id: 3,
+    name: "Mechanics",
+    chapNo: 3,
+  },
+];
+
+const subjects = [
+  {
+    id: 1,
+    name: "Physics",
+    chapters: 5,
+  },
+  {
+    id: 2,
+    name: "Maths",
+    chapNo: 2,
+    chapters: 4,
+  },
+  {
+    id: 3,
+    name: "English",
+    chapters: 6,
+  },
+];
+
 const SResources = () => {
   const [resources, setResources] = useState([]);
   const [student, setStudent] = useState({});
   const [selectedResource, setSelectedResource] = useState(null);
   const [tab, setTab] = useState("note");
-  const [loading, setLoading] = useState("note");
+  const [loading, setLoading] = useState(false);
+  const [selectionMode, setSelectionMode] = useState("subject");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedChapter, setSelectedChapter] = useState({});
 
-  // FETCH STUDENT PROFILE
+  // FETCH STUDENT
   useEffect(() => {
     const getStudent = async () => {
       try {
@@ -61,16 +101,60 @@ const SResources = () => {
       </div>
     );
   }
+
+  if (selectionMode === "subject") {
+    return (
+      <div className="max-h-screen h-[90vh] overflow-hidden flex flex-col justify-center items-center">
+        {subjects.map((sub) => (
+          <div
+            key={sub.id}
+            onClick={() => {
+              setSelectionMode("chapter");
+              setSelectedSubject(sub.name);
+            }}
+            className="max-w-100 w-full card my-1 cursor-pointer"
+          >
+            <h2>{sub.name}</h2>
+            <p>{sub.chapters} Chapters</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (selectionMode === "chapter") {
+    return (
+      <div className="max-h-screen h-[90vh] overflow-hidden flex flex-col justify-center items-center">
+        {chapters.map((cha) => (
+          <div
+            key={cha.id}
+            onClick={() => {
+              setSelectionMode("");
+              setSelectedChapter({ cha: cha.chapNo, name: cha.name });
+            }}
+            className="max-w-100 w-full card my-1 cursor-pointer"
+          >
+            <h2>Chapter {cha.chapNo}</h2>
+            <p>{cha.name}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       {/* Materials List Section */}
       <div className="mt-8">
         <header className="flex justify-between items-center mb-5">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-1">
-            MATERIALS <Dot /> {resources.length} found
+            Maths Uploads <Dot /> {resources.length} found
           </h2>
         </header>
 
+        <h2 className="font-semibold tex-lg mb-3">
+          {selectedSubject}, Chapter {selectedChapter.cha}, {selectedChapter.name} Uploads 🔦
+        </h2>
         {/* Tabs */}
         <div className="flex gap-3 items-center card mb-3">
           <button onClick={() => setTab("note")}>Notes</button>

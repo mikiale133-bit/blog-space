@@ -7,7 +7,7 @@ const SAssignments = () => {
   const [assessments, setAssessments] = useState([]);
   const [student, setStudent] = useState([]);
 
-  // FETCH STUDENT PROFILE
+  // FETCH STUDENT
   useEffect(() => {
     const getStudent = async () => {
       try {
@@ -21,19 +21,20 @@ const SAssignments = () => {
   }, []);
 
   // Fetch assessments
-  const id = student?.classId;
+
   useEffect(() => {
-    if (!id) return;
+    if (!student?.classId) return;
     try {
       const getAssessments = async () => {
-        const res = await API.get(`/api/classes/${id}/assessments`);
+        const res = await API.get(`/api/classes/${student?.classId}/assessments`);
         setAssessments(res.data.assessments || []);
+        console.log(res.data);
       };
       getAssessments();
     } catch (error) {
       alert(error.response?.data?.message || "Error fetching assessments");
     }
-  }, [id]);
+  }, [student?.classId]);
 
   return (
     <div>
@@ -44,12 +45,6 @@ const SAssignments = () => {
           <button className="btn btn-primary">Add Assignment</button>
         </header>
 
-        {/* Tabs */}
-        <div>
-          <button>All</button>
-          <button>Individual</button>
-          <button>Group</button>
-        </div>
         {assessments.length === 0 ? (
           <div className="card">
             <div className="flex flex-col gap- items-center justify-center p-5 text-gray-500">

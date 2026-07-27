@@ -2,74 +2,86 @@ import mongoose from "mongoose";
 
 const resourceSchema = new mongoose.Schema(
   {
-    classId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Class",
-      required: true,
-    },
-    subject: {
+    subjectId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subject",
       required: true,
     },
-    chapter: {
+    chapterId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chapter",
       required: true,
     },
-    topic: {
+    topicId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
       required: true,
-    },
-    module: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Module",
-      required: true,
+      unique: true, // <-- CRUCIAL: Ensures ONE resource container per Topic!
     },
 
-    // topic: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
+    videos: [
+      {
+        public_id: { type: String },
+        url: { type: String }, //required: true
+        duration: { type: Number }, // Store video length in seconds
+        metadata: {
+          originalName: String,
+          sizeInBytes: Number,
+        },
+      },
+    ],
+
+    note: {
+      type: String, // Store HTML or Markdown here
+      default: "",
     },
-    resourceType: {
-      type: String,
-      required: true,
-      enum: ["video", "audio", "image", "document", "slide", "note", "handout"],
-    },
-    // The actual link to the file stored on AWS S3, Cloudinary, etc.
-    fileUrl: {
+
+    // THE POWERPOINT (Downloadable #1) ---
+    powerPoint: {
       public_id: { type: String },
-      url: { type: String, required: true },
+      url: { type: String }, //required: true
+      metadata: {
+        originalName: { type: String, default: "lecture_slides.pptx" },
+        mimeType: { type: String, default: "application/vnd.ms-powerpoint" },
+        sizeInBytes: { type: Number },
+      },
     },
-    textContent: String,
-    // Optional: Useful for rendering custom icons or description text
-    description: {
-      type: String,
-      trim: true,
+
+    // --- 4. THE DOCX / PDF (Downloadable #2) ---
+    attachment: {
+      public_id: { type: String },
+      url: { type: String }, //required: true
+      metadata: {
+        originalName: { type: String, default: "lecture_notes.docx" },
+        mimeType: { type: String, default: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+        sizeInBytes: { type: Number },
+      },
     },
-    // Highly recommended metadata for file downloads
-    fileMetadata: {
-      originalName: String, // e.g., "lecture_notes.pptx"
-      mimeType: String, // e.g., "application/vnd.ms-powerpoint"
-      sizeInBytes: Number, // e.g., 5242880 (5MB)
+
+    // IMAGES (Gallery/Screenshots) ---
+
+    quizzes: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Quiz",
     },
+
+    // ---  METADATA & AUDIT ---
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["draft", "published"],
+      default: "draft",
+    },
   },
   { timestamps: true },
 );
 
-resourceSchema.index({ createdAt: -1, _id: -1 });
+// Compound index to ensure fast lookups when fetching by Topic
+resourceSchema.index({ topicId: 1, classId: 1 });
 
 const Resource = mongoose.model("Resource", resourceSchema);
 export default Resource;

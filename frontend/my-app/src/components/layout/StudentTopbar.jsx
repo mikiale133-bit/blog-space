@@ -4,10 +4,10 @@ import { ChevronLeft, Text } from "lucide-react";
 import React from "react";
 
 const StudentTopbar = () => {
-  const openSidebar = useToggleStore((s) => s.openSidebar);
-  const sidebarOpen = useToggleStore((s) => s.sidebarOpen);
+  const openSidebar = useToggleStore((s) => s.openStudentSidebar);
+  const sidebarOpen = useToggleStore((s) => s.studentSidebarOpened);
   return (
-    <div className="p-4 bg-muted/20 w-full border-b border-border flex justify-between">
+    <div className="p-3 h-15 md:h-20 bg-white dark:bg-muted w-full flex items-center justify-between">
       <div className="hidde md:flex">
         <Text onClick={openSidebar} className={`${sidebarOpen ? "hidden" : ""} max-md:hidden`} />
 

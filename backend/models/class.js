@@ -2,20 +2,19 @@ import mongoose from "mongoose";
 
 const classSchema = mongoose.Schema(
   {
-    // teacherId: {
+    // teachers: [{
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "Teacher",
     //   required: true,
-    // },
+    // }],
     section: String,
     department: String,
-    // subjects: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Subject",
-    //     required: true,
-    //   },
-    // ],
+    subjects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subject",
+      },
+    ],
   },
   { timestamps: true },
 );

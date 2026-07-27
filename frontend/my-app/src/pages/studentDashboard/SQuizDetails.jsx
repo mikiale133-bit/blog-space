@@ -173,11 +173,11 @@ const SQuizDetails = () => {
               {/* MCQ */}
               {que.type === "MCQ" && (
                 <div className="grid grid-cols-1 gap-2.5 mt-2">
-                  {(que.options || que.choices || []).map((choice) => {
+                  {(que.options || que.choices || []).map((choice, i) => {
                     const isSelected = answers[que._id] === choice;
                     return (
                       <button
-                        key={choice}
+                        key={i}
                         type="button"
                         onClick={() => handleAnswerChange(que._id, choice)}
                         className={`flex gap-1 items-center text-left justify-start px-4 py-3 rounded w-full font-medium  ${

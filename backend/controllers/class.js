@@ -1,4 +1,5 @@
 import Class from "../models/class.js";
+import Subject from "../models/curricullum/Subject.js";
 import Group from "../models/groupModel.js";
 import Quiz from "../models/quizModel.js";
 import Student from "../models/students.js";
@@ -15,10 +16,11 @@ export const createClass = async (req, res) => {
       return res.status(403).json({ message: "sorry, You are not admin." });
     }
 
-    await Class.create({
+    const newClass = await Class.create({
       department,
       section,
     });
+    await newClass.populate("subjects", "name");
 
     res.status(200).json({ message: "Class created successfully" });
   } catch (error) {
@@ -28,25 +30,32 @@ export const createClass = async (req, res) => {
 };
 
 // FOR TEACHER _ ALSO ADMIN
-export const getMyClass = async (req, res) => {
+export const getClass = async (req, res) => {
   const { classId } = req.params;
   try {
-    const myClass = await Class.findById(classId);
+    const classRoom = await Class.findById(classId);
 
-    res.status(200).json({ myClass });
+    res.status(200).json({ classRoom });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-export const getMyClasses = async (req, res) => {
-  const { teacherId } = req.params;
+export const getTeacherClasses = async (req, res) => {
   try {
-    const teacher = await Teacher.findById(teacherId);
-    const myClasses = await Class.find({ _id: { $in: teacher.classes } });
+    const teacherId = req.user._id;
+    console.log(teacherId);
+    const teacher = await Teacher.findOne({ accountId: teacherId });
 
-    res.status(200).json({ myClasses });
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+      console.log("teacher not found");
+    }
+
+    const classes = await Class.find({ _id: { $in: teacher.classes } });
+
+    res.status(200).json({ classes });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -54,24 +63,24 @@ export const getMyClasses = async (req, res) => {
 };
 
 export const getClasses = async (req, res) => {
-  const classes = await Class.find();
+  const classes = await Class.find().populate("subjects", "name");
   res.status(200).json({ classes });
-};
-
-export const getClass = async (req, res) => {
-  const classRoom = await Class.findById(req.params.classId);
-  res.status(200).json({ classRoom });
 };
 
 // ******* GROUPS ******* //
 export const createGroup = async (req, res) => {
   try {
     const { groupName, students } = req.body;
-    const { classId } = req.params;
+    const { classId, subjectId } = req.params;
+
+    if (!subjectId) {
+      return res.statut(400).json({ message: "subjectId is required." });
+    }
     const group = await Group.create({
       name: groupName,
       classId,
       students,
+      subjectId,
     });
 
     await Student.updateMany({ _id: { $in: students } }, { $set: { group: group._id } });
@@ -92,8 +101,8 @@ export const createGroup = async (req, res) => {
 
 export const getGroups = async (req, res) => {
   try {
-    const { classId } = req.params;
-    const groups = await Group.find({ classId }).populate({
+    const { classId, subjectId } = req.params;
+    const groups = await Group.find({ classId, subjectId }).populate({
       path: "students",
       populate: {
         path: "accountId",
@@ -127,8 +136,15 @@ export const removeStudentFromGroup = async (req, res) => {
 
 export const addStudentsToGroup = async (req, res) => {
   try {
-    const { groupId, studentsIds } = req.body;
+    const { groupId } = req.params;
+    const { studentsIds } = req.body;
+
+    if (!groupId) {
+      return res.status(404).json({ message: "Group ID not found" });
+    }
+
     const group = await Group.findById(groupId);
+
     if (!group) {
       return res.status(404).json({ message: "Group not found" });
     }
@@ -168,20 +184,18 @@ export const deleteGroup = async (req, res) => {
   }
 };
 
-export const nullgroup = async (req, res) => {
-  await Student.updateMany({}, { $set: { group: null } });
-};
 // QUIZZES
 export const createQuiz = async (req, res) => {
   try {
     const { classId } = req.params;
-    const { title, status, topic, description, instructions, scheduleDate, duration, questions } = req.body;
+    const { subjectId, title, status, topicId, description, instructions, scheduleDate, duration, questions } = req.body;
     const quiz = await Quiz.create({
       classId,
+      subjectId,
       createdBy: req.user._id,
       title,
       status,
-      topic,
+      topicId: topicId ? topicId : null,
       description,
       instructions,
       scheduleDate,
@@ -197,8 +211,8 @@ export const createQuiz = async (req, res) => {
 
 export const getQuizzes = async (req, res) => {
   try {
-    const { classId } = req.params;
-    const quizzes = await Quiz.find({ classId }).populate("createdBy", "name email");
+    const { classId, subjectId } = req.params;
+    const quizzes = await Quiz.find({ classId, subjectId }).populate("createdBy", "name email");
     res.status(200).json({ quizzes });
   } catch (error) {
     console.log(error);

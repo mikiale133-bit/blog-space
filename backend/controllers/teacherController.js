@@ -1,12 +1,13 @@
+import Subject from "../models/curricullum/Subject.js";
 import Student from "../models/students.js";
 import Teacher from "../models/teachers.js";
 import User from "../models/userModel.js";
 
 export const createTeacher = async (req, res) => {
   try {
-    const { subject, classes } = req.body;
+    const { subjectId, classes } = req.body;
 
-    if (!subject) {
+    if (!subjects) {
       return res.status(400).json({ message: "Subject is required to create teacher" });
     }
 
@@ -23,30 +24,13 @@ export const createTeacher = async (req, res) => {
     const teacher = await Teacher.create({
       accountId: req.user._id,
       classes,
-      subject,
+      subjectId,
     });
 
     await User.findByIdAndUpdate(req.user._id, { role: "teacher" });
 
     teacher.populate("accountId", "name email profile_img");
     res.status(201).json({ message: "teacher created successfully." });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-export const getMystudents = async (req, res) => {
-  try {
-    const { classId } = req.params;
-    if (!classId)
-      return res.status(400).json({
-        message: "class ID is required",
-      });
-
-    const students = await Student.find({ classId }).populate("accountId", "name email profile_img");
-
-    res.status(200).json({ success: true, students });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -73,5 +57,89 @@ export const getTeacher = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const assignSubject = async (req, res) => {
+  try {
+    const { teacherId } = req.params;
+    const { subjectId } = req.body;
+
+    // Authorization
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied. Only admins can assign subjects.",
+      });
+    }
+
+    // Check if teacher exists and add subject in one query
+    // const teacher = await Teacher.findByIdAndUpdate(
+    //   teacherId,
+    //   {
+    //     $addToSet: { subjects: subjectId }, // Prevents duplicates
+    //   },
+    //   {
+    //     new: true, // Return updated document
+    //     runValidators: true,
+    //   },
+    // ).populate("subjects");
+
+    const teacher = await Teacher.findByIdAndUpdate(teacherId, { subjectId: subjectId });
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    // Check if subject exists (optional - but good practice)
+    // const subject = await Subject.findById(subjectId);
+    // if (!subject) {
+    //   // Remove the subject we just added since it doesn't exist
+    //   await Teacher.findByIdAndUpdate(teacherId, {
+    //     $pull: { subjects: subjectId },
+    //   });
+
+    //   return res.status(404).json({
+    //     message: "Subject not found",
+    //   });
+    // }
+
+    res.status(200).json({
+      success: true,
+      message: "Subject assigned to teacher successfully",
+    });
+  } catch (error) {
+    console.error("Error assigning subject:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while assigning subject",
+      error: error.message,
+    });
+  }
+};
+
+export const getTeacherSubject = async (req, res) => {
+  try {
+    // // Authorization
+    // if (!req.user || req.user.role !== "admin") {
+    //   return res.status(403).json({
+    //     message: "Access denied. Only admins can assign subjects.",
+    //   });
+    // }
+
+    const teacher = await Teacher.findOne({ accountId: req.user._id }).populate("subectId", "name");
+
+    res.status(200).json({
+      success: true,
+      subjects,
+    });
+  } catch (error) {
+    console.error("Error assigning subject:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while assigning subject",
+      error: error.message,
+    });
   }
 };

@@ -46,13 +46,13 @@ export const Navbar = () => {
             </div>
 
             {/* Searchbar */}
-            <div className="relative shrink max-sm:hidden">
+            <div className="relative shrink">
               <input
                 type="search"
                 name="search"
                 id="search"
                 placeholder="Search..."
-                className="p-2 w-full py-1.5 border-3 pl-7 border-border rounded shrink"
+                className="p-2 w-full py-1.5 border-3 pl-7 border-border rounded-full shrink"
               />
               <Search size={16} className="absolute top-3.25 left-2 text-gray-500" />
             </div>
@@ -64,7 +64,7 @@ export const Navbar = () => {
                 <div className="items-center hidden gap-2 lg:flex">
                   <Link
                     to={"/users"}
-                    className="px-2 py-2 font-medium transition rounded cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-muted/70"
+                    className="px-5 py-1.5  font-medium transition rounded-2xl border border-border cursor-pointer bg-slate-100 dark:bg-muted hover:bg-muted/70"
                   >
                     People
                   </Link>
@@ -169,13 +169,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-
-      {sidebarOpen && (
-        <div className="absolute top-0 z-50 md:hidden">
-          <HomeLeftbar />
-          <X onClick={closeSidebar} className="absolute top-5 right-5" />
-        </div>
-      )}
     </div>
   );
 };

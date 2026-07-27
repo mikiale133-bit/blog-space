@@ -1,19 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API } from "../../api/Axios";
-import {
-  CornerDownRightIcon,
-  Clock3,
-  CalendarDays,
-  Loader2,
-  Bookmark,
-  MessageSquare,
-  Share,
-  Share2,
-  HeartPlus,
-  EllipsisVertical,
-} from "lucide-react";
-import Footer from "../../components/Footer";
+import { Clock3, CalendarDays, Loader2, Bookmark, MessageSquare, Share2, HeartPlus, EllipsisVertical } from "lucide-react";
 import DotLoader from "@/components/Loaders/DotLoader";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -138,7 +126,7 @@ const PostDetail = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative bg-white dark:bg-background">
       <div className="mx-auto max-w-3xl pt-5 mb-1 bg-white dark:bg-muted/50">
         <main className="flex-1 max-w-200 justify-end">
           {/* Header & image */}
@@ -218,9 +206,9 @@ const PostDetail = () => {
                   <p className="w-[50%] max-w-70 h-3 bg-muted animate-shimmer"></p>
                 </div>
               ) : (
-                <div className="space-y-1">
+                <div className="space-y-3  bg-background/50 p-3">
                   {comments?.map((comment) => (
-                    <div key={comment._id} className="relative bg-background p-3">
+                    <div key={comment._id} className="relative">
                       <div className="flex gap-2 items-center">
                         <div to={`/users/${comment.user._id}`} className="w-5 h-5 bg-muted rounded-full">
                           <img src={comment.user.profile_img?.url} alt="" className="w-5 h-5 rounded-full mt-" />
@@ -323,7 +311,7 @@ const PostDetail = () => {
         </main>
       </div>
       {/* <Footer /> */}
-      <div className="flex bg-background justify-around p-3 border-t border-border sticky bottom-0 w-full z-40">
+      <div className="flex bg-slate-200 justify-around p-3 border-t border-border sticky bottom-0 left-0 w-full z-40">
         <Bookmark />
         <MessageSquare />
         <Share2 />

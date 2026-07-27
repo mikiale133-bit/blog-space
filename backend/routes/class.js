@@ -7,30 +7,36 @@ import {
   getGroups,
   getClass,
   getClasses,
-  getMyClasses,
   removeStudentFromGroup,
   deleteGroup,
   addStudentsToGroup,
   createQuiz,
   getQuizzes,
   getQuiz,
-  nullgroup,
+  getTeacherClasses,
 } from "../controllers/class.js";
-import { createAssessment, deleteAssessment, getAssessment, getAssessments, updateAssessment } from "../controllers/assessment.js";
+import {
+  createAssessment,
+  deleteAssessment,
+  getAssessment,
+  getSubjectAssessments,
+  getClassAssessments,
+  updateAssessment,
+} from "../controllers/assessment.js";
 
-import { addResource, getResources, getResourcesByType } from "../controllers/resource.js";
+import { createSubject, deleteSubject, getAllSubjects, getClassSubjects, getSubjectById, updateSubject } from "../controllers/Subject.js";
 
 const classRoutes = express.Router();
 
 // HINT! verify teacher admin or staff
 classRoutes.post("/", protect, createClass);
 classRoutes.get("/", getClasses);
-classRoutes.get("/teacher/my-classes", getMyClasses);
+classRoutes.get("/teacher-classes", protect, getTeacherClasses);
 classRoutes.get("/:classId", getClass);
 
 // Groups
-classRoutes.post("/:classId/groups", protect, createGroup);
-classRoutes.get("/:classId/groups", protect, getGroups);
+classRoutes.post("/:classId/groups/:subjectId", protect, createGroup);
+classRoutes.get("/:classId/groups/:subjectId", protect, getGroups);
 // classRoutes.get("/:classId/groups/:groupId", protect, getGroups);
 // classRoutes.put("/:classId/groups/:groupId", protect, getGroups);
 classRoutes.delete("/:classId/groups/:groupId/delete", protect, deleteGroup);
@@ -40,26 +46,25 @@ classRoutes.delete("/:classId/groups/:groupId/remove-student", protect, removeSt
 
 // Quizzes
 classRoutes.post("/:classId/quizzes", protect, createQuiz);
-classRoutes.get("/:classId/quizzes", protect, getQuizzes);
 classRoutes.get("/class/quizzes/:quizId", protect, getQuiz);
+classRoutes.get("/:classId/quizzes/:subjectId", protect, getQuizzes);
 // classRoutes.put("/:classId/quizzes/:quizId", protect, updateQuiz);
 // classRoutes.delete("/:classId/quizzes/:quizId", protect, deleteQuiz);
 
 // Assessment
 classRoutes.post("/:classId/assessments", protect, createAssessment);
-classRoutes.get("/:classId/assessments", protect, getAssessments);
+classRoutes.get("/:classId/assessments", getClassAssessments);
+classRoutes.get("/:classId/assessments/:subjectId", protect, getSubjectAssessments);
 classRoutes.get("/class/assessments/:assessmentId", protect, getAssessment);
 classRoutes.put("/:classId/assessments/:assessmentId", protect, updateAssessment);
 classRoutes.delete("/:classId/assessments/:assessmentId", protect, deleteAssessment);
 
-// Resources
-classRoutes.post("/:classId/resources", protect, addResource);
-classRoutes.get("/:classId/resources", protect, getResources);
-classRoutes.post("/:classId/resources/by-type", getResourcesByType);
-// classRoutes.get("/class/assessments/:assessmentId", protect, getAssessment);
-// classRoutes.put("/:classId/assessments/:assessmentId", protect, updateAssessment);
-// classRoutes.delete("/:classId/assessments/:assessmentId", protect, deleteAssessment);
-
-// classRoutes.post("/null", nullgroup);
+// SUBJECTS
+classRoutes.post("/:classId/subjects", protect, createSubject);
+classRoutes.get("/subjects/get", protect, getAllSubjects);
+classRoutes.get("/:classId/subjects", getClassSubjects);
+classRoutes.get("/class/subjects/:subjectId", getSubjectById);
+classRoutes.put("/:classId/subjects/:subjectId", protect, updateSubject);
+classRoutes.delete("/:classId/subjects/:subjectId", protect, deleteSubject);
 
 export default classRoutes;

@@ -47,8 +47,16 @@ import SProgress from "./pages/studentDashboard/Progress";
 import HomeLayout from "./components/layout/HomeLayout";
 import Profile from "./pages/users/Profile";
 import SAssessmentDetails from "./pages/studentDashboard/SAssessmentDetails";
-import Resources1 from "./pages/TeacherDashboard/Resources1";
+import Resources1 from "./pages/TeacherDashboard/ResourceForm";
 import Community from "./pages/accademy/Community";
+import MyClass from "./pages/TeacherDashboard/MyClass";
+import AssignSubject from "./pages/accademy/admin/AssignSubject";
+import CreateChapters from "./pages/accademy/admin/CreateChapters";
+import Resources3 from "./pages/TeacherDashboard/Resources3";
+import LandingPage from "./LandingPage";
+import ResourceSubjects from "./pages/TeacherDashboard/ResourceSubjects";
+import SelectClass from "./pages/TeacherDashboard/SelectClass";
+import GroupsPage from "./pages/TeacherDashboard/Groups";
 
 const App = () => {
   return (
@@ -67,14 +75,17 @@ const App = () => {
                 <Route path="posts/:id" element={<PostDetail />} />
               </Route>
 
+              <Route path="/teacher/select" element={<SelectClass />} />
+
               {/* TEACHER DASHBOARD */}
               <Route path="/teacher-dashboard" element={<TeacherDashboard />}>
                 <Route path="" element={<TeacherHomePage />} />
-                <Route path="my-classes/:id" element={<ClassDetails />} />
+                <Route path="classes/:id" element={<MyClass />} />
                 <Route path="quizzes" element={<Quizzes />} />
                 <Route path="assessments" element={<Assessments />} />
                 <Route path="results" element={<Results />} />
-                <Route path="resources" element={<Resources />} />
+                <Route path="groups" element={<GroupsPage />} />
+                <Route path="resources/select-subject" element={<ResourceSubjects />} />
                 <Route path="submissions" element={<Submissions />} />
                 <Route path="settings" element={<TSettings />} />
                 <Route path="messages" element={<Messages />} />
@@ -89,7 +100,7 @@ const App = () => {
                 <Route path="assessments" element={<SAssignments />} />
                 <Route path="assessments/:id" element={<SAssessmentDetails />} />
                 <Route path="classes" element={<SMyclasses />} />
-                <Route path="resources" element={<SResources />} />
+                <Route path="resources" element={<Resources />} />
                 <Route path="grades" element={<SProgress />} />
               </Route>
 
@@ -112,6 +123,7 @@ const App = () => {
 
               <Route path="/chat" element={<ChatInterface />} />
               <Route path="/best" element={<BestSelling />} />
+              <Route path="/landing-page" element={<LandingPage />} />
 
               {/* Accademy */}
               <Route path="/quiz" element={<Quize />} />
@@ -119,12 +131,16 @@ const App = () => {
               <Route path="/teacher/assignments" element={<Assignments />} />
               <Route path="/add-class" element={<CreateClasses />} />
               <Route path="/teachers" element={<Teachers />} />
+              <Route path="/resources/:subjectId" element={<Resources />} />
 
               {/* Practice */}
               <Route path="/profile" element={<Profile />} />
               <Route path="/resource" element={<Resources1 />} />
               <Route path="/community" element={<Community />} />
               <Route path="/students/register" element={<RegisterStudent />} />
+              <Route path="class" element={<ClassDetails />} />
+              <Route path="/assign-subject" element={<AssignSubject />} />
+              <Route path="/create-chapters" element={<CreateChapters />} />
             </Routes>
           </div>
         </BrowserRouter>

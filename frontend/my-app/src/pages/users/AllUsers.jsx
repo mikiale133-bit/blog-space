@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { API } from "../../api/Axios";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { Loader2 } from "lucide-react";
 import DotLoader from "@/components/Loaders/DotLoader";
 import FollowBtn from "@/components/FollowBtn";
+import Navbar from "@/components/Navbar";
 
 const AllUsers = () => {
-  const [KnownUsers, setKnownUsers] = useState([]);
+  const [knownUsers, setKnownUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,7 +16,6 @@ const AllUsers = () => {
       try {
         const response = await API.get("/api/users");
         setKnownUsers(response.data);
-        // setLoading(false);
       } catch (error) {
         console.error(error);
       } finally {
@@ -29,83 +26,55 @@ const AllUsers = () => {
   }, []);
 
   return (
-    <div>
-      <main className="px-2 pr-4 max-w-5xl mx-auto min-h-screen mt-10">
-        {/* People you may know */}
-        <div className="">
-          <h1 className="my-5 font-bold text-2xl">You May Know These</h1>
+    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
+      <Navbar />
+      <main className="px-4 max-w-5xl mx-auto min-h-screen py-10">
+        {/* People You May Know */}
+        <section className="mb-10">
+          <h1 className="mb-6 font-bold text-2xl md:text-3xl tracking-tight">You May Know These</h1>
 
           {loading ? (
-            <div className="flex justify-center items-center h-64 text-gray-900">
+            <div className="flex justify-center items-center h-48 text-slate-800 dark:text-slate-200">
               <DotLoader />
             </div>
+          ) : knownUsers.length === 0 ? (
+            <p className="text-center my-10 text-slate-500 dark:text-slate-400">We couldn't find people you know.</p>
           ) : (
-            KnownUsers.length === 0 && <p className="text-center mt-10">We can not find people you know.</p>
-          )}
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {KnownUsers?.map((user) => (
-              <Link to={`/users/${user._id}`} key={user._id} className="flex flex-col justify-between p-2 border rounded border-border mb-2">
-                <div to={`/users/${user._id}`} className="flex items-center gap-2 mb-2">
-                  <img src={user.profile_img?.url} alt="" className="aspect-[1/1]" />
-                </div>
-                <div>
-                  <h2 className="font-semibold text-lg">{user.name}</h2>
-
-                  <FollowBtn userId={user._id} />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <section className="md:flex gap-4 space-y-4 mt-10 lg:mt-15">
-          {/* Staff Members */}
-          <section className="border border-border p-2 rounded-lg">
-            <h2 className="my-5 font-semibold text-2xl">Members</h2>
-
-            <div className="members-grid grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {KnownUsers?.map((user) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {knownUsers.map((user) => (
                 <Link
                   to={`/users/${user._id}`}
                   key={user._id}
-                  className="flex flex-col items-center justify-between border border-transparent p-2 bg-gray-100 rounded-lg"
+                  className="group flex flex-col justify-between p-4 border rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-sm"
                 >
-                  <div className="flex align-middle gap-2 mb-2">
-                    <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
+                  <div className="flex items-center gap-3 mb-3">
+                    {user.profile_img?.url ? (
+                      <img
+                        src={user.profile_img.url}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300">
+                        {user.name?.charAt(0) || "U"}
+                      </div>
+                    )}
                   </div>
-                  <div className="text-center">
-                    <h2 className="font-semibold mb-1">{user.name}</h2>
 
-                    <div className="bg-black inline">
+                  <div>
+                    <h2 className="font-semibold text-base line-clamp-1 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {user.name}
+                    </h2>
+
+                    {/* Prevent parent Link click when clicking Follow */}
+                    <div onClick={(e) => e.stopPropagation()}>
                       <FollowBtn userId={user._id} />
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
-          </section>
-
-          {/* Students */}
-          {/* Staff Members */}
-          <section className="border-2 border-border p-2 rounded-lg mb-3">
-            <h2 className="my-5 font-semibold text-2xl">Instructors</h2>
-
-            <div className="members-grid grid gap-3 grid-cols-2">
-              {KnownUsers?.map((user) => (
-                <Link to={`/users/${user._id}`} key={user._id} className="flex flex-col items-center justify-between shadow-sm p-2 rounded-lg">
-                  <div className="flex align-middle gap-2 mb-2">
-                    <img src={user.profile_img?.url} alt="" className="aspect-square rounded-full max-h-20 mx-auto" />
-                  </div>
-                  <div className="text-center">
-                    <h2 className="font-semibold mb-1">{user.name}</h2>
-
-                    <FollowBtn userId={user._id} />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
+          )}
         </section>
       </main>
       <Footer />

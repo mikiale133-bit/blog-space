@@ -5,9 +5,9 @@ import { protect } from "../middleware/authMiddleware.js";
 const followsRouter = express.Router();
 
 followsRouter.post("/", protect, followUser);
-followsRouter.delete("/:id/unfollow", protect, unfollowUser);
-followsRouter.get("/:id/followers", protect, getFollowers);
-followsRouter.get("/:id/following", protect, getFollowings);
+followsRouter.delete("/:userId/unfollow", protect, unfollowUser);
+followsRouter.get("/:userId/followers", protect, getFollowers);
+followsRouter.get("/:userId/following", protect, getFollowings);
 followsRouter.get("/check/:userId", protect, checkFollowStatus);
 
 export default followsRouter;

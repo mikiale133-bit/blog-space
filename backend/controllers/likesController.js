@@ -33,10 +33,12 @@ export const unlikePost = async (req, res) => {
   res.json({ msg: "Post unliked" });
 };
 
-export const getLikes = async (req, res) => {
-  const { postId } = req.body;
+export const getPostLikes = async (req, res) => {
+  const { postId } = req.params;
 
   const likes = await Like.find({
     post: postId,
-  });
+  }).populate("user", "name email profile_img");
+
+  res.status(200).json({ likes });
 };

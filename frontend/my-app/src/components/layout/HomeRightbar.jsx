@@ -24,7 +24,7 @@ const HomeRightbar = () => {
   }, []);
 
   return (
-    <aside className="bg-white dark:bg-muted/50 h-158 max-lg:hidden dark:border-gray-900 p-3 sticky top-20 overflow-y-auto w-70 lg:w-80  border-border no-scrollbar">
+    <aside className="bg-white dark:bg-muted/50 max-lg:hidden dark:border-gray-900 p-3 top-0 overflow-y-auto w-70 lg:w-80  border-border no-scrollbar mt-3">
       {loading ? (
         <h2 className="h-full w-full flex justify-center items-center">
           <Loader2 className="animate-spin" />
@@ -39,9 +39,9 @@ const HomeRightbar = () => {
             {posts.slice(0, 5).map((p) => (
               <div key={p._id} className="hover:bg-muted">
                 <Link to={`/posts/${p._id}`} className="w-full group flex items- gap-3 p-1">
-                  <div>
-                    <div src={p.image?.url} alt="" className="w-20 h-20 object-cover rounded-xl bg-muted" />
-                  </div>
+                  {/* <div className="w-20 h-20">
+                    <img src={p.image?.url} alt="" className="w-20  object-cover rounded-xl bg-red-500" />
+                  </div> */}
 
                   <h2 className="line-clamp-3 text-sm font-semibold h-full">
                     {p.title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla?

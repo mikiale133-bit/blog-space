@@ -103,7 +103,6 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen bg-[#fffff5] dark:bg-background">
-      {/* Hero Section with Cover Image */}
       <div className="relative">
         {/* Subtle Cover Image Placeholder */}
         <div className="relative shadow-xl h-20 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 dark:z-50">
@@ -214,7 +213,7 @@ const UserProfile = () => {
               <div className="bg-white mx-1 dark:bg-muted/50 min-w-80 shadow-lg min-h-100">{/* Stats Cards */}</div>
 
               {/* Right bar */}
-              <div className="max-md:mt-5">
+              <div className="max-md:mt-5 w-full ">
                 {/* Tabs Navigation */}
                 <div className="mb-3 mx-1 border border-primary/20 flex gap-1 bg-white dark:bg-muted/50 p-3">
                   <button
