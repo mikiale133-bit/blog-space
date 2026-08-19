@@ -34,11 +34,6 @@ const CreatePost = ({ onPostCreated }) => {
       return;
     }
 
-    if (!image) {
-      setError("Please upload an image");
-      return;
-    }
-
     setLoading(true);
     setError("");
     setSuccess(false);
@@ -82,18 +77,18 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="relative min-h-screen pb-8 px-2 sm:px-6 lg:px-8 py-3 mt-10">
+    <div className="relative min-h-screen px-2 py-3 pb-8 mt-10 sm:px-6 lg:px-8">
       {/* <ParticleBackground /> */}
       <div className="max-w-3xl mx-auto">
-        <div className="rounded-lg overflow-hidden  border-border ">
+        <div className="overflow-hidden rounded-lg border-border ">
           {/* Header */}
-          <div className=" dark:bg-gray-800 px-6 py-4 text-center">
+          <div className="px-6 py-4 text-center dark:bg-gray-800">
             <h2 className="text-2xl font-bold ">Create New Post</h2>
-            <p className="text mt-1 font-medium text-gray-600">Share your thoughts with the community</p>
+            <p className="mt-1 font-medium text-gray-600 text">Share your thoughts with the community</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="py-6 px-1 space-y-6">
+          <form onSubmit={handleSubmit} className="px-1 py-6 space-y-6">
             {/* Title Input */}
             <div className="space-y-2">
               <label htmlFor="title" className="block text-sm font-medium">
@@ -105,7 +100,7 @@ const CreatePost = ({ onPostCreated }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter a catchy title..."
-                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                className="w-full px-4 py-2 transition-all duration-200 border rounded-lg outline-none border-border focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 disabled={loading}
               />
@@ -122,13 +117,13 @@ const CreatePost = ({ onPostCreated }) => {
 
             {/* Category Select */}
             <div>
-              <label className="font-bold text-xl mb-1">Category</label>
+              <label className="mb-1 text-xl font-bold">Category</label>
               <select
                 name="category"
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border p-2 border-border rounded mt-1"
+                className="w-full p-2 mt-1 border rounded border-border"
                 disabled={loading}
               >
                 <option value="">Select Category</option>
@@ -152,11 +147,11 @@ const CreatePost = ({ onPostCreated }) => {
 
             {/* Image Upload Component */}
 
-            <div className=" gap-2 items-center">
-              <label className="block text-lg font-medium text-gray-700 mb-3">
+            <div className="items-center gap-2 ">
+              <label className="block mb-3 text-lg font-medium text-gray-700">
                 Upload Cover Image <span className="text-red-500">*</span>
               </label>
-              <div className="p-3 border inline-block border-blue-400 rounded-md gap-2 ">
+              <div className="inline-block gap-2 p-3 border border-blue-400 rounded-md ">
                 <ImageUpload onImageSelect={setImage} currentImage={null} disabled={loading} />
               </div>
 
@@ -165,15 +160,15 @@ const CreatePost = ({ onPostCreated }) => {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-                <p className="text-red-700 text-sm">{error}</p>
+              <div className="p-4 border-l-4 border-red-500 rounded-lg bg-red-50">
+                <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
 
             {/* Success Message */}
             {success && (
-              <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-                <p className="text-green-700 text-sm">Post created successfully!</p>
+              <div className="p-4 border-l-4 border-green-500 rounded-lg bg-green-50">
+                <p className="text-sm text-green-700">Post created successfully!</p>
               </div>
             )}
 
@@ -181,11 +176,11 @@ const CreatePost = ({ onPostCreated }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black dark:bg-white dark:text-black text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 font-semibold text-white transition-all duration-200 bg-black rounded-lg dark:bg-white dark:text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center gap-0.5 justify-center ">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500">
+                  <div className="w-5 h-5 border-b-2 border-blue-500 rounded-full animate-spin">
                     <Loader2 size={15} />
                   </div>
                   Creating Post...

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, StaticRouterProvider } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, Plus, User, X, Settings, Search, FileTypeCornerIcon, Text } from "lucide-react";
+import { LogOut, Plus, User, X, Settings, Search, FileTypeCornerIcon, Text, LogsIcon, ScooterIcon, Braces, GeorgianLari } from "lucide-react";
 import ThemeToggle from "@/context/Toggle";
 import { useToggleStore } from "@/store/toggle";
 import HomeLeftbar from "./layout/HomeLeftbar";
@@ -30,19 +30,7 @@ export const Navbar = () => {
             {/* Logo */}
             <div className="flex gap-3 items-center">
               {/* mobile toggle */}
-              <button className="md:hidden transition rounded-lg hover:bg-muted">
-                {sidebarOpen ? (
-                  <X size={24} onClick={closeSidebar} />
-                ) : (
-                  <div className="flex flex-col gap-1 mt-0.5 pr-0.5">
-                    <Text onClick={openSidebar} />
-                  </div>
-                )}
-              </button>
-              {/* Logo */}
-              <Link to={"/"} className="flex items-center gap-2 text-lg italic mr-3">
-                Blog
-              </Link>
+              <LogsIcon />
             </div>
 
             {/* Searchbar */}

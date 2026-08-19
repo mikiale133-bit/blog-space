@@ -28,11 +28,8 @@ import RegisterStudent from "./pages/auth/RegisterStudent";
 import Quizzes from "./pages/TeacherDashboard/Quizzes";
 import Assessments from "./pages/TeacherDashboard/Assessments";
 import Resources from "./pages/TeacherDashboard/Resources";
-import Results from "./pages/TeacherDashboard/Results";
-import Submissions from "./pages/TeacherDashboard/Submissions";
 import Messages from "./pages/TeacherDashboard/Messages";
 import TSettings from "./pages/TeacherDashboard/Settings";
-import Feedbacks from "./pages/TeacherDashboard/Feedbacks";
 import TeacherHomePage from "./pages/TeacherDashboard/HomePage";
 
 // STUDENTS
@@ -41,22 +38,21 @@ import StudentDashboard from "./components/layout/StudentDashboard";
 import SQuizDetails from "./pages/studentDashboard/SQuizDetails";
 import StudentHomePage from "./pages/studentDashboard/HomePage";
 import SAssignments from "./pages/studentDashboard/SAssignments";
-import SMyclasses from "./pages/studentDashboard/SMyclasses";
-import SResources from "./pages/studentDashboard/SResources";
-import SProgress from "./pages/studentDashboard/Progress";
 import HomeLayout from "./components/layout/HomeLayout";
 import Profile from "./pages/users/Profile";
 import SAssessmentDetails from "./pages/studentDashboard/SAssessmentDetails";
 import Resources1 from "./pages/TeacherDashboard/ResourceForm";
 import Community from "./pages/accademy/Community";
-import MyClass from "./pages/TeacherDashboard/MyClass";
 import AssignSubject from "./pages/accademy/admin/AssignSubject";
 import CreateChapters from "./pages/accademy/admin/CreateChapters";
-import Resources3 from "./pages/TeacherDashboard/Resources3";
 import LandingPage from "./LandingPage";
 import ResourceSubjects from "./pages/TeacherDashboard/ResourceSubjects";
 import SelectClass from "./pages/TeacherDashboard/SelectClass";
 import GroupsPage from "./pages/TeacherDashboard/Groups";
+import SMessages from "./pages/studentDashboard/SMessages";
+import SSettings from "./pages/studentDashboard/SSettings";
+import SChat from "./pages/studentDashboard/SChat";
+import SNotifications from "./pages/studentDashboard/SNotifications";
 
 const App = () => {
   return (
@@ -80,16 +76,13 @@ const App = () => {
               {/* TEACHER DASHBOARD */}
               <Route path="/teacher-dashboard" element={<TeacherDashboard />}>
                 <Route path="" element={<TeacherHomePage />} />
-                <Route path="classes/:id" element={<MyClass />} />
+                <Route path="students" element={<TeacherHomePage />} />
                 <Route path="quizzes" element={<Quizzes />} />
                 <Route path="assessments" element={<Assessments />} />
-                <Route path="results" element={<Results />} />
                 <Route path="groups" element={<GroupsPage />} />
                 <Route path="resources/select-subject" element={<ResourceSubjects />} />
-                <Route path="submissions" element={<Submissions />} />
                 <Route path="settings" element={<TSettings />} />
                 <Route path="messages" element={<Messages />} />
-                <Route path="feedbacks" element={<Feedbacks />} />
               </Route>
 
               {/* STUDENT DASHBOARD */}
@@ -99,9 +92,11 @@ const App = () => {
                 <Route path="quizzes/:id" element={<SQuizDetails />} />
                 <Route path="assessments" element={<SAssignments />} />
                 <Route path="assessments/:id" element={<SAssessmentDetails />} />
-                <Route path="classes" element={<SMyclasses />} />
-                <Route path="resources" element={<Resources />} />
-                <Route path="grades" element={<SProgress />} />
+                <Route path="resources/select-subject" element={<ResourceSubjects />} />
+                <Route path="messages" element={<SMessages />} />
+                <Route path="notifications" element={<SNotifications />} />
+                <Route path="settings" element={<SSettings />} />
+                <Route path="chat" element={<SChat />} />
               </Route>
 
               {/* Auth */}

@@ -66,8 +66,8 @@ export const createPost = [
       if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
       const { title, content, category } = req.body;
-      if (!title || !content || !req.file) {
-        return res.status(400).json({ msg: "Please provide title, content, and image" });
+      if (!title || !content) {
+        return res.status(400).json({ msg: "Please provide title, content." });
       }
 
       //  FALLBACK

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const HomeLeftbar = () => {
   // const sidebarOpen = useToggleStore((state) => state.sidebarOpen);
   const user = useAuthStore((state) => state.user);
-  const link = user?.role === "teacher" ? "/teacher/select" : "/student/select";
+  const link = user?.role === "teacher" ? "/teacher/select" : "/student-dashboard";
 
   console.log(user?.role);
 

@@ -19,9 +19,10 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import UpdateResource from "./UpdateResource";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Resources = () => {
+  const navigate = useNavigate();
   const { subjectId } = useParams();
   const [popup, setPopup] = useState(false);
 
@@ -143,11 +144,15 @@ const Resources = () => {
   return (
     <div className="mx-auto">
       {/* Back Header Nav */}
-      <Link to={"/teacher-dashboard/resources/select-subject"}>
-        <button className="flex bg-white sticky top-0 p-5 w-full items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+
+      <div>
+        <button
+          onClick={() => navigate(-1)}
+          className="flex w-full bg-white sticky top-0 p-5 items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4" /> Back to Subjects
         </button>
-      </Link>
+      </div>
 
       <div className="flex flex-col md:items-start mt-3 md:flex-row gap-2 h-160">
         {/* Left Sidebar: Chapters & Topics */}

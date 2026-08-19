@@ -18,18 +18,18 @@ export default function StudentHomePage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 font-sans text-slate-900">
+    <div className="max-w-4xl px-6 py-10 mx-auto font-sans text-slate-900">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight">Welcome back, {student.name || "Student"} 👋</h1>
-        <p className="text-sm text-slate-500 mt-1">Here is what is happening with your studies today.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Welcome back, {student?.name || "Student"} 👋</h1>
+        <p className="mt-1 text-sm text-slate-500">Here is what is happening with your studies today.</p>
       </div>
 
       {/* Main Content Areas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         {/* Left Column: Quizzes and Assessments */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Quizzes and Assessments</h2>
+          <h2 className="mb-4 text-lg font-semibold">Quizzes and Assessments</h2>
 
           <ul className="space-y-3 text-sm">
             <li>
@@ -57,7 +57,7 @@ export default function StudentHomePage() {
 
         {/* Right Column: Upcoming Schedule / Tasks */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Upcoming Tasks</h2>
+          <h2 className="mb-4 text-lg font-semibold">Upcoming Tasks</h2>
 
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between">
@@ -77,7 +77,7 @@ export default function StudentHomePage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-lg font-semibold mb-4">Recent Activities</h2>
+        <h2 className="mb-4 text-lg font-semibold">Recent Activities</h2>
 
         <ul className="space-y-3 text-sm">
           <li>

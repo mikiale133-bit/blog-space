@@ -3,23 +3,13 @@ import { Bookmark, CircleUserRound, Ellipsis, MessageCircle, Share2, ThumbsUp } 
 import { API } from "../api/Axios";
 import { Link } from "react-router-dom";
 import { ExploreSkeleton } from "../components/Loaders/Homepage.jsx";
+import LikeBtn from "../components/LikeBtn";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-
-  const likePost = async (postId) => {
-    setLoading(true);
-    try {
-      await API.post(`/api/likes`, { postId });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -42,26 +32,47 @@ const Home = () => {
   // const makenull = async () => {
   //   await API.post("/api/classes/null");
   // };
-  // const activeTabStyle = `border-b-2`;
+  const activeTabStyle = `border-b-2`;
 
   return (
-    <div className="text-foreground">
+    <div className="text-foreground max-w-2xl mx-auto">
       {/* BLOG GRID */}
       <main className="">
         {/* SECTION TITLE */}
         {!loading && !error && (
           // tabs
 
-          <header className="flex mb-3 px-2 max-sm:justify-between sm:gap-10 items-center">
-            {/* <div className="relative flex gap-5 text-lg font-semibold">
+          <header className="">
+            <div className="relative flex gap-5 text-lg font-semibold">
               <button className={`${activeTab === "all" && activeTabStyle}`} onClick={() => setActiveTab("all")}>
-                All Posts
+                {/* All Posts */}
               </button>
 
               <button className={`${activeTab === "following" && activeTabStyle}`} onClick={() => setActiveTab("following")}>
-                Following
+                {/* Following */}
               </button>
-            </div> */}
+            </div>
+
+            <div className="flex gap-2 items-center w-full">
+              <div className="w-7 h-7 rounded-xl bg-green-300" />
+              <input
+                type="text"
+                name=""
+                id=""
+                placeholder="What do you want to post 🤔"
+                className="p-2 px-4 border border-blue-300 rounded-full w- bg-white focus-none cursor-pointer"
+              />
+            </div>
+
+            <div className="overflow-hidden py-5">
+              <div className="flex p-3 gap-4 items-center justify-center overflow-auto shrink">
+                <div className="min-w-10 w-full shrink h-full aspect-square rounded-full bg-blue-200"></div>
+                <div className="min-w-10 w-full shrink h-full aspect-square rounded-full bg-blue-200"></div>
+                <div className="min-w-10 w-full shrink h-full aspect-square rounded-full bg-blue-200"></div>
+                <div className="min-w-10 w-full shrink h-full aspect-square rounded-full bg-blue-200"></div>
+                <div className="min-w-10 w-full shrink h-full aspect-square rounded-full bg-blue-200"></div>
+              </div>
+            </div>
           </header>
         )}
 
@@ -73,13 +84,13 @@ const Home = () => {
             <p>Find people to connect</p>
           </div>
         ) : (
-          <div className="posts-grid grid gap-3 grid-cols-s sm:grid-cols-2">
+          <div className="posts-grid grid gap-1 sm:gap-3 grid-cols-1">
             {posts?.map((p, i) => (
               <article
                 key={i}
-                className="max-h-150 py-3 rounded-lg shadow-g border border-slate-300 transition-all duration-500 divide-neutral-300 bg-white dark:bg-muted/70 p-3"
+                className="py-3 sm:rounded-lg shadow-g sm:border border-slate-300 transition-all duration-500 divide-neutral-300 bg-white dark:bg-muted/70 p-3"
               >
-                <div className={`flex flex-col justify-between gap-1 h-full`}>
+                <div className={`flex flex-col justify-between gap-1`}>
                   <header className="flex justify-between gap-3 text-text-secondary border-b pb-3 border-border">
                     <div className="flex gap-2 items-center">
                       {p.image === "" ? (
@@ -97,41 +108,43 @@ const Home = () => {
                     </div>
 
                     <div className="flex gap-1 items-center">
-                      {" "}
-                      <Ellipsis />
+                      <Ellipsis className="cursor-pointer" />
                     </div>
                   </header>
 
-                  <div className="flex-1 h-full flex flex-col justify-between">
-                    <div className="">
-                      <Link to={`/posts/${p._id}`}>{p.image?.url && <img src={p.image.url} alt="" className={`aspect-video object-cover `} />}</Link>
-                    </div>
+                  <div className="flex-1 flex flex-col justify-between">
                     <Link to={`/posts/${p._id}`}>
-                      <h4 className="font-bold line-clamp text-[18px] leading-relaxed max-w-120 my-2 font-serif">
+                      <h4 className="font-semibold line-clamp-2 text- my-2">
                         {/* {p.title} */}
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, debitis!
                       </h4>
                     </Link>
+                    <div className="flex justify-center items-center">
+                      <img src={p.image?.url} alt="" className={`object-cover max-h-full`} />
+                    </div>
                   </div>
 
                   {/* Interactions/Activities */}
                   <div className="flex justify-between items-center p-3">
-                    <div className="flex gap-7 items-center text-[18px] text-gray-400">
-                      <div className="flex gap-1 items-center cursor-pointer">
-                        <ThumbsUp size={20} className=" fill-blue-800 text-blue-800" onClick={() => likePost(p._id)} /> <span>{p.num_likes}</span>
-                      </div>
+                    <div className="flex items-center text-[15px] text-gray350">
+                      <LikeBtn postId={p._id} initialLikeCount={p.num_likes} />
 
-                      <div className="flex gap-1 items-center cursor-pointer">
-                        <MessageCircle size={18} className=" fill-gray-00" /> {p.num_comments}
-                      </div>
+                      <Link className="" to={`/posts/${p._id}`}>
+                        <div className="flex gap-1 items-center cursor-pointer px-5 py-1.5 hover:bg-slate-200">
+                          <MessageCircle size={15} className=" fill-gray-00" />
+                          <span className="max-sm:hiden">Comment</span>
+                        </div>
+                      </Link>
 
-                      <div className="flex gap-1 items-center cursor-pointer">
-                        <Share2 size={18} className=" fill-gray-00" /> 243
+                      <div className="flex gap-1 items-center cursor-pointer px-2 sm:px-5 py-1.5 hover:bg-slate-200">
+                        <Share2 size={15} className=" fill-gray-00" />
+                        <span className="max-sm:hdden">Share</span>
                       </div>
                     </div>
 
-                    <div>
-                      <Bookmark className="" size={18} />
+                    <div className="flex gap-1 items-center py-1.5 px-2 sm:px-5 cursor-pointer hover:bg-slate-200">
+                      <Bookmark className="" size={15} />
+                      Save
                     </div>
                   </div>
                 </div>

@@ -13,11 +13,13 @@ import {
   createPost,
   getFollowingPosts,
 } from "../controllers/postsController.js";
+import { checkLikeStatus } from "../controllers/likesController.js";
 
 // parent route: /api/posts
 postsRouter.get("/", getPosts);
 postsRouter.get("/recents", getRecentPosts);
 postsRouter.get("/following-posts", protect, getFollowingPosts);
+postsRouter.post("/check-like-status", protect, checkLikeStatus);
 postsRouter.get("/:id", getSinglePost);
 postsRouter.get("/users/:id", getUserPosts);
 postsRouter.post("/", protect, createPost);

@@ -7,6 +7,6 @@ import { protect } from "../middleware/authMiddleware.js";
 
 likesRouter.post("/", protect, likePost);
 likesRouter.get("/:postId", protect, getPostLikes);
-likesRouter.delete("/:likeId", protect, unlikePost);
+likesRouter.delete("/:postId", protect, unlikePost);
 
 export default likesRouter;
