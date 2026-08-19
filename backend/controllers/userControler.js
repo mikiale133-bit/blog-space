@@ -121,7 +121,6 @@ export const loginUser = async (req, res) => {
   @access  Private*/
 export const getMe = async (req, res) => {
   res.status(200).json(req.user);
-  console.log(req.user);
 };
 
 // Generate JWT

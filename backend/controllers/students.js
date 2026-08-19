@@ -25,7 +25,6 @@ export const createStudent = async (req, res) => {
 
     const student = await Student.create({
       accountId: req.user._id,
-      department,
       classId,
     });
 

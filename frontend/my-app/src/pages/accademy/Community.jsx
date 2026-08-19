@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Community = () => {
   return (
-    <div className="p-5 flex gap-5 flex-wrap">
+    <div className="flex flex-wrap gap-5 p-5">
       <Link to={"/add-class"} className="p-2 px-5 border rounded-full">
         Create New Class
       </Link>
@@ -24,16 +24,20 @@ const Community = () => {
         Assign a subject for teachers
       </Link>
 
-      <Link to={"/class"} className="p-2 px-5 border rounded-full">
+      <Link to={"/create-subject"} className="p-2 px-5 border rounded-full">
         Create Subjects
       </Link>
 
       <Link to={"/create-chapters"} className="p-2 px-5 border rounded-full">
-        Create Chapters
+        Manage Subject
       </Link>
 
       <Link to={"/create-topic"} className="p-2 px-5 border rounded-full">
         Create Topics
+      </Link>
+
+      <Link to={"/assign-roles"} className="p-2 px-5 border rounded-full">
+        Change User Rols
       </Link>
 
       {/* <Link to={"/students/register"} className="p-2 px-5 border rounded-full"></Link> */}

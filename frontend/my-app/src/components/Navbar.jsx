@@ -1,18 +1,16 @@
 import { useState } from "react";
-import { Link, StaticRouterProvider } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, Plus, User, X, Settings, Search, FileTypeCornerIcon, Text, LogsIcon, ScooterIcon, Braces, GeorgianLari } from "lucide-react";
+import { LogOut, Plus, User, X, Settings, Search, Text, LogsIcon } from "lucide-react";
 import ThemeToggle from "@/context/Toggle";
-import { useToggleStore } from "@/store/toggle";
-import HomeLeftbar from "./layout/HomeLeftbar";
+
+// import HomeLeftbar from "./layout/HomeLeftbar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { logOut, user } from "@/features/store";
 
 export const Navbar = () => {
   // const { theme, toggleTheme } = useTheme();
-  const openSidebar = useToggleStore((state) => state.openSidebar);
-  const closeSidebar = useToggleStore((state) => state.closeSidebar);
-  const sidebarOpen = useToggleStore((state) => state.sidebarOpen);
+
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   // const dispatch = useDispatch();
@@ -20,15 +18,16 @@ export const Navbar = () => {
   const [popupOpened, setPopupOpened] = useState(false);
 
   // console.log(user);
+  const dashboardLink = user?.role === "user" ? "/user-dashboard" : user?.role === "teacher" ? "/teacher-dashboard" : "/student-dashboard";
 
   return (
     <div className="sticky top-0 z-50">
-      <nav className="py-4 bg-white/95 dark:bg-background/95 backdrop-blur-md border-b border-border ">
+      <nav className="py-4 border-b bg-white/95 dark:bg-background/95 backdrop-blur-md border-border ">
         <div>
           {/* Desktop Header */}
           <div className="flex items-center justify-between px-4">
             {/* Logo */}
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               {/* mobile toggle */}
               <LogsIcon />
             </div>
@@ -48,7 +47,7 @@ export const Navbar = () => {
             {/* right Navbar */}
             <div className="flex items-center gap-1">
               {/* Navigation */}
-              <div className="flex gap-5 items-center">
+              <div className="flex items-center gap-5">
                 <div className="items-center hidden gap-2 lg:flex">
                   <Link
                     to={"/users"}
@@ -58,12 +57,12 @@ export const Navbar = () => {
                   </Link>
                 </div>
 
-                <div className="flex gap-1 items-center group">
+                <div className="flex items-center gap-1 group">
                   {user ? (
-                    <div className="relative ml-1 flex gap-5 items-center">
+                    <div className="relative flex items-center gap-5 ml-1">
                       <Link
                         to={"/create-post"}
-                        className="max-sm:hidden flex text-white items-center gap-1 px-2 py-1 pr-4 font-medium transition rounded bg-linear-to-br from-purple-500 to-blue-500"
+                        className="flex items-center gap-1 px-2 py-1 pr-4 font-medium text-white transition rounded max-sm:hidden bg-linear-to-br from-purple-500 to-blue-500"
                       >
                         <Plus size={16} />
                         Create
@@ -74,11 +73,11 @@ export const Navbar = () => {
                         className="relative flex items-center justify-center transition rounded-full cursor-pointer"
                       >
                         {user.profile_img ? (
-                          <div className=" rounded-full text-gray-500">
-                            <img src={user?.profile_img?.url} alt="" className="w-8 h-8 object-cover aspect-square rounded-full" />
+                          <div className="text-gray-500 rounded-full ">
+                            <img src={user?.profile_img?.url} alt="" className="object-cover w-8 h-8 rounded-full aspect-square" />
                           </div>
                         ) : (
-                          <div className="p-2 border border-gray-300  bg-white rounded-full text-gray-500">
+                          <div className="p-2 text-gray-500 bg-white border border-gray-300 rounded-full">
                             <User size={20} />
                           </div>
                         )}
@@ -97,10 +96,10 @@ export const Navbar = () => {
 
                   {/* profile Popup */}
                   {popupOpened && (
-                    <div className="absolute group-hover:block bg-white dark:bg-background z-10 w-80 min-h-90 mt-2 overflow-hidden border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-xl right-7 top-12">
-                      <div className="p-2 mb-2 rounded-b bg-muted flex justify-star items-start gap-3 w-full">
-                        <div className="flex justify-between items-center w-full">
-                          <h2 className="text-lg font-bold mt-1 text-center">{user?.name}</h2>
+                    <div className="absolute z-10 mt-2 overflow-hidden bg-white border rounded-lg shadow-xl group-hover:block dark:bg-background w-80 min-h-90 border-neutral-300 dark:border-neutral-700 right-7 top-12">
+                      <div className="flex items-start w-full gap-3 p-2 mb-2 rounded-b bg-muted justify-star">
+                        <div className="flex items-center justify-between w-full">
+                          <h2 className="mt-1 text-lg font-bold text-center">{user?.name}</h2>
                           <X onClick={() => setPopupOpened(false)} className="cursor-pointer" />
                         </div>
                       </div>
@@ -120,7 +119,7 @@ export const Navbar = () => {
                         {user?.profile_img ? (
                           <img src={user.profile_img?.url} alt={user.name} className="w-5 h-5 rounded-full" />
                         ) : (
-                          <div className="p-1 border border-gray-400 bg-white rounded-full text-gray-500">
+                          <div className="p-1 text-gray-500 bg-white border border-gray-400 rounded-full">
                             <User size={20} />
                           </div>
                         )}{" "}
@@ -135,12 +134,21 @@ export const Navbar = () => {
                         <Settings size={16} /> Settings
                       </Link>
 
-                      <div className="w-full flex items-center gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted active:bg-muted">
+                      <div className="flex items-center w-full gap-1 px-4 py-4 border-b cursor-pointer border-border hover:bg-muted active:bg-muted">
                         <div className="w-full">
                           <ThemeToggle />
                         </div>
-                        <p className="absolute left-11 mb-1 z-0">ToggleTheme</p>
+                        <p className="absolute z-0 mb-1 left-11">ToggleTheme</p>
                       </div>
+
+                      {user && user?.role !== "user" && (
+                        <Link
+                          className="flex items-center w-full gap-2 px-4 py-4 text-sm text-left border-b cursor-pointer border-border hover:bg-muted active:bg-muted"
+                          to={dashboardLink}
+                        >
+                          Dashboard
+                        </Link>
+                      )}
 
                       <Link
                         to={"/community"}

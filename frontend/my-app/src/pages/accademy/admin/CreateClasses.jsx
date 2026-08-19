@@ -33,8 +33,8 @@ const CreateClasses = () => {
     getClasses();
   }, []);
   return (
-    <div className="p-3 max-w-4xl mx-auto bg-background">
-      <h2 className="font-bold text-2xl my-4 mx-3">Create Class</h2>
+    <div className="max-w-4xl p-3 mx-auto bg-background">
+      <h2 className="mx-3 my-4 text-2xl font-bold">Create Class</h2>
 
       <form onSubmit={createClass}>
         <input
@@ -44,7 +44,7 @@ const CreateClasses = () => {
           placeholder="department"
           value={department}
           onChange={(e) => setDepartment(e.target.value)}
-          className="p-2 block border"
+          className="block p-2 border"
         />
 
         <input
@@ -54,16 +54,16 @@ const CreateClasses = () => {
           placeholder="section"
           value={section}
           onChange={(e) => setSection(e.target.value)}
-          className="p-2 border block my-2"
+          className="block p-2 my-2 border"
         />
-        <button type="submit" disabled={creating} className="border px-4 py-1">
+        <button type="submit" disabled={creating} className="px-4 py-1 border">
           {creating ? "Creating..." : "Create Class"}
         </button>
       </form>
 
-      <h2 className="font-bold text-2xl my-4 mx-3">Classes</h2>
+      <h2 className="mx-3 my-4 text-2xl font-bold">Classes</h2>
       {classes.map((c) => (
-        <div key={c._id} className="p-3 border border-border bg-white dark:bg-background rounded-md">
+        <div key={c._id} className="p-3 mb-2 bg-white border rounded-md border-border dark:bg-background">
           <Link to={`/my-classes/${c._id}`}>
             <h2>Section: {c.section}</h2>
             <h2>{c.department}</h2>

@@ -34,7 +34,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
     subjectId: subjectId,
     chapterId: chapterId,
     topicId: topicId,
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia incidunt quam deserunt. Sapiente est quibusdam tempora architecto, facilis repellendus voluptatibus suscipit delectus praesentium quis quaerat sit laborum, porro optio, totam nihil natus hic sunt aut! Aliquid harum odit nostrum debitis doloribus architecto ratione nemo? Iste saepe corporis id excepturi assumenda?",
+    note: "",
     quizzes: [],
     videos: [],
     powerPoint: [],
@@ -144,14 +144,14 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white/50">
+    <div className="max-w-4xl p-6 mx-auto bg-white/50">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{topicId ? "Edit Resource" : "Create Resource"}</h1>
-          <p className="text-sm text-gray-500 mt-1">Add videos, note, files, and quizzes to this topic</p>
+          <p className="mt-1 text-sm text-gray-500">Add videos, note, files, and quizzes to this topic</p>
         </div>
-        <button type="button" onClick={() => setUploadModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <button type="button" onClick={() => setUploadModal(false)} className="p-2 transition-colors rounded-full hover:bg-gray-100">
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -164,7 +164,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
         <input type="hidden" name="topicId" value={formData.topicId} />
 
         {/* Section: note */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="p-6 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="w-5 h-5 text-blue-600" />
             <h2 className="text-lg font-semibold text-gray-900">Lesson Content</h2>
@@ -178,7 +178,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
         </div>
 
         {/* Section: Videos */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="p-6 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
             <Video className="w-5 h-5 text-blue-600" />
             <h2 className="text-lg font-semibold text-gray-900">Videos</h2>
@@ -188,9 +188,9 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
         </div>
 
         {/* Section: Documents */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* PowerPoint */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="p-6 bg-white border border-gray-200 rounded-lg">
             <div className="flex items-center gap-2 mb-4">
               <File className="w-5 h-5 text-orange-600" />
               <h2 className="text-lg font-semibold text-gray-900">PowerPoint</h2>
@@ -207,7 +207,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
           </div>
 
           {/* Attachment */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="p-6 bg-white border border-gray-200 rounded-lg">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-5 h-5 text-purple-600" />
               <h2 className="text-lg font-semibold text-gray-900">Attachment</h2>
@@ -225,7 +225,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
         </div>
 
         {/* Section: Quizzes */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="p-6 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="w-5 h-5 text-green-600" />
             <h2 className="text-lg font-semibold text-gray-900">Quizzes</h2>
@@ -234,7 +234,7 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
         </div>
 
         {/* Section: Publish */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="p-6 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-medium text-gray-700">Publish Resource</label>
@@ -263,14 +263,14 @@ const ResourceForm = ({ topicId, subjectId, chapterId, setUploadModal }) => {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             disabled={submitting}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-6 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={submitting}
           >
             {submitting ? (

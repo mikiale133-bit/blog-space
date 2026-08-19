@@ -21,7 +21,7 @@ import Quize from "./pages/accademy/Quize";
 import MyStudents from "./pages/accademy/teachers/MyStudents";
 import Assignments from "./pages/accademy/teachers/Assignments";
 import CreateClasses from "./pages/accademy/admin/CreateClasses";
-import ClassDetails from "./pages/accademy/admin/ClassDetails";
+import CreateSubject from "./pages/accademy/admin/CreateSubject";
 import Teachers from "./pages/accademy/teachers/Teachers";
 import TeacherDashboard from "./components/layout/TeacherDashboard";
 import RegisterStudent from "./pages/auth/RegisterStudent";
@@ -130,10 +130,10 @@ const App = () => {
 
               {/* Practice */}
               <Route path="/profile" element={<Profile />} />
-              <Route path="/resource" element={<Resources1 />} />
+              <Route path="/resources" element={<Resources1 />} />
               <Route path="/community" element={<Community />} />
               <Route path="/students/register" element={<RegisterStudent />} />
-              <Route path="class" element={<ClassDetails />} />
+              <Route path="create-subject" element={<CreateSubject />} />
               <Route path="/assign-subject" element={<AssignSubject />} />
               <Route path="/create-chapters" element={<CreateChapters />} />
             </Routes>

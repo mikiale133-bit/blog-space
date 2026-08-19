@@ -69,8 +69,8 @@ const Teachers = () => {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto px-3 pt-10">
-      <form onSubmit={registerTeacher} className="p-3 border m-3">
+    <div className="max-w-5xl px-3 pt-10 mx-auto">
+      <form onSubmit={registerTeacher} className="p-3 m-3 border">
         <h2 className="mt-10 text-lg font-bold">Select your classes</h2>
 
         {subjects.map((sub) => (
@@ -80,7 +80,7 @@ const Teachers = () => {
           </div>
         ))}
 
-        <div className="space-y-3 my-3 grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 my-3 space-y-3">
           {classes.map((c) => (
             <div
               key={c._id}
@@ -97,19 +97,17 @@ const Teachers = () => {
             </div>
           ))}
         </div>
-        <button type="submit" className="px-3 py-1 border m-3">
+        <button type="submit" className="px-3 py-1 m-3 border">
           Register
         </button>
       </form>
-      <h2 className="font-bold text-2xl mb-3 mt-10">Teachers from your Campus</h2>
+      <h2 className="mt-10 mb-3 text-2xl font-bold">Teachers from your Campus</h2>
       <div className="grid grid-cols-2 gap-3">
         {teachers?.map((t) => (
-          <div key={t._id} className="card py-2">
-            <Link to={`/teachers/${t._id}`}>
-              <h2>Name: {t.accountId?.name}</h2>
-              <h2>Email: {t.accountId?.email}</h2>
-              <h2>Subject: {t.subject}</h2>
-            </Link>
+          <div key={t._id} className="py-2 card">
+            <h2>Name: {t.accountId?.name}</h2>
+            <h2>Email: {t.accountId?.email}</h2>
+            <h2>Subject: {t.subject}</h2>
           </div>
         ))}
       </div>
