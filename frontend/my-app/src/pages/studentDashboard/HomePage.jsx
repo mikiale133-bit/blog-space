@@ -1,107 +1,59 @@
 import { API } from "@/api/Axios";
+import { BookOpen, ChevronRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function StudentHomePage() {
-  const [student, setStudent] = useState({});
+const HomePage = () => {
+  // Fetch Subjects on mount
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    const getStudent = async () => {
+    const fetchSubjects = async () => {
       try {
-        const res = await API.get("/api/students/get-me");
-        setStudent(res.data.student);
-      } catch (error) {
-        console.log(error);
+        const res = await API.get("/api/subjects");
+        setSubjects(res.data.subjects || []);
+      } catch (err) {
+        console.error("Error fetching subjects:", err);
       }
     };
-    getStudent();
+    fetchSubjects();
   }, []);
 
   return (
-    <div className="max-w-4xl px-6 py-10 mx-auto font-sans text-slate-900">
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight">Welcome back, {student?.name || "Student"} 👋</h1>
-        <p className="mt-1 text-sm text-slate-500">Here is what is happening with your studies today.</p>
+    <div className="py-3 mx-auto md:p-6 max-w-7xl">
+      <div className="flex items-center gap-2 mb-6 ml-2">
+        <BookOpen className="w-5 h-5 text-primary" />
+        <h2 className="text-lg font-bold tracking-tight">Select Subject</h2>
       </div>
 
-      {/* Main Content Areas */}
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-        {/* Left Column: Quizzes and Assessments */}
-        <div>
-          <h2 className="mb-4 text-lg font-semibold">Quizzes and Assessments</h2>
-
-          <ul className="space-y-3 text-sm">
-            <li>
-              <span className="mr-2">👊</span>
-              <span className="font-medium">Mathematics</span>
-              <span className="text-slate-500"> → 4 quizzes</span>
-            </li>
-            <li>
-              <span className="mr-2">🔦</span>
-              <span className="font-medium">English</span>
-              <span className="text-slate-500"> → 2 quizzes, 3 assessments</span>
-            </li>
-            <li>
-              <span className="mr-2">✋🏼</span>
-              <span className="font-medium">Physics</span>
-              <span className="text-slate-500"> → 2 quizzes, 2 assessments</span>
-            </li>
-            <li>
-              <span className="mr-2">🔑</span>
-              <span className="font-medium">Biology</span>
-              <span className="text-slate-500"> → 2 quizzes, 1 assignment</span>
-            </li>
-          </ul>
+      {subjects.length === 0 ? (
+        <div className="px-4 py-12 text-center border-dashed opacity-75 card">
+          <p className="m-0 text-base font-medium">No subjects available.</p>
         </div>
-
-        {/* Right Column: Upcoming Schedule / Tasks */}
-        <div>
-          <h2 className="mb-4 text-lg font-semibold">Upcoming Tasks</h2>
-
-          <ul className="space-y-3 text-sm">
-            <li className="flex justify-between">
-              <span>Physics Lab Submission</span>
-              <span className="text-slate-500">Today</span>
-            </li>
-            <li className="flex justify-between">
-              <span>English Literature Quiz</span>
-              <span className="text-slate-500">Tomorrow</span>
-            </li>
-            <li className="flex justify-between">
-              <span>Biology Chapter Reading</span>
-              <span className="text-slate-500">Jul 28</span>
-            </li>
-          </ul>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {subjects.map((sub) => (
+            <Link
+              to={`/subjects/${sub._id}`}
+              key={sub._id}
+              className="flex items-center justify-between p-5 transition-all border cursor-pointer card hover:shadow-md border-border"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-lg bg-primary/10 text-primary">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="m-0 text-base font-bold">{sub.name}</h3>
+                  {sub.code && <span className="text-xs opacity-60">{sub.code}</span>}
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 opacity-50" />
+            </Link>
+          ))}
         </div>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="mb-4 text-lg font-semibold">Recent Activities</h2>
-
-        <ul className="space-y-3 text-sm">
-          <li>
-            <span className="mr-2">👊</span>
-            <span className="font-medium">Mathematics</span>
-            <span className="text-slate-500"> → 4 quizzes</span>
-          </li>
-          <li>
-            <span className="mr-2">🔦</span>
-            <span className="font-medium">English</span>
-            <span className="text-slate-500"> → 2 quizzes, 3 assessments</span>
-          </li>
-          <li>
-            <span className="mr-2">✋🏼</span>
-            <span className="font-medium">Physics</span>
-            <span className="text-slate-500"> → 2 quizzes, 2 assessments</span>
-          </li>
-          <li>
-            <span className="mr-2">🔑</span>
-            <span className="font-medium">Biology</span>
-            <span className="text-slate-500"> → 2 quizzes, 1 assignment</span>
-          </li>
-        </ul>
-      </div>
+      )}
     </div>
   );
-}
+};
+
+export default HomePage;

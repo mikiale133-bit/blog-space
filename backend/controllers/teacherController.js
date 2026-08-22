@@ -7,8 +7,12 @@ export const createTeacher = async (req, res) => {
   try {
     const { subjectId, classes } = req.body;
 
-    if (!subjects) {
+    if (!subjectId) {
       return res.status(400).json({ message: "Subject is required to create teacher" });
+    }
+
+    if (!classes) {
+      return res.status(400).json({ message: "Please select your Classes." });
     }
 
     const alreadyExist = await Teacher.findOne({ accountId: req.user._id });

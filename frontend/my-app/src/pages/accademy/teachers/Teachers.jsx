@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Teachers = () => {
-  const [teachers, setTeachers] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
   const [selectedClasses, setSelectedClasses] = useState([]);
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState([]);
 
   // fetch Classes
   useEffect(() => {
@@ -34,18 +33,12 @@ const Teachers = () => {
       : setSelectedClasses([...selectedClasses, classId]);
   };
 
-  const toggleSubject = (subId) => {
-    selectedSubjects.includes(subId)
-      ? setSelectedSubjects(selectedSubjects.filter((c) => c !== subId))
-      : setSelectedSubjects([...selectedSubjects, subId]);
-  };
-
   // Create teacher
   const registerTeacher = async (e) => {
     e.preventDefault();
     try {
       const res = await API.post(`/api/teachers`, {
-        subjects: selectedSubjects,
+        subjectId: selectedSubject,
         classes: selectedClasses,
       });
       alert(res.data.message);
@@ -55,19 +48,6 @@ const Teachers = () => {
     }
   };
 
-  useEffect(() => {
-    const getTeacher = async () => {
-      try {
-        const res = await API.get("/api/teachers");
-
-        setTeachers(res.data.teachers);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getTeacher();
-  }, []);
-
   return (
     <div className="max-w-5xl px-3 pt-10 mx-auto">
       <form onSubmit={registerTeacher} className="p-3 m-3 border">
@@ -75,8 +55,8 @@ const Teachers = () => {
 
         {subjects.map((sub) => (
           <div key={sub._id} className="flex items-center gap-2 ">
-            <h2 onClick={() => toggleSubject(sub._id)}>{sub.name}</h2>
-            {selectedSubjects.includes(sub._id) && "✓"}
+            <h2 onClick={() => setSelectedSubject(sub._id)}>{sub.name}</h2>
+            {selectedSubject === sub._id && "✓"}
           </div>
         ))}
 
@@ -101,16 +81,6 @@ const Teachers = () => {
           Register
         </button>
       </form>
-      <h2 className="mt-10 mb-3 text-2xl font-bold">Teachers from your Campus</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {teachers?.map((t) => (
-          <div key={t._id} className="py-2 card">
-            <h2>Name: {t.accountId?.name}</h2>
-            <h2>Email: {t.accountId?.email}</h2>
-            <h2>Subject: {t.subject}</h2>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

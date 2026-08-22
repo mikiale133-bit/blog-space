@@ -85,90 +85,63 @@ const SAssessmentDetails = () => {
   };
 
   return (
-    <div className="p-4 max-w-6xl mx-auto pb-32">
+    <div className="max-w-6xl p-4 pb-32 mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex items-start justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">{assessment.title || "Assessment Title"}</h1>
         <div className="flex gap-2">
-          <button className="p-2 rounded-lg hover:bg-muted transition-colors" onClick={() => setIsLiked(!isLiked)}>
+          <button className="p-2 transition-colors rounded-lg hover:bg-muted" onClick={() => setIsLiked(!isLiked)}>
             <Heart size={20} className={isLiked ? "fill-red-500 text-red-500" : "text-foreground"} />
           </button>
-          <button className="p-2 rounded-lg hover:bg-muted transition-colors">
+          <button className="p-2 transition-colors rounded-lg hover:bg-muted">
             <Share2 size={20} className="text-foreground" />
           </button>
         </div>
       </div>
 
       {/* Assessment Card */}
-      <div className="card mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-4 border-b border-border mb-4">
+      <div className="mb-6 card">
+        <div className="grid grid-cols-1 gap-4 pb-4 mb-4 border-b sm:grid-cols-2 lg:grid-cols-4 border-border">
           <div className="flex items-center gap-3">
             <Calendar size={18} className="text-muted-foreground" />
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Due Date</p>
+              <p className="text-xs tracking-wide uppercase text-muted-foreground">Due Date</p>
               <p className="font-medium text-foreground">{assessment.dueDate || "2026-07-20"}</p>
             </div>
           </div>
-          {/* <div className="flex items-center gap-3">
-            <Users size={18} className="text-muted-foreground" />
-            <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Submissions</p>
-              <p className="font-medium text-foreground">{assessment.submissions?.length || 0} students</p>
-            </div>
-          </div> */}
 
           <div className="flex items-center gap-3">
             <Clock size={18} className="text-muted-foreground" />
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Time Remaining</p>
+              <p className="text-xs tracking-wide uppercase text-muted-foreground">Time Remaining</p>
               <p className="font-medium text-primary">3 days</p>
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <h3 className="flex items-center gap-2 font-semibold text-foreground mb-2">
-              <BookOpen size={18} />
-              Description
-            </h3>
-            <p className="text-foreground/80 leading-relaxed">
-              {assessment.description || "Complete the assignment according to the given instructions."}
-            </p>
-          </div>
-
-          <div>
-            <h3 className="flex items-center gap-2 font-semibold text-foreground mb-2">
-              <Text size={18} />
-              Instructions
-            </h3>
-            <p className="text-foreground/80 leading-relaxed">{assessment.instructions || "Follow the guidelines and submit before the deadline."}</p>
-          </div>
-
-          {assessment.content && (
-            <div>
-              <h3 className="font-semibold text-foreground mb-2">Content</h3>
-              <div className="text-foreground/80">{assessment.content}</div>
-            </div>
-          )}
+        {/* {assessment.content && ( */}
+        <div>
+          <h3 className="mb-2 font-semibold text-foreground">Content</h3>
+          <div className="text-foreground/80">{assessment.content}</div>
         </div>
+        {/* )} */}
       </div>
 
       {/* Attachments Section */}
       <div className="mb-6 card">
-        <h2 className="text-lg font-semibold text-foreground mb-3">Your Attachments</h2>
+        <h2 className="mb-3 text-lg font-semibold text-foreground">Your Attachments</h2>
         <div className="grid grid-cols-1 gap-3 max-w-100">
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border">
+          <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted border-border">
             <FileTypeCornerIcon size={24} className="text-primary" />
             <div className="flex-1">
-              <p className="font-medium text-foreground text-sm">assignment-guide.pdf</p>
+              <p className="text-sm font-medium text-foreground">assignment-guide.pdf</p>
               <p className="text-xs text-muted-foreground">2.4 MB</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border">
+          <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted border-border">
             <Image size={24} className="text-primary" />
             <div className="flex-1">
-              <p className="font-medium text-foreground text-sm">diagram.png</p>
+              <p className="text-sm font-medium text-foreground">diagram.png</p>
               <p className="text-xs text-muted-foreground">1.2 MB</p>
             </div>
           </div>
@@ -177,21 +150,21 @@ const SAssessmentDetails = () => {
 
       {/* Submissions Section */}
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-3 p-3 bg-white">
-          <div className="flex gap-2 items-center">
+        <div className="flex items-center justify-between p-3 mb-3 bg-white">
+          <div className="flex items-center gap-2">
             <Users size={18} className="text-muted-foreground" />
             <h2 className="text-lg font-semibold text-foreground">Submissions</h2>
-            <p className="w-1 h-1 bg-gray-600 mx-3 dark:bg-white rounded-full"></p>
+            <p className="w-1 h-1 mx-3 bg-gray-600 rounded-full dark:bg-white"></p>
             <span className="text-sm text-muted-foreground">{assessment.submissions?.length || 0} students submitted</span>
 
-            <p className="w-1 h-1 bg-gray-600 mx-3 dark:bg-white rounded-full"></p>
+            <p className="w-1 h-1 mx-3 bg-gray-600 rounded-full dark:bg-white"></p>
 
             <button className="cursor-pointer">Hide students</button>
           </div>
-          <div className="flex gap-3 items-center"></div>
+          <div className="flex items-center gap-3"></div>
         </div>
 
-        <div className="flex gap-2 flex-wrap p-3 bg-white">
+        <div className="flex flex-wrap gap-2 p-3 bg-white">
           <button
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "all" ? "bg-primary text-white" : "bg-muted text-foreground hover:bg-muted-hover"
@@ -220,9 +193,9 @@ const SAssessmentDetails = () => {
 
         <div className="space-y-2">
           {getTabContent().map((sub) => (
-            <div key={sub.id} className="flex justify-between items-center p-3 bg-muted rounded-lg border border-border">
+            <div key={sub.id} className="flex items-center justify-between p-3 border rounded-lg bg-muted border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-sm">
+                <div className="flex items-center justify-center w-10 h-10 text-sm font-semibold text-white rounded-full bg-primary">
                   {sub.name.charAt(0)}
                 </div>
                 <div>
@@ -242,38 +215,38 @@ const SAssessmentDetails = () => {
       </div>
 
       {/* Discussions Section */}
-      <div className="mb-6 p-3 bg-white">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground mb-3">
+      <div className="p-3 mb-6 bg-white">
+        <h2 className="flex items-center gap-2 mb-3 text-lg font-semibold text-foreground">
           <MessageCircle size={20} />
           Discussions
         </h2>
 
         <div className="space-y-3">
           {discussions.map((disc) => (
-            <div key={disc.id} className="p-4 bg-muted rounded-lg border border-border">
+            <div key={disc.id} className="p-4 border rounded-lg bg-muted border-border">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center font-semibold text-xs">
+                <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-secondary">
                   {disc.user.charAt(0)}
                 </div>
                 <div>
-                  <p className="font-medium text-foreground text-sm">{disc.user}</p>
+                  <p className="text-sm font-medium text-foreground">{disc.user}</p>
                   <p className="text-xs text-muted-foreground">{disc.timestamp}</p>
                 </div>
               </div>
-              <p className="text-foreground/80 text-sm ml-11">{disc.message}</p>
+              <p className="text-sm text-foreground/80 ml-11">{disc.message}</p>
             </div>
           ))}
 
           <div className="flex gap-2">
             <input
               type="text"
-              className="input flex-1"
+              className="flex-1 input"
               placeholder="Type your message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             />
-            <button className="btn btn-primary flex gap-2 items-center" onClick={handleSendMessage}>
+            <button className="flex items-center gap-2 btn btn-primary" onClick={handleSendMessage}>
               <Send size={18} />
               <span className="text-xl -translate-y-1">send</span>
             </button>
@@ -282,30 +255,30 @@ const SAssessmentDetails = () => {
       </div>
 
       {/* Fixed Bottom Message Input */}
-      <div className="fixed bottom-0 w-full bg-card border-t border-border p-3 shadow-lg">
+      <div className="fixed bottom-0 w-full p-3 border-t shadow-lg bg-card border-border">
         <div className="max-w-6xl mx-auto">
-          <div className="flex gap-2 mb-2 flex-wrap">
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+          <div className="flex flex-wrap gap-2 mb-2">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <PlusCircle size={18} />
               <span>Add</span>
             </button>
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <Type size={18} />
               <span>Text</span>
             </button>
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <Paperclip size={18} />
               <span>File</span>
             </button>
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <Camera size={18} />
               <span>Camera</span>
             </button>
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <Image size={18} />
               <span>Gallery</span>
             </button>
-            <button className="flex items-center gap-1 px-2 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-muted rounded transition-colors">
+            <button className="flex items-center gap-1 px-2 py-1 text-sm transition-colors rounded text-foreground/70 hover:text-foreground hover:bg-muted">
               <Video size={18} />
               <span>Video</span>
             </button>

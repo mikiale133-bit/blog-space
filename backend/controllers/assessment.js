@@ -1,15 +1,12 @@
 import Assessment from "../models/assessmentModel.js";
 
 export const createAssessment = async (req, res) => {
-  const { subjectId, title, description, instructions, tags, content, dueDate } = req.body;
-  const { classId } = req.params;
+  const { subjectId, title, description, instructions, tags, content, dueDate, classId } = req.body;
 
   await Assessment.create({
     classId,
     subjectId,
     title,
-    description,
-    instructions,
     tags,
     content,
     createdBy: req.user._id,
@@ -34,12 +31,6 @@ export const submitAssessment = async (req, res) => {
 export const getSubjectAssessments = async (req, res) => {
   const { classId, subjectId } = req.params;
   const assessments = await Assessment.find({ classId, subjectId });
-  res.status(200).json({ assessments });
-};
-
-export const getClassAssessments = async (req, res) => {
-  const { classId } = req.params;
-  const assessments = await Assessment.find({ classId });
   res.status(200).json({ assessments });
 };
 

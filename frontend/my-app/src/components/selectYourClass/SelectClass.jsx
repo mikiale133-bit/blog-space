@@ -10,27 +10,27 @@ const SelectClassComponent = () => {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    const fetchSubjects = async () => {
+    const fetchClasses = async () => {
       try {
         const res = await API.get("/api/classes/teacher-classes");
         setClasses(res.data.classes || []);
       } catch (err) {
-        console.log("Error fetching classes:", err.response.data.message);
+        console.log("Error fetching classes:", err.response?.data?.message);
         alert("Error", err.response.data.message);
       }
     };
-    fetchSubjects();
+    fetchClasses();
   }, []);
 
   // --- VIEW 1: SUBJECT SELECTION SCREEN ---
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
-      <div className=" mb-6">
+    <div className="max-w-4xl px-4 py-12 mx-auto">
+      <div className="mb-6 ">
         <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Select a Class</h1>
         <p>You can change this later</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {classes.map((c) => (
           <button
             onClick={() => setClass(c._id)}

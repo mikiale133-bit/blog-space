@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "@/api/Axios";
-import { ThumbsUp } from "lucide-react";
+import { Heart, ThumbsUp } from "lucide-react";
 
 const LikeBtn = ({ postId, initialLikeCount }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -52,15 +52,16 @@ const LikeBtn = ({ postId, initialLikeCount }) => {
       onClick={handleLikeToggle}
       disabled={isLoading}
       className={`
-        flex items-center gap-1.5 px-2 sm:px-5 py-1.5 hover:bg-slate-200
-        transition-all duration-200 ease-in-out
-        ${isLiked ? "text-blue-600" : "text-gray-600"}
+        flex items-center rounded-lg gap-1.5 p-2 sm:px-5 hover:bg-muted
+        transition-all duration-200 ease-in-out 
+        ${isLiked ? "" : ""}
         ${isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105 active:scale-95"}
       `}
     >
-      <ThumbsUp size={16} className={`${isLiked ? "fill-blue-600" : ""}`} />
-      <span className="font-medium text-sm">
-        <span className="max-sm:hiden">{isLiked ? "" : "Like"}</span> {likeCount}
+      <Heart size={16} className={`${isLiked ? "fill-red-600 text-red-500" : ""}`} />
+      <span className="flex items-center gap-2 font-medium">
+        {likeCount}
+        <span className="max-sm:hidden">Likes</span>
       </span>
       {isLoading && <div className="w-3.5 h-3.5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />}
     </button>

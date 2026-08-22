@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, FileText, FolderOpen, Bell, Settings, Menu, X } from "lucide-react";
 import { API } from "@/api/Axios";
@@ -7,32 +7,31 @@ import { useSelectStore } from "@/store/store";
 
 // Simplified navigation items
 const NAV_ITEMS = [
-  { path: "/teacher-dashboard", label: "Dashboard", icon: LayoutDashboard },
+  // { path: "/teacher-dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/teacher-dashboard/assessments", label: "Assessments", icon: FileText },
   { path: "/teacher-dashboard/quizzes", label: "Quizzes", icon: FolderOpen },
-  { path: "/teacher-dashboard/resources/select-subject", label: "Resources", icon: FolderOpen },
   { path: "/teacher-dashboard/groups", label: "Groups", icon: FileText },
-  { path: "/teacher-dashboard/messages", label: "Messages", icon: Bell },
-  { path: "/teacher-dashboard/settings", label: "Settings", icon: Settings },
+  // { path: "/teacher-dashboard/messages", label: "Messages", icon: Bell },
+  // { path: "/teacher-dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 // Custom hook for teacher data
-const useTeacherData = () => {
-  const [teacher, setTeacher] = useState({});
-  useEffect(() => {
-    const fetchTeacher = async () => {
-      try {
-        const response = await API.get("/api/teachers/me");
-        setTeacher(response.data.teacher || {});
-      } catch (error) {
-        console.error("Failed to fetch teacher data:", error);
-      }
-    };
-    fetchTeacher();
-  }, []);
+// const useTeacherData = () => {
+//   const [teacher, setTeacher] = useState({});
+//   useEffect(() => {
+//     const fetchTeacher = async () => {
+//       try {
+//         const response = await API.get("/api/teachers/me");
+//         setTeacher(response.data.teacher || {});
+//       } catch (error) {
+//         console.error("Failed to fetch teacher data:", error);
+//       }
+//     };
+//     fetchTeacher();
+//   }, []);
 
-  return teacher;
-};
+//   return teacher;
+// };
 
 // Navigation Link Component
 const NavLink = ({ to, icon: Icon, label, isActive }) => (
@@ -61,7 +60,7 @@ const TeacherSidebar = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const teacher = useTeacherData();
+  // const teacher = useTeacherData();
 
   const getDynamicPath = (path) => {
     if (path.includes("?")) {

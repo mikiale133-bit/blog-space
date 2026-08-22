@@ -24,9 +24,9 @@ const HomeRightbar = () => {
   }, []);
 
   return (
-    <aside className="bg-white dark:bg-muted/50 max-lg:hidden dark:border-gray-900 p-3 sticky top-20 overflow-y-auto w-70 lg:w-80  border-border no-scrollbar mt-1">
+    <aside className="sticky h-[calc(100vh-64px)] p-3 overflow-y-auto bg-blue-50/50 dark:bg-background border-l max-lg:hidden dark:border-gray-900 top-16 w-70 lg:w-80 border-border no-scrollbar">
       {loading ? (
-        <h2 className="h-full w-full flex justify-center items-center">
+        <h2 className="flex items-center justify-center w-full h-full">
           <Loader2 className="animate-spin" />
         </h2>
       ) : (
@@ -35,15 +35,15 @@ const HomeRightbar = () => {
             <h2 className="mb-4 text-xl font-bold">Find Friends</h2>
           </div>
 
-          <div className=" ">
+          <div className="">
             {users.slice(0, 5).map((p) => (
-              <div key={p._id} className="hover:bg-slate-50 dark:hover:bg-muted rounded-full cursor-pointer p-2">
-                <div className="w-full group flex items- gap-3 p-1">
-                  <div className="w-10 h-10 bg-blue-200 rounded-full flex justify-center items-center">
-                    <img src={p.profile_img?.url} alt="" className="w-10 h-10 object-cover rounded-xl bg-blue-00" />
+              <div key={p._id} className="p-2 rounded-full cursor-pointer hover:bg-slate-50 dark:hover:bg-muted">
+                <div className="flex w-full gap-3 p-1 group items-">
+                  <div className="flex items-center justify-center w-10 h-10 bg-blue-200 rounded-full">
+                    <img src={p.profile_img?.url} alt="" className="object-cover w-10 h-10 rounded-xl bg-blue-00" />
                   </div>
 
-                  <h2 className="line-clamp-3 text-sm font-semibold h-full">{p.name}</h2>
+                  <h2 className="h-full text-sm font-semibold line-clamp-3">{p.name}</h2>
                 </div>
               </div>
             ))}

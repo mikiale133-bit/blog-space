@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, Plus, User, X, Settings, Search, Text, LogsIcon } from "lucide-react";
+import { LogOut, Plus, User, X, Settings, Search, Menu } from "lucide-react";
 import ThemeToggle from "@/context/Toggle";
+import { useToggleStore } from "@/store/toggle";
 
 // import HomeLeftbar from "./layout/HomeLeftbar";
 // import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +14,7 @@ export const Navbar = () => {
 
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const openSidebar = useToggleStore((state) => state.openSidebar);
   // const dispatch = useDispatch();
 
   const [popupOpened, setPopupOpened] = useState(false);
@@ -21,15 +23,15 @@ export const Navbar = () => {
   const dashboardLink = user?.role === "user" ? "/user-dashboard" : user?.role === "teacher" ? "/teacher-dashboard" : "/student-dashboard";
 
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-40 h-16 lg:z-50">
       <nav className="py-4 border-b bg-white/95 dark:bg-background/95 backdrop-blur-md border-border ">
         <div>
           {/* Desktop Header */}
           <div className="flex items-center justify-between px-4">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <div onClick={openSidebar} className="flex items-center gap-3">
               {/* mobile toggle */}
-              <LogsIcon />
+              <Menu />
             </div>
 
             {/* Searchbar */}

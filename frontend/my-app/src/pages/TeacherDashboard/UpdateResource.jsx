@@ -127,7 +127,7 @@ const UpdateResource = ({ topicId, subjectId, chapterId, setUpdateModal, note, q
   };
 
   return (
-    <div className="max-w-4xl p-6 mx-auto bg-white/50">
+    <div className="p-6 mx-auto max-w-7xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -147,7 +147,7 @@ const UpdateResource = ({ topicId, subjectId, chapterId, setUpdateModal, note, q
         <input type="hidden" name="topicId" value={formData.topicId} />
 
         {/* Section: note */}
-        <div className="p-6 bg-white border border-gray-200 rounded-lg">
+        <div className="border-gray-200 rounded-lg bg-whte borde">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="w-5 h-5 text-blue-600" />
             <h2 className="text-lg font-semibold text-gray-900">Lesson Content</h2>

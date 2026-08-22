@@ -4,15 +4,6 @@ import Post from "../models/postModel.js";
 export const createComment = async (req, res) => {
   try {
     const { type } = req.body;
-    const alreadyCommented = await Comment.findOne({
-      post: req.body.postId,
-      user: req.user._id,
-    });
-
-    if (alreadyCommented) {
-      return res.status(400).json({ message: "You have already commented on this post." });
-    }
-
     const newComment = await Comment.create({
       post: req.body.postId,
       user: req.user._id,

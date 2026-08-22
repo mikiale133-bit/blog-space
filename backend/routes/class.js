@@ -15,14 +15,7 @@ import {
   getQuiz,
   getTeacherClasses,
 } from "../controllers/class.js";
-import {
-  createAssessment,
-  deleteAssessment,
-  getAssessment,
-  getSubjectAssessments,
-  getClassAssessments,
-  updateAssessment,
-} from "../controllers/assessment.js";
+import { createAssessment, deleteAssessment, getAssessment, getSubjectAssessments, updateAssessment } from "../controllers/assessment.js";
 
 import { createSubject, deleteSubject, getAllSubjects, getClassSubjects, getSubjectById, updateSubject } from "../controllers/Subject.js";
 
@@ -52,10 +45,9 @@ classRoutes.get("/:classId/quizzes/:subjectId", protect, getQuizzes);
 // classRoutes.delete("/:classId/quizzes/:quizId", protect, deleteQuiz);
 
 // Assessment
-classRoutes.post("/:classId/assessments", protect, createAssessment);
-classRoutes.get("/:classId/assessments", getClassAssessments);
-classRoutes.get("/:classId/assessments/:subjectId", protect, getSubjectAssessments);
 classRoutes.get("/class/assessments/:assessmentId", protect, getAssessment);
+classRoutes.post("/:classId/assessments", protect, createAssessment);
+classRoutes.get("/:classId/assessments/:subjectId", protect, getSubjectAssessments);
 classRoutes.put("/:classId/assessments/:assessmentId", protect, updateAssessment);
 classRoutes.delete("/:classId/assessments/:assessmentId", protect, deleteAssessment);
 

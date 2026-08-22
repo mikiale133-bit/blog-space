@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+.homepage-posts-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
 @theme {
   /* ===== COLORS ===== */
   --color-background: var(--bg);
@@ -84,7 +88,7 @@
 
 :root {
   /* Light Mode */
-  --bg: #f2f2f2;
+  --bg: #ffffff;
   --text: #111111;
 
   --primary: #009e89;
@@ -99,7 +103,7 @@
   --accent-hover: #059669;
   --accent-active: #047857;
 
-  --muted: #fafcff;
+  --muted: #e0e0e0;
   --muted-hover: #e2e8f0;
   --muted-active: #cbd5e1;
 
@@ -180,7 +184,7 @@
 }
 
 body {
-  @apply box-border;
+  @apply box-border dark:text-gray-200;
   background-color: var(--bg);
 }
 html {
@@ -188,9 +192,6 @@ html {
 }
 button {
   @apply cursor-pointer;
-}
-img {
-  @apply max-w-full h-auto;
 }
 
 @media screen and (min-width: 400px) {

@@ -61,9 +61,9 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
   };
 
   return (
-    <div className="border-b border-gray-200 bg-gray-50 p-2 flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1 p-2 border-b border-gray-200 bg-gray-50">
       {/* Headings */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -91,7 +91,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Text Formatting */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -135,7 +135,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Alignment */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
@@ -171,7 +171,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Lists */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -191,7 +191,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Blocks */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -211,7 +211,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Links & Images */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={setLink}
@@ -229,7 +229,7 @@ const MenuBar = ({ editor, onTogglePreview, showPreview }) => {
       </div>
 
       {/* Undo / Redo */}
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+      <div className="flex items-center gap-1 pr-2 mr-1 border-r border-gray-200">
         <button
           type="button"
           onClick={() => editor.chain().focus().undo().run()}
@@ -333,23 +333,23 @@ const RichTextEditor = ({ value, onChange, error, placeholder = "Write your less
         <span className="text-xs text-gray-500">Supports markdown, images, and tables</span>
       </div>
 
-      <div className="border border-gray-300 rounded-lg overflow-hidden">
+      <div className="overflow-hidden border border-gray-300 rounded-lg">
         <MenuBar editor={editor} onTogglePreview={() => setShowPreview(!showPreview)} showPreview={showPreview} />
 
         {showPreview ? (
-          <div className="p-6 bg-white min-h-[200px] prose prose-sm max-w-none">
+          <div className="p-6 prose-sm prose bg-white max-w-none">
             {editor.getHTML() ? (
               <div dangerouslySetInnerHTML={{ __html: editor.getHTML() }} />
             ) : (
-              <p className="text-gray-400 italic">Nothing to preview</p>
+              <p className="italic text-gray-400">Nothing to preview</p>
             )}
           </div>
         ) : (
-          <EditorContent editor={editor} className="bg-white" />
+          <EditorContent editor={editor} className="prose-sm prose bg-white max-w-none" />
         )}
       </div>
 
-      {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 };

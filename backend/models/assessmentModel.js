@@ -18,17 +18,11 @@ const submissionSchema = new mongoose.Schema(
       ],
       textSubmission: String,
     },
-
     status: {
       type: String,
       enum: ["pending", "submitted", "graded", "returned"],
       default: "pending",
     },
-
-    mark: {
-      type: Number,
-    },
-
     feedback: String,
     submittedAt: Date,
   },
@@ -51,9 +45,7 @@ const assessmentSchema = mongoose.Schema(
       default: "draft",
     },
     title: String,
-    description: String,
     tags: [String],
-    instructions: [String],
     dueDate: Date,
 
     content: String,

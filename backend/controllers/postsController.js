@@ -41,7 +41,6 @@ export const getSinglePost = async (req, res) => {
 
 /* ✓ */
 export const getUserPosts = async (req, res) => {
-  // const posts = await Post.find({ user: req.user }); //.populate("user", "name email");
   const posts = await Post.find({ user: String(req.params.id) })
     .sort({
       createdAt: -1,
@@ -71,15 +70,9 @@ export const createPost = [
       }
 
       //  FALLBACK
-      const publicId = req.file.filename || req.file.public_id;
-      const imageUrl = req.file.path || req.file.secure_url || req.file.url;
 
-      if (!publicId || !imageUrl) {
-        return res.status(400).json({
-          message: "Cloudinary upload failed to populate file properties correctly.",
-          debug_received: { filename: req.file.filename, path: req.file.path },
-        });
-      }
+      const publicId = req.file?.filename || req.file?.public_id;
+      const imageUrl = req.file?.path || req.file?.secure_url || req.file?.url;
 
       const newPost = await Post.create({
         title,
